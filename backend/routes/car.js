@@ -1,15 +1,37 @@
 const express = require('express');
-const app = express();
 
-// /api/car/
+const fs = require('fs');
+const path = require('path');
+
+const multer = require('multer');
+// const {upload} = require('../utils/multer');
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, 'uploads/');
+        },
+        filename: (req, file, cb) => {
+            const ext = path.extname(file.originalname);
+            cb(null, path.basename(file.originalname, ext) + '_' + Date.now() + ext);
+        }
+    }),
+    // limits: {fileSize: 10 * 1024 * 1024}
+})
+
+// api/car
 const router = express.Router();
 
 
 // 차량등록 API
-router.post('/register', async(req, res) => {
+router.post('/register', upload.single('carRegisterImage'), async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carRegister:'success'});
+        if (req.file.mimetype === 'image/png' || req.file.mimetype === 'image/jpg') {
+            return res.json({carRegister:'success'})
+        }
+        else {
+            return res.json({carRegister:'fail: Upload jpg/png file ONLY!'})
+        }
     } catch (error) {
         console.log(error);
         return res.json({carRegister:'fail'});
@@ -33,30 +55,30 @@ router.post('/insurance', async(req, res) => {
 router.get('/:carID/time', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carTime:'success'});
+        return res.json({getCarTime:'success'});
     } catch (error) {
         console.log(error);
-        return res.json({carTime:'fail'});
+        return res.json({getCarTime:'fail'});
     }
 });
 
 router.post('/:carID/time', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carTime:'success'});
+        return res.json({postCarTime:'success'});
     } catch (error) {
         console.log(error);
-        return res.json({carTime:'fail'});
+        return res.json({postCarTime:'fail'});
     }
 });
 
 router.patch('/:carID/time', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carTime:'success'});
+        return res.json({patchCarTime:'success'});
     } catch (error) {
         console.log(error);
-        return res.json({carTime:'fail'});
+        return res.json({patchCarTime:'fail'});
     }
 });
 
@@ -65,30 +87,30 @@ router.patch('/:carID/time', async(req, res) => {
 router.get('/:carID/info', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carInfo:'success'});
+        return res.json({getCarInfo:'success'});
     } catch (error) {
         console.log(error);
-        return res.json({carInfo:'fail'});
+        return res.json({getCarInfo:'fail'});
     }
 });
 
 router.post('/:carID/info', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carInfo:'success'});
+        return res.json({postCarInfo:'success'});
     } catch (error) {
         console.log(error);
-        return res.json({carInfo:'fail'});
+        return res.json({postCarInfo:'fail'});
     }
 });
 
 router.patch('/:carID/info', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carInfo:'success'});
+        return res.json({patchCarInfo:'success'});
     } catch (error) {
         console.log(error);
-        return res.json({carInfo:'fail'});
+        return res.json({patchCarInfo:'fail'});
     }
 });
 
@@ -97,30 +119,30 @@ router.patch('/:carID/info', async(req, res) => {
 router.get('/:carID/review', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carReview:'success'});
+        return res.json({getCarReview:'success'});
     } catch (error) {
         console.log(error);
-        return res.json({carReview:'fail'});
+        return res.json({getCarReview:'fail'});
     }
 });
 
 router.post('/:carID/review', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carReview:'success'});
+        return res.json({postCarReview:'success'});
     } catch (error) {
         console.log(error);
-        return res.json({carReview:'fail'});
+        return res.json({postCarReview:'fail'});
     }
 });
 
 router.patch('/:carID/review', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carReview:'success'});
+        return res.json({patchCarReview:'success'});
     } catch (error) {
         console.log(error);
-        return res.json({carReview:'fail'});
+        return res.json({patchCarReview:'fail'});
     }
 });
 
@@ -135,3 +157,6 @@ router.get('/:carID/history', async(req, res) => {
         return res.json({carHistory:'fail'});
     }
 });
+
+
+module.exports = router;

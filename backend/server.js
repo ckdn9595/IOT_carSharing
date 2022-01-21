@@ -30,4 +30,4 @@ app.use(cors());
 // routes를 사용 => server.js에는 서버 관련된 내용만 두기 위함
 app.use("/", routes);
 
-app.listen(PORT, () => console.log(`Server listening on ${PORT}`))
+app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
