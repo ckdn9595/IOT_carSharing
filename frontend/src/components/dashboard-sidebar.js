@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
+import { Box, Grid, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { ChartBar as ChartBarIcon } from '../icons/chart-bar';
 import { Cog as CogIcon } from '../icons/cog';
@@ -28,24 +28,19 @@ const items = [
     title: '실시간 이용정보'
   },
   {
-    href: '/myPage',
+    href: '/chamgo',
     icon: (<ShoppingBagIcon fontSize="small" />),
-    title: '마이페이지'
+    title: '참고용'
   },
   {
-    href: '/account',
+    href: '/myPage',
     icon: (<UserIcon fontSize="small" />),
-    title: '내정보관리 - 마이페이지'
+    title: '마이페이지'
   },
   {
     href: '/settings',
     icon: (<CogIcon fontSize="small" />),
     title: '옵션 선택 화면 참고용'
-  },
-  {
-    href: '/register',
-    icon: (<UserAddIcon fontSize="small" />),
-    title: '회원가입 - 마이페이지'
   },
   {
     href: '/404',
@@ -87,24 +82,55 @@ export const DashboardSidebar = (props) => {
       >
         <div>
           <Box sx={{ p: 3 }}>
-            <NextLink
-              href="/"
-              passHref
+            <Grid
+              container
+              spacing={1}
             >
-              <a>
-                <Logo
-                  sx={{
-                    height: 42,
-                    width: 42
-                  }}
+              <Grid
+                item
+                lg={3}
+                md={3}
+                xs={12}
+              >
+                <NextLink
+                  href="/"
+                  passHref
+                >
+                  <a>
+                    <Logo
+                      sx={{
+                        height: 42,
+                        width: 42
+                      }}
+                    />
+                  </a>
+                </NextLink>
+              </Grid>
+              <Grid
+                item
+                lg={3}
+                md={3}
+                xs={12}
+              >
+                <NavItem
+                  // icon={<LockIcon fontSize="small" />}
+                  href={'/login'}
+                  title={'로그인'}
                 />
-              </a>
-            </NextLink>
-            <NavItem
-              icon={<LockIcon fontSize="small" />}
-              href={'/login'}
-              title={'Login'}
-            />
+              </Grid>
+              <Grid
+                item
+                lg={6}
+                md={6}
+                xs={12}
+              >
+                <NavItem
+                  // icon={<LockIcon fontSize="small" />}
+                  href={'/register'}
+                  title={'회원가입'}
+                />
+              </Grid>
+            </Grid>
           </Box>
           <Box sx={{ px: 2 }}>
             <Box

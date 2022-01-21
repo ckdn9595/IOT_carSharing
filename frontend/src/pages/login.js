@@ -12,28 +12,34 @@ const Login = () => {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
+      id: 'oneTeam',
       password: 'Password123'
     },
     validationSchema: Yup.object({
-      email: Yup
+      id: Yup
         .string()
-        .email(
-          'Must be a valid email')
         .max(255)
         .required(
-          'Email is required'),
+          'id is required'),
       password: Yup
         .string()
         .max(255)
         .required(
-          'Password is required')
+          'Password is required'),
     }),
     onSubmit: () => {
       router.push('/');
     }
   });
-
+  const formik2 = useFormik({
+    initialValues: {
+     
+    },
+   
+    onSubmit: () => {
+      alert("Oauth 기능(추후)");
+    }
+  });
   return (
     <>
       <Head>
@@ -57,26 +63,27 @@ const Login = () => {
               component="a"
               startIcon={<ArrowBackIcon fontSize="small" />}
             >
-              Dashboard
+              뒤로 가기
             </Button>
           </NextLink>
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={formik2.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography
                 color="textPrimary"
                 variant="h4"
               >
-                Sign in
+                로그인
               </Typography>
               <Typography
+                align="center"
                 color="textSecondary"
                 gutterBottom
                 variant="body2"
               >
-                Sign in on the internal platform
+                간편 로그인
               </Typography>
             </Box>
-            <Grid
+	          <Grid
               container
               spacing={3}
             >
@@ -89,7 +96,10 @@ const Login = () => {
                   color="info"
                   fullWidth
                   startIcon={<FacebookIcon />}
-                  onClick={formik.handleSubmit}
+                  onClick={
+                    // formik.setStatus({formik.isOauth:true});
+                    formik2.handleSubmit
+                  }
                   size="large"
                   variant="contained"
                 >
@@ -105,7 +115,7 @@ const Login = () => {
                   fullWidth
                   color="error"
                   startIcon={<GoogleIcon />}
-                  onClick={formik.handleSubmit}
+                  onClick={formik2.handleSubmit}
                   size="large"
                   variant="contained"
                 >
@@ -113,6 +123,8 @@ const Login = () => {
                 </Button>
               </Grid>
             </Grid>
+	        </form>
+          <form onSubmit={formik.handleSubmit}>
             <Box
               sx={{
                 pb: 1,
@@ -124,19 +136,19 @@ const Login = () => {
                 color="textSecondary"
                 variant="body1"
               >
-                or login with email address
+                회원 로그인
               </Typography>
             </Box>
             <TextField
-              error={Boolean(formik.touched.email && formik.errors.email)}
+              error={Boolean(formik.touched.id && formik.errors.id)}
               fullWidth
-              helperText={formik.touched.email && formik.errors.email}
-              label="Email Address"
+              helperText={formik.touched.id && formik.errors.id}
+              label="id"
               margin="normal"
-              name="email"
+              name="id"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              type="email"
+              type="id"
               value={formik.values.email}
               variant="outlined"
             />
@@ -162,14 +174,14 @@ const Login = () => {
                 type="submit"
                 variant="contained"
               >
-                Sign In Now
+                로그인
               </Button>
             </Box>
             <Typography
               color="textSecondary"
               variant="body2"
             >
-              Don&apos;t have an account?
+              회원이 아니신가요?
               {' '}
               <NextLink
                 href="/register"
@@ -182,7 +194,7 @@ const Login = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  Sign Up
+                  회원가입
                 </Link>
               </NextLink>
             </Typography>

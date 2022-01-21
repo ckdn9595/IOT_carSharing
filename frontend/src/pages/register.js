@@ -85,7 +85,7 @@ const Register = () => {
               component="a"
               startIcon={<ArrowBackIcon fontSize="small" />}
             >
-              Dashboard
+              뒤로 가기
             </Button>
           </NextLink>
           <form onSubmit={formik.handleSubmit}>
@@ -94,21 +94,21 @@ const Register = () => {
                 color="textPrimary"
                 variant="h4"
               >
-                Create a new account
+                회원가입
               </Typography>
               <Typography
                 color="textSecondary"
                 gutterBottom
                 variant="body2"
               >
-                Use your email to create a new account
+                회원가입 하쎄용!!
               </Typography>
             </Box>
             <TextField
               error={Boolean(formik.touched.firstName && formik.errors.firstName)}
               fullWidth
               helperText={formik.touched.firstName && formik.errors.firstName}
-              label="First Name"
+              label="수"
               margin="normal"
               name="firstName"
               onBlur={formik.handleBlur}
@@ -120,7 +120,7 @@ const Register = () => {
               error={Boolean(formik.touched.lastName && formik.errors.lastName)}
               fullWidth
               helperText={formik.touched.lastName && formik.errors.lastName}
-              label="Last Name"
+              label="정"
               margin="normal"
               name="lastName"
               onBlur={formik.handleBlur}
@@ -132,7 +132,7 @@ const Register = () => {
               error={Boolean(formik.touched.email && formik.errors.email)}
               fullWidth
               helperText={formik.touched.email && formik.errors.email}
-              label="Email Address"
+              label="예"
               margin="normal"
               name="email"
               onBlur={formik.handleBlur}
@@ -145,7 +145,7 @@ const Register = () => {
               error={Boolean(formik.touched.password && formik.errors.password)}
               fullWidth
               helperText={formik.touched.password && formik.errors.password}
-              label="Password"
+              label="정"
               margin="normal"
               name="password"
               onBlur={formik.handleBlur}
@@ -170,8 +170,6 @@ const Register = () => {
                 color="textSecondary"
                 variant="body2"
               >
-                I have read the
-                {' '}
                 <NextLink
                   href="#"
                   passHref
@@ -181,9 +179,10 @@ const Register = () => {
                     underline="always"
                     variant="subtitle2"
                   >
-                    Terms and Conditions
+                    이용약관
                   </Link>
                 </NextLink>
+                에 동의합니다.
               </Typography>
             </Box>
             {Boolean(formik.touched.policy && formik.errors.policy) && (
@@ -200,14 +199,14 @@ const Register = () => {
                 type="submit"
                 variant="contained"
               >
-                Sign Up Now
+                제출
               </Button>
             </Box>
             <Typography
               color="textSecondary"
               variant="body2"
             >
-              Have an account?
+              회원이신가요?
               {' '}
               <NextLink
                 href="/login"
@@ -217,7 +216,7 @@ const Register = () => {
                   variant="subtitle2"
                   underline="hover"
                 >
-                  Sign In
+                  로그인
                 </Link>
               </NextLink>
             </Typography>
