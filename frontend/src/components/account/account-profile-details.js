@@ -175,7 +175,7 @@ export const AccountProfileDetails = (props) => {
             color="primary"
             variant="contained"
           >
-            Save details
+            수 정
           </Button>
         </Box>
       </Card>

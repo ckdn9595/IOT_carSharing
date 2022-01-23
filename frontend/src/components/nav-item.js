@@ -33,7 +33,7 @@ export const NavItem = (props) => {
             color: active ? 'secondary.main' : 'neutral.300',
             fontWeight: active && 'fontWeightBold',
             justifyContent: 'flex-start',
-            px: 3,
+            px: 1,
             textAlign: 'left',
             textTransform: 'none',
             width: '100%',
