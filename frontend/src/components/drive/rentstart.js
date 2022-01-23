@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// 문 제어
-const DoorControl = () =>{
-  const [Door, SetDoor]= useState(0)
+// 예약한 차량 내역 불러오기
+// 
+const DriveStart = () =>{
 
   useEffect( async() =>{
     try{
-      const response = await axios.get(`http://localhost:3000/api/${carID}/문제어`)
+      const response = await axios.get(`http://localhost:3000/api/resevation/${carID}`)
       console.log(response.data)
     }catch(err){
       console.log(err)
@@ -17,9 +17,9 @@ const DoorControl = () =>{
 
   return(
     <div>
-      <p>문 제어상태를 설정합니다.</p>
+      <p>예약한 차량의 내역을 불러옵니다</p>
     </div>
   )
 }
 
-export default DoorControl
+export default DriveStart
