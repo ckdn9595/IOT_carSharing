@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ReservationHistory from './reservation-history';
 
 // 임차인이 빌린 내역
 
 
-const ReservationHistory = () =>{
+const ReservationHistoryList = () =>{
   const [items , set]= useState({
     대여기간:"",
   })
@@ -26,8 +27,9 @@ const ReservationHistory = () =>{
   return(
     <div>
       <p>예약내용</p>
+      <ReservationHistory/>
     </div>
   )
 }
 
-export default ReservationHistory
+export default ReservationHistoryList

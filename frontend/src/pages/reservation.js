@@ -4,6 +4,11 @@ import { CustomerListResults } from '../components/customer/customer-list-result
 import { CustomerListToolbar } from '../components/customer/customer-list-toolbar';
 import { DashboardLayout } from '../components/dashboard-layout';
 import { customers } from '../__mocks__/customers';
+import Insurance from 'src/components/car-management/insurance/insurance';
+import CarReview from 'src/components/car-management/review/car-review-create';
+import Review from 'src/components/car-management/review/review'
+import ReviewList from 'src/components/car-management/review/review-list'
+import CarRegister from 'src/components/car-management/car-register';
 
 const Customers = () => (
   <>
@@ -12,7 +17,7 @@ const Customers = () => (
         Customers | Material Kit
       </title>
     </Head>
-    <Box
+    {/* <Box
       component="main"
       sx={{
         flexGrow: 1,
@@ -25,7 +30,13 @@ const Customers = () => (
           <CustomerListResults customers={customers} />
         </Box>
       </Container>
-    </Box>
+    </Box> */}
+    <Insurance/>
+    <CarReview/>
+    <ReviewList/>
+    <Review/>
+    <CarRegister/>
+
   </>
 );
 Customers.getLayout = (page) => (

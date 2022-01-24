@@ -17,20 +17,60 @@ const RentTimeCheck = () =>{
   const 임대인이용승인
   const 임대인반납확인
 
-  useEffect( async() =>{
-    try{
-      const response = await axios.get(`http://localhost:3000/api/car/${carID}/time`)
-      console.log(response.data)
-    }catch(err){
-      console.log(err)
+  useEffect( () =>{
+    const fetch = async () => {
+      try{
+        const response = await axios.get(`http://localhost:3000/api/car/${carID}/time`)
+        console.log(response.data)
+      }catch(err){
+        console.log(err)
+      }
     }
+    fetch()
 
   }, [])
 
   return(
     <div>
       <p>예약차량의 이용중인 상태를 표시합니다.</p>
+      <table class="tg">
+<thead>
+  <tr>
+    <th class="tg-0lax">신고</th>
+    <th class="tg-0lax"></th>
+    <th class="tg-0lax">고객센터</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax"></td>
+    <td class="tg-0lax">차량운행상태</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">사용시간</td>
+    <td class="tg-0lax">주행거리</td>
+    <td class="tg-0lax">단위요금</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">10초</td>
+    <td class="tg-0lax">100키로</td>
+    <td class="tg-0lax">오백원</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax"></td>
+    <td class="tg-0lax">실시간이용요금</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">결제수단</td>
+    <td class="tg-0lax">문컨트롤</td>
+    <td class="tg-0lax">이용종료</td>
+  </tr>
+</tbody>
+</table>
     </div>
+    
   )
 }
   
