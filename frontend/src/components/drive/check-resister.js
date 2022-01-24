@@ -19,19 +19,64 @@ const CheckList = () =>{
   }
 
 
-  useEffect(async() =>{
-    try{
-      const response = await axios(option)
-      console.log(response.data)
-    }catch(err){
-      console.log(err)
+  useEffect( () =>{
+    const fetch = async () => {
+      try{
+        const response = await axios(option)
+        console.log(response.data)
+      }catch(err){
+        console.log(err)
+      }
     }
+    fetch()
 
   },[])
 
   return(
     <div>
       <p> 예약된 차량의 이용 전 상태를 등록합니다</p>
+      <table class="tg">
+<thead>
+  <tr>
+    <th class="tg-0lax">외부사진</th>
+    <th class="tg-0lax">외부사진2</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">사진1</td>
+    <td class="tg-0lax">사진2</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">내부사진</td>
+    <td class="tg-0lax">내부사진2</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">사진3</td>
+    <td class="tg-0lax">사진4</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">등록취소</td>
+    <td class="tg-0lax">등록완료</td>
+  </tr>
+</tbody>
+</table>
+
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-0lax">체크리스트</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">체크할것들</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">제출하기</td>
+  </tr>
+</tbody>
+</table>
     </div>
   )
 }
