@@ -5,7 +5,7 @@ import MemberInfo from '../components/myPage/memberInfo';
 import LicenseResi from '../components/myPage/licenseResi';
 import PayCardInfo from '../components/myPage/payCardInfo';
 
-const Account = () => (
+const MyPage = () => (
   <>
     <Head>
       <title>
@@ -42,10 +42,10 @@ const Account = () => (
   </>
 );
 
-Account.getLayout = (page) => (
+MyPage.getLayout = (page) => (
   <DashboardLayout>
     {page}
   </DashboardLayout>
 );
 
-export default Account;
+export default MyPage;
