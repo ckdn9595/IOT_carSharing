@@ -38,6 +38,11 @@ const items = [
     title: '마이페이지'
   },
   {
+    href: '/serviceCenter',
+    icon: (<UserIcon fontSize="small" />),
+    title: '고객센터'
+  },
+  {
     href: '/settings',
     icon: (<CogIcon fontSize="small" />),
     title: '옵션 선택 화면 참고용'
