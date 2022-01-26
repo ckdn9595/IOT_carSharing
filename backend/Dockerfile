@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 8001
 
-CMD [ "npx", "nodemon" ]
+CMD [ "npx", "nodemon", "server" ]
