@@ -1,82 +1,43 @@
 {
-  "name": "sadf",
-  "version": "0.1.0",
-  "private": true,
+  "name": "material-kit-react",
+  "author": "Devias IO",
+  "licence": "MIT",
+  "version": "2.0.0",
+  "private": false,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export",
+    "lint": "next lint",
+    "lint-fix": "next lint --fix"
+  },
   "dependencies": {
-    "@date-io/date-fns": "1.x",
-    "@material-ui/core": "^4.7.2",
-    "@material-ui/icons": "^4.5.1",
-    "@material-ui/pickers": "^3.2.10",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "axios": "^0.24.0",
-    "crypto": "^1.0.1",
-    "crypto-browserify": "^3.12.0",
-    "date-fns": "^2.14.0",
-    "eslint-config-prettier": "^6.10.1",
-    "material-ui": "^0.15.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-draggable": "^4.2.0",
-    "react-dropzone": "^10.2.1",
-    "react-infinite-scroll-component": "^5.0.4",
-    "react-player": "^1.14.2",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "^5.0.0",
-    "react-simple-keyboard": "^2.1.82",
-    "react-use": "^13.12.2",
-    "react-vis": "^1.11.7",
-    "recharts": "^2.0.0-beta.1",
-    "socket.io-client": "^2.3.0",
-    "store": "^2.0.12",
-    "styled-components": "^4.4.1",
-    "web3": "^1.6.1"
+    "@emotion/cache": "^11.5.0",
+    "@emotion/react": "^11.5.0",
+    "@emotion/server": "^11.4.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.5",
+    "@mui/lab": "^5.0.0-alpha.53",
+    "@mui/material": "^5.0.6",
+    "@mui/styles": "^5.0.2",
+    "axios": "^0.25.0",
+    "chart.js": "^3.5.1",
+    "date-fns": "^2.25.0",
+    "formik": "^2.1.5",
+    "history": "^5.0.0",
+    "next": "^12.0.8",
+    "nprogress": "^0.2.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-chartjs-2": "^3.0.4",
+    "react-dom": "^17.0.2",
+    "react-perfect-scrollbar": "^1.5.8",
+    "uuid": "^8.3.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
-    "eslint": "^8.6.0",
-    "eslint-loader": "^4.0.2",
-    "prettier": "^1.19.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "main": "index.js",
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "prettier"
-    ],
-    "rules": {
-      "react/prefer-stateless-function": 0,
-      "react/jsx-filename-extension": 0,
-      "react/jsx-one-expression-per-line": 0,
-      "react-hooks/exhaustive-deps": 0,
-      "no-unused-vars": 1,
-      "eqeqeq": "off"
-    }
-  },
-  "prettier": {
-    "singleQuote": true,
-    "semi": true,
-    "useTabs": false,
-    "tabWidth": 2,
-    "trailingComma": "all",
-    "printWidth": 80
+    "eslint": "^7.32.0",
+    "eslint-config-next": "12.0.3-canary.7"
   }
 }
