@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Pull') {
       steps {
-        git(url: '${GIT_URL}', branch: 'feature/cicd', poll: true, changelog: true)
+        git(url: 'https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104.git', branch: 'feature/cicd', poll: true, changelog: true)
       }
     }
 
