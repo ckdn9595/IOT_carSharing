@@ -7,8 +7,17 @@ import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Facebook as FacebookIcon } from '../icons/facebook';
 import { Google as GoogleIcon } from '../icons/google';
+import { getUser, useUsersDispatch } from 'src/context/UserContext.js';
+
+const getLogin = () => {
+  const dispatch = useUsersDispatch;
+  let {id, password} = formik.values;
+  let member = {"id":id, "password":password};
+  getUser(dispatch, member);
+};
 
 const Login = () => {
+  
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -27,8 +36,9 @@ const Login = () => {
         .required(
           'Password is required'),
     }),
-    onSubmit: () => {
-      router.push('/');
+    onSubmit: async () => {
+     await getLogin;
+     router.push('/');
     }
   });
   const formik2 = useFormik({
@@ -149,7 +159,7 @@ const Login = () => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               type="id"
-              value={formik.values.email}
+              value={formik.values.id}
               variant="outlined"
             />
             <TextField

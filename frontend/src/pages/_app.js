@@ -6,6 +6,7 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { createEmotionCache } from '../utils/create-emotion-cache';
 import { theme } from '../theme';
+import { UsersProvider } from '../context/UserContext';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -16,21 +17,23 @@ const App = (props) => {
 
   return (
     <CacheProvider value={emotionCache}>
-      <Head>
-        <title>
-          Material Kit Pro
-        </title>
-        <meta
-          name="viewport"
-          content="initial-scale=1, width=device-width"
-        />
-      </Head>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeProvider>
-      </LocalizationProvider>
+      <UsersProvider>
+        <Head>
+          <title>
+            Material Kit Pro
+          </title>
+          <meta
+            name="viewport"
+            content="initial-scale=1, width=device-width"
+          />
+        </Head>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {getLayout(<Component {...pageProps} />)}
+          </ThemeProvider>
+        </LocalizationProvider>
+      </UsersProvider>
     </CacheProvider>
   );
 };
