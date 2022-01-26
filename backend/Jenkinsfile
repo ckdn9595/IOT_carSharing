@@ -1,0 +1,33 @@
+pipeline {
+  agent any
+  stages {
+    stage('Pull') {
+      steps {
+        git(url: 'https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104.git', branch: 'feature/cicd', changelog: true, poll: true, credentialsId: '5b334aab-1ca1-4f1f-add2-69c9ecc40e3d')
+      }
+    }
+
+    stage('Build') {
+      steps {
+        sh 'docker build -t nodejs/back ./backend'
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        sh 'docker ps -q --filter name=backend | grep -q . && docker stop backend && docker rm backend'
+        sh 'docker run -d --name backend -p 8001:8001 -u root nodejs/back'
+      }
+    }
+
+    stage('Finish') {
+      steps {
+        sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
+      }
+    }
+
+  }
+  environment {
+    GIT_URL = 'https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104.git'
+  }
+}
