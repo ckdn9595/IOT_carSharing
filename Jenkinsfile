@@ -35,14 +35,16 @@ pipeline {
       parallel {
         stage('Deploy-front') {
           steps {
-            sh 'docker ps -q --filter name=frontend | grep -q . && docker stop frontend && docker rm frontend'
+            sh 'docker stop frontend'
+            sh 'docker rm frontend'
             sh 'docker run -d --name frontend -p 3000:3000 -v /home/ubuntu/Workspace/certs:/home/ubuntu/Workspace/certs -u root nodejs/front'
           }
         }
 
         stage('Deploy-back') {
           steps {
-            sh 'docker ps -q --filter name=backend | grep -q . && docker stop backend && docker rm backend'
+            sh 'docker stop backend'
+            sh 'docker rm backend'
             sh 'docker run -d --name backend -p 8001:8001 -u root nodejs/back'
           }
         }
@@ -52,7 +54,7 @@ pipeline {
 
     stage('Finish') {
       steps {
-        sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
+        echo 'Done!'
       }
     }
 
