@@ -15,15 +15,38 @@ pipeline {
     }
 
     stage('Build') {
-      steps {
-        sh 'docker build -t nodejs/front ./frontend'
+      parallel {
+        stage('Build-front') {
+          steps {
+            sh 'docker build -t nodejs/front ./frontend'
+          }
+        }
+
+        stage('Build-back') {
+          steps {
+            sh 'docker build -t nodejs/back ./backend'
+          }
+        }
+
       }
     }
 
-    stage('Deploy') {
-      steps {
-        sh 'docker ps -q --filter name=frontend | grep -q . && docker stop frontend && docker rm frontend'
-        sh 'docker run -d --name frontend -p 3000:3000 -v /home/ubuntu/Workspace/certs:/home/ubuntu/Workspace/certs -u root nodejs/front'
+    stage('Deploy-front') {
+      parallel {
+        stage('Deploy-front') {
+          steps {
+            sh 'docker ps -q --filter name=frontend | grep -q . && docker stop frontend && docker rm frontend'
+            sh 'docker run -d --name frontend -p 3000:3000 -v /home/ubuntu/Workspace/certs:/home/ubuntu/Workspace/certs -u root nodejs/front'
+          }
+        }
+
+        stage('Deploy-back') {
+          steps {
+            sh 'docker ps -q --filter name=backend | grep -q . && docker stop backend && docker rm backend'
+            sh 'docker run -d --name backend -p 8001:8001 -u root nodejs/back'
+          }
+        }
+
       }
     }
 
