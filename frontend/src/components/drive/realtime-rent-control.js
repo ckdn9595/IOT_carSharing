@@ -9,13 +9,13 @@ import axios from 'axios';
 // 문이 닫히고 차량이 정지중이면 주차중, 정지중이면 정차중, 이동상태면 주행중//
 // 차량이 주차인 상태에서만 차량 문 제어 가능
 const RentTimeCheck = () =>{
-  const 사용시간
-  const 이동거리
-  const 이용요금
-  const 단위요금, 예약시간
-  const 임차인정보
-  const 임대인이용승인
-  const 임대인반납확인
+  // const 사용시간
+  // const 이동거리
+  // const 이용요금
+  // const 단위요금, 예약시간
+  // const 임차인정보
+  // const 임대인이용승인
+  // const 임대인반납확인
 
   useEffect( () =>{
     const fetch = async () => {

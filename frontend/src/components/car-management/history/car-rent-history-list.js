@@ -10,7 +10,7 @@ const RentHistoryList = () =>{
 
 
   const option = {
-    url =`http://localhost:3000/api/car/${carID}/history`,
+    url: `http://localhost:3000/api/car/${carID}/history`,
     method:'GET',
     data:{
  

@@ -4,8 +4,8 @@ import axios from 'axios';
 // 이용 종료
 // 사용시간과, 체크리스트를 보냄
 const DriveEnd = () =>{
-  const [사용시간, set] = useState()
-  const [체크리스트, set] = useState()
+  const [사용시간, set사용시간] = useState()
+  const [체크리스트, set체크리스트] = useState()
 
   option = {
     url:`http://localhost:3000/api/car/${carID}/history/`,

@@ -5,6 +5,15 @@ const cors = require('cors');
 const routes = require('./routes');
 const app = express();
 
+// HTTPS 설정
+// const https = require('https');
+// const fs = require('fs');
+
+// const options = {
+//     key: fs.readFileSync('/home/ubuntu/Workspace/certs/privkey.pem'),
+//     cert: fs.readFileSync('/home/ubuntu/Workspace/certs/fullchain.pem')
+// };
+
 // 아래 세팅 사용시 주의점
 // 기존에 했던 DB내 데이터가 전부 날아가기때문에
 // 첫 세팅시에만 사용하는것을 추천함
@@ -18,7 +27,7 @@ const app = express();
 // })
 // --  --
 
-const PORT = 8000;
+const PORT = 8001;
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
@@ -31,3 +40,4 @@ app.use(cors());
 app.use("/", routes);
 
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+// https.createServer(options, app).listen(PORT, () => console.log(`Server listening on ${PORT}`));
