@@ -9,11 +9,30 @@ const fs = require('fs');
 
 const router = express.Router();
 
-// 회원가입
+// register function
 router.post('/register', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({register:'success'});
+        const {
+            userId,
+            userName,
+            userPassword,
+            userGender,
+            userBirth,
+            userPhone,
+            userDriverLicense,
+            userDriverInsurance,
+            userPrivacyPolicy,
+            userLocationBasedService
+        } = req.body;
+        if(userId==null || !userId.includes('@') || !userId.includes('.')){
+            return res.status(400).json({
+                message: 'userId is required'
+            });
+        }
+        return res.status(200).json({
+            register:'success'
+        });
     } catch (error) {
         console.log(error);
         return res.json({register:'fail'});
@@ -24,6 +43,10 @@ router.post('/register', async(req, res) => {
 router.post('/login', async (req, res) => {
     console.log(req.body);
     try {
+        const {
+            userId,
+            userPassword
+        } = req.body;
         return res.json({login:'success'});
     } catch (error) {
         console.log(error);
@@ -35,6 +58,9 @@ router.post('/login', async (req, res) => {
 router.get('/info', async (req, res) => {
     console.log(req.body);
     try {
+        const {
+            userToken
+        } = req.body;
         return res.json({userInfo:'success'});
     } catch (error) {
         console.log(error);
