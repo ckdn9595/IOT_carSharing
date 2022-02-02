@@ -13,7 +13,7 @@ const router = express.Router();
 router.post('/register', async(req, res) => {
     console.log(req.body);
     try {
-        const {
+        const { // destructuring assignment for each variable
             userId,
             userName,
             userPassword,
@@ -25,21 +25,55 @@ router.post('/register', async(req, res) => {
             userPrivacyPolicy,
             userLocationBasedService
         } = req.body;
+
+        // check if all values are filled
         if(userId==null || !userId.includes('@') || !userId.includes('.')){
             return res.status(400).json({
-                message: 'userId is required'
+                message: 'userId is required and must be email format'
             });
         }
+        if(userPassword==null || userPassword.length<8){
+            return res.status(400).json({
+                message: 'userPassword is required and must be 8 characters at least'
+            });
+        }
+        if(userName==null || userGender==null || userBirth==null || userPhone==null || userDriverLicense==null || userPrivacyPolicy==null || userLocationBasedService==null){
+            return res.status(400).json({
+                message: 'fill all the required fields'
+            });
+        }
+
+        // userId duplication check
+        if(await db.User.findOne({
+            where: {'sys.tb_user' : userId}}) != null){
+            return res.status(400).json({
+                message: 'userId is already used'
+            });
+        }
+
+        // hash userPassword
+        const hashedPassword = await hashPassword(userPassword);
+
+        // create user
+        const user = await db.User.create({
+            'sys.tb_user.usr_id': userId,
+            'sys.tb_user.usr_pwd': hashedPassword,
+            'sys.tb_user.usr_name': userName,
+            'sys.tb_user.usr_gender': userGender,
+            'sys.tb_user.usr_phone': userPhone,
+        });
+
+        // return success message
         return res.status(200).json({
             register:'success'
         });
-    } catch (error) {
+    } catch (error) { // catch error
         console.log(error);
         return res.json({register:'fail'});
     }
-});
+}); // end of register function
 
-// 로그인
+// login function
 router.post('/login', async (req, res) => {
     console.log(req.body);
     try {
@@ -54,7 +88,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// 유저 정보
+// user info function
 router.get('/info', async (req, res) => {
     console.log(req.body);
     try {

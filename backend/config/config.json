@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": "",
-    "database": "ssafy_room",
-    "host": "127.0.0.1",
+    "password": "a104sqlserver",
+    "database": "sys",
+    "host": "i6a104.p.ssafy.io",
     "dialect": "mysql"
   },
   "test": {
