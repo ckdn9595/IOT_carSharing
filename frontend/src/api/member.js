@@ -5,7 +5,7 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 
 async function login(member, success, fail) {
   await axios
-    .post(`{API_BASE_URL}/user/login`, JSON.stringify(member))
+    .post(`${API_BASE_URL}/user/login`, JSON.stringify(member))
     .then(success)
     .catch(fail);
 }

@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useContext } from 'react';
-import { login } from "../api/member.js";
+
 // UsersContext 에서 사용 할 기본 상태
 const initialState = {
   user: {
@@ -33,6 +33,12 @@ const error = error => ({
   error: error,
   isLogin: false
 });
+const logOut = () => ({
+  loading: false,
+  data: null,
+  error: null,
+  isLogin: false
+});
 
 // 위에서 만든 객체 / 유틸 함수들을 사용하여 리듀서 작성
 function usersReducer(state, action) {
@@ -51,6 +57,11 @@ function usersReducer(state, action) {
       return {
         ...state,
         user: error(action.error)
+      };
+    case 'GET_LOGOUT':
+      return {
+        ...state,
+        user: logOut()
       };
     default:
       throw new Error(`Unhanded action type: ${action.type}`);
@@ -90,22 +101,3 @@ export function useUsersDispatch() {
   }
   return dispatch;
 }
-
-export async function getUser(dispatch, member) {
-    dispatch({ type: 'GET_USER' });
-    await login(
-        member,
-        (response) => {
-          console.log(member);
-          console.log(response);
-          if (response.data.status_code == "0" ) {
-            let token = response.data["access-token"];
-            sessionStorage.setItem("access-token", token);
-            dispatch({ type: 'GET_USER_SUCCESS', data: response.data });
-          } else {
-            dispatch({ type: 'GET_USER_ERROR', error: e });
-          }
-        },
-        () => {dispatch({ type: 'GET_USER_ERROR', error: e });}
-      );
-  }

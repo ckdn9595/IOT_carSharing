@@ -7,22 +7,17 @@ import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Facebook as FacebookIcon } from '../icons/facebook';
 import { Google as GoogleIcon } from '../icons/google';
-import { getUser, useUsersDispatch } from 'src/context/UserContext.js';
-
-const getLogin = () => {
-  const dispatch = useUsersDispatch;
-  let {id, password} = formik.values;
-  let member = {"id":id, "password":password};
-  getUser(dispatch, member);
-};
+import { login } from "../api/member.js";
+import { useUsersDispatch } from 'src/context/UserContext.js';
+import { useContext } from 'react';
 
 const Login = () => {
-  
+  const dispatch = useUsersDispatch();
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      id: 'oneTeam',
-      password: 'Password123'
+      id: '',
+      password: ''
     },
     validationSchema: Yup.object({
       id: Yup
@@ -36,9 +31,28 @@ const Login = () => {
         .required(
           'Password is required'),
     }),
-    onSubmit: async () => {
-     await getLogin;
-     router.push('/');
+    onSubmit: async (e) => {
+      let member = e;
+      dispatch({ type: 'GET_USER', data: null });
+      await login(
+        member,
+        (response) => {
+          console.log(member);
+          console.log(response);
+          if (response.status === 200 ) {
+            let token = response.data["access_token"];
+            sessionStorage.setItem("access_token", token);
+            dispatch({ type: 'GET_USER_SUCCESS', data: response.data });
+            router.push('/');
+          } else {
+            dispatch({ type: 'GET_USER_ERROR', error: e });
+            alert('아이디/비밀번호 확인해주세요.');
+          }
+        },
+        () => {
+                dispatch({ type: 'GET_USER_ERROR', error: e });
+              }
+      );
     }
   });
   const formik2 = useFormik({
