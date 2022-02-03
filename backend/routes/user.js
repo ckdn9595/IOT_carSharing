@@ -25,6 +25,7 @@ router.post('/register', async(req, res) => {
             userPrivacyPolicy,
             userLocationBasedService
         } = req.body;
+        let seqNum;
 
         // check if all values are filled
         if(userId==null || !userId.includes('@') || !userId.includes('.')){
@@ -44,22 +45,28 @@ router.post('/register', async(req, res) => {
         }
 
         // userId duplication check
-        if(await db.tb_user.findOne({where: {'usr_id' : userId}}) != null){
+        if(await db.tb_user.findOne({where: {usr_id : userId}}) != null){
             return res.status(400).json({
                 message: 'userId is already used'
             });
         }
 
+        if(await db.tb_user.findAll({where: {usr_seq: !null}}).length > 0){
+            seqNum = (db.tb_user.findAll({where: {usr_seq: !null}}).length + 1).padStart(8, '0');
+        } else {seqNum = "1".padStart(8,"0");}
+
         // hash userPassword
         const hashedPassword = await hashPassword(userPassword);
 
         // create user
-        const user = await db.User.create({
-            'sys.tb_user.usr_id': userId,
-            'sys.tb_user.usr_pwd': hashedPassword,
-            'sys.tb_user.usr_name': userName,
-            'sys.tb_user.usr_gender': userGender,
-            'sys.tb_user.usr_phone': userPhone,
+        const user = await db.tb_user.create({
+            usr_seq: seqNum,
+            usr_id: userId,
+            usr_pwd: hashedPassword,
+            usr_name: userName,
+            usr_gender: userGender,
+            usr_phone: userPhone,
+            usr_birth_day: userBirth,
         });
 
         // return success message

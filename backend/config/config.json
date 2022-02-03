@@ -5,7 +5,10 @@
     "database": "sys",
     "host": "i6a104.p.ssafy.io",
     "port": 5050,
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "define": {
+      "timestamps": false
+    }
   },
   "test": {
     "username": "root",

@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   tb_user.init({
-    usr_id: DataTypes.STRING,
+    usr_seq: DataTypes.INTEGER,
+    usr_id: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
     usr_pwd: DataTypes.STRING,
     usr_name: DataTypes.STRING,
     usr_gender: DataTypes.STRING,
