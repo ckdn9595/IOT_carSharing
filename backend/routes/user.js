@@ -9,21 +9,84 @@ const fs = require('fs');
 
 const router = express.Router();
 
-// 회원가입
+// register function
 router.post('/register', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({register:'success'});
-    } catch (error) {
-        console.log(error);
-        return res.json({register:'fail'});
-    }
-});
+        const { // destructuring assignment for each variable
+            userId,
+            userName,
+            userPassword,
+            userGender,
+            userBirth,
+            userPhone,
+            userDriverLicense,
+            userDriverInsurance,
+            userPrivacyPolicy,
+            userLocationBasedService
+        } = req.body;
+        let seqNum;
 
-// 로그인
+        // check if all values are filled
+        if(userId==null || !userId.includes('@') || !userId.includes('.')){
+            return res.status(400).json({
+                message: 'userId is required and must be email format'
+            });
+        }
+        if(userPassword==null || userPassword.length<8){
+            return res.status(400).json({
+                message: 'userPassword is required and must be 8 characters at least'
+            });
+        }
+        if(userName==null || userGender==null || userBirth==null || userPhone==null || userDriverLicense==null || userPrivacyPolicy==null || userLocationBasedService==null){
+            return res.status(400).json({
+                message: 'fill all the required fields'
+            });
+        }
+
+        // userId duplication check
+        if(await db.tb_user.findOne({where: {usr_id : userId}}) != null){
+            return res.status(400).json({
+                message: 'userId is already used'
+            });
+        }
+
+        if(await db.tb_user.findAll({where: {usr_seq: !null}}).length > 0){
+            seqNum = (db.tb_user.findAll({where: {usr_seq: !null}}).length + 1).padStart(8, '0');
+        } else {seqNum = "1".padStart(8,"0");}
+
+        // hash userPassword
+        const hashedPassword = await hashPassword(userPassword);
+
+        // create user
+        const user = await db.tb_user.create({
+            usr_seq: seqNum,
+            usr_id: userId,
+            usr_pwd: hashedPassword,
+            usr_name: userName,
+            usr_gender: userGender,
+            usr_phone: userPhone,
+            usr_birth_day: userBirth,
+        });
+
+        // return success message
+        return res.status(200).json({
+            register:'success'
+        });
+    } catch (error) { // catch error
+        console.log(error);
+        return res.json({register:error});
+    }
+}); // end of register function
+
+// login function
 router.post('/login', async (req, res) => {
     console.log(req.body);
     try {
+        const {
+            userId,
+            userPassword
+        } = req.body;
         return res.json({login:'success'});
     } catch (error) {
         console.log(error);
@@ -31,10 +94,13 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// 유저 정보
+// user info function
 router.get('/info', async (req, res) => {
     console.log(req.body);
     try {
+        const {
+            userToken
+        } = req.body;
         return res.json({userInfo:'success'});
     } catch (error) {
         console.log(error);
