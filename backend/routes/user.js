@@ -51,17 +51,11 @@ router.post('/register', async(req, res) => {
             });
         }
 
-        // generate seqNum
-        if(await db.tb_user.findAll({where: {usr_seq: !null}}).length > 0){
-            seqNum = (db.tb_user.findAll({where: {usr_seq: !null}}).length + 1).padStart(8, '0');
-        } else {seqNum = "1".padStart(8,"0");}
-
         // hash userPassword
         const hashedPassword = await hashPassword(userPassword);
 
         // create user
         const user = await db.tb_user.create({
-            usr_seq: seqNum,
             usr_id: userId,
             usr_pwd: hashedPassword,
             usr_name: userName,

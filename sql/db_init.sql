@@ -31,12 +31,12 @@ CREATE TABLE `tb_car_info` (
 );
 
 CREATE TABLE `tb_user` (
-	`usr_seq`	BIGINT	NOT NULL,
+	`usr_seq`	BIGINT	NOT NULL AUTO_INCREMENT,
 	`usr_id`	VARCHAR(100)	NOT NULL,
 	`usr_name`	VARCHAR(50)	NOT NULL,
 	`usr_type`	enum('REGULAR', 'GUEST')	NOT NULL,
 	`usr_stat`	enum('NORMAL', 'REST', 'STOP')	NOT NULL,
-	`usr_befo_pwd`	VARCHAR(100)	NOT NULL,
+	`usr_befo_pwd`	VARCHAR(100)	NULL,
 	`usr_pwd`	VARCHAR(100)	NOT NULL,
 	`usr_gender`	enum('M','F')	NOT NULL,
 	`usr_birth_day`	VARCHAR(8)	NOT NULL,
