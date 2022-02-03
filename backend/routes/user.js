@@ -51,6 +51,7 @@ router.post('/register', async(req, res) => {
             });
         }
 
+        // generate seqNum
         if(await db.tb_user.findAll({where: {usr_seq: !null}}).length > 0){
             seqNum = (db.tb_user.findAll({where: {usr_seq: !null}}).length + 1).padStart(8, '0');
         } else {seqNum = "1".padStart(8,"0");}
@@ -87,10 +88,48 @@ router.post('/login', async (req, res) => {
             userId,
             userPassword
         } = req.body;
-        return res.json({login:'success'});
+
+        // check if all values are filled
+        if(userId==null || !userId.includes('@') || !userId.includes('.')){
+            return res.status(400).json({
+                message: 'userId is required and must be email format'
+            });
+        };
+
+
+        // check if userId is registered
+        const user = await db.tb_user.findOne({where: {usr_id: userId}});
+        if(user == null){
+            return res.status(400).json({
+                message: 'userId is not registered'
+            });
+        } else {
+            // check if userPassword is correct
+            const isCorrect = await comparePassword(userPassword, user.usr_pwd);
+            if(isCorrect){
+                process.env.JWT_SECRET = user.usr_id;
+                // generate token
+                const token = jwt.sign({
+                    userId: user.usr_id,
+                    userName: user.usr_name,
+                    userGender: user.usr_gender
+                }, process.env.JWT_SECRET, {
+                    expiresIn: '1h'
+                });
+                return res.status(200).json({
+                    message: 'login success',
+                    token: token
+                });
+            } else {
+                return res.status(400).json({
+                    message: 'userPassword is incorrect'
+                });
+            }
+        }
+
     } catch (error) {
         console.log(error);
-        return res.json({login:'fail'});
+        return res.status(400).json({login:error});
     }
 });
 
