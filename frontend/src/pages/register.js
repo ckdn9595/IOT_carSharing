@@ -3,7 +3,9 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import DateFnsUtils from '@date-io/date-fns';
 import {
+  Grid,
   Box,
   Button,
   Checkbox,
@@ -11,43 +13,88 @@ import {
   FormHelperText,
   Link,
   TextField,
-  Typography
+  RadioGroup,
+  FormLabel,
+  FormControlLabel,
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+  Typography,
+  Radio,
+  FormControl
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
+const makeDatetoString = (date) => {
+  if(!date){
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = ('0' + (today.getMonth() + 1)).slice(-2);
+    let day = ('0' + today.getDate()).slice(-2);
+    return year + '/' + month + '/' + day;
+  }
+}
+const makeStringtoDate = (dateStr) => {
+  let parts = dateStr.split('/');
+  console.log(new Date(parts[0], parts[1] - 1, parts[2]));
+  return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
 const Register = () => {
   const router = useRouter();
+  // let dateStr = makeDatetoString();
   const formik = useFormik({
     initialValues: {
-      email: '',
-      firstName: '',
-      lastName: '',
-      password: '',
+      userId: '',
+      userName: '',
+      userPassword: '',
+      userPasswordCh: '',
+      userPhone: '',
+      userGender: '',
+      userBirth: makeDatetoString(),
       policy: false
     },
     validationSchema: Yup.object({
-      email: Yup
+      userId: Yup
         .string()
         .email(
-          'Must be a valid email')
+          'Must be a valid userId')
         .max(255)
         .required(
-          'Email is required'),
-      firstName: Yup
+          'Id is required'),
+      userName: Yup
         .string()
         .max(255)
         .required(
-          'First name is required'),
-      lastName: Yup
+          'Name is required'),
+      userPassword: Yup
         .string()
-        .max(255)
-        .required(
-          'Last name is required'),
-      password: Yup
-        .string()
+        .matches(
+          /(?=.*\d)(?=.*[a-z]).{8,}/,
+          "영어소문자, 숫자 포함 8자 이상의 비밀번호"
+        )
         .max(255)
         .required(
           'Password is required'),
+      userPasswordCh: Yup
+        .string()
+        .max(255)
+        .required()
+        .oneOf([Yup.ref("userPassword"), null], "Passwords must match"),
+      userPhone: Yup
+        .string()
+        .max(255)
+        .matches(
+          /^\d{11}$/,
+          "숫자 11자리"
+        )
+        .required(
+          'phone is required'),
+      userBirth: Yup
+        .string()
+        .max(10),
+      userGender: Yup
+        .string()
+        .max(2),
       policy: Yup
         .boolean()
         .oneOf(
@@ -55,8 +102,10 @@ const Register = () => {
           'This field must be checked'
         )
     }),
-    onSubmit: () => {
-      router.push('/');
+    onSubmit: (data, {setSubmitting}) => {
+      setSubmitting(true);
+      console.log(data);
+      setSubmitting(false);
     }
   });
 
@@ -101,59 +150,111 @@ const Register = () => {
                 gutterBottom
                 variant="body2"
               >
-                회원가입 하쎄용!!
+                회원가입!!
               </Typography>
             </Box>
             <TextField
-              error={Boolean(formik.touched.firstName && formik.errors.firstName)}
+              error={Boolean(formik.touched.userId && formik.errors.userId)}
               fullWidth
-              helperText={formik.touched.firstName && formik.errors.firstName}
-              label="수"
+              helperText={formik.touched.userId && formik.errors.userId}
+              label="아이디"
               margin="normal"
-              name="firstName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.firstName}
-              variant="outlined"
-            />
-            <TextField
-              error={Boolean(formik.touched.lastName && formik.errors.lastName)}
-              fullWidth
-              helperText={formik.touched.lastName && formik.errors.lastName}
-              label="정"
-              margin="normal"
-              name="lastName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.lastName}
-              variant="outlined"
-            />
-            <TextField
-              error={Boolean(formik.touched.email && formik.errors.email)}
-              fullWidth
-              helperText={formik.touched.email && formik.errors.email}
-              label="예"
-              margin="normal"
-              name="email"
+              name="userId"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               type="email"
-              value={formik.values.email}
+              value={formik.values.userId}
               variant="outlined"
             />
             <TextField
-              error={Boolean(formik.touched.password && formik.errors.password)}
+              error={Boolean(formik.touched.userName && formik.errors.userName)}
               fullWidth
-              helperText={formik.touched.password && formik.errors.password}
-              label="정"
+              helperText={formik.touched.userName && formik.errors.userName}
+              label="이름"
               margin="normal"
-              name="password"
+              name="userName"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.userName}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.userPassword && formik.errors.userPassword)}
+              fullWidth
+              helperText={formik.touched.userPassword && formik.errors.userPassword}
+              label="비밀번호"
+              margin="normal"
+              name="userPassword"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               type="password"
-              value={formik.values.password}
+              value={formik.values.userPassword}
               variant="outlined"
             />
+            <TextField
+              error={Boolean(formik.touched.userPasswordCh && formik.errors.userPasswordCh)}
+              fullWidth
+              helperText={formik.touched.userPasswordCh && formik.errors.userPasswordCh}
+              label="비밀번호 확인"
+              margin="normal"
+              name="userPasswordCh"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="password"
+              value={formik.values.userPasswordCh}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.userPhone && formik.errors.userPhone)}
+              fullWidth
+              helperText={formik.touched.userPhone && formik.errors.userPhone}
+              label="전화번호 ex) 01012345678"
+              margin="normal"
+              name="userPhone"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.userPhone}
+              variant="outlined"
+            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Grid 
+                Container
+                justify='space-around'>
+                <KeyboardDatePicker
+                  disableToolbar
+                  variant='dialog'
+                  format='MM/dd/yyy'
+                  margin='normal'
+                  id='date-picker'
+                  label='Date Picker'
+                  value={makeStringtoDate(formik.values.userBirth)}
+                  onChange={formik.handleChange}
+                  KeyboardButtonProps={
+                    {'aria-label':'change date'}
+                  }
+                />
+              </Grid>
+            </MuiPickersUtilsProvider>
+            <FormControl margin="normal">
+              <FormLabel> 성별</FormLabel>
+              <RadioGroup 
+                defaultValue={formik.values.userGender}
+                margin="normal"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                name="userGender"
+                >
+                <FormControlLabel
+                  value="M" 
+                  control={<Radio />} 
+                  label="Male" />
+                <FormControlLabel 
+                  value="F" 
+                  control={<Radio />} 
+                  label="Female" />
+              </RadioGroup>
+            </FormControl>
+            
             <Box
               sx={{
                 alignItems: 'center',
