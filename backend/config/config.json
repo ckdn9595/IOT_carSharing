@@ -4,6 +4,7 @@
     "password": "a104sqlserver",
     "database": "sys",
     "host": "i6a104.p.ssafy.io",
+    "port": 5050,
     "dialect": "mysql"
   },
   "test": {

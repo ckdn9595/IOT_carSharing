@@ -44,8 +44,7 @@ router.post('/register', async(req, res) => {
         }
 
         // userId duplication check
-        if(await db.User.findOne({
-            where: {'sys.tb_user' : userId}}) != null){
+        if(await db.tb_user.findOne({where: {'usr_id' : userId}}) != null){
             return res.status(400).json({
                 message: 'userId is already used'
             });
@@ -69,7 +68,7 @@ router.post('/register', async(req, res) => {
         });
     } catch (error) { // catch error
         console.log(error);
-        return res.json({register:'fail'});
+        return res.json({register:error});
     }
 }); // end of register function
 
