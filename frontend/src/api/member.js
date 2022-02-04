@@ -20,10 +20,10 @@ async function findById(id, success, fail) {
     .catch(fail);
 }
 
-function registerUser(user, success, fail) {
-  console.log(user);
+function registerUser(data, success, fail) {
+  console.log(data);
   return axios
-    .post(`http://localhost:8000/user`, JSON.stringify(user))
+    .post(`${API_BASE_URL}/user/register`, JSON.stringify(data))
     .then(success)
     .catch(fail);
 }
