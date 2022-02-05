@@ -125,19 +125,62 @@ router.post('/login', async (req, res) => {
         console.log(error);
         return res.status(400).json({login:error});
     }
-});
+}); // end of login function
 
-// user info function
+// GET user info function
 router.get('/info', async (req, res) => {
     console.log(req.body);
     try {
         const {
+            userId,
             userToken
         } = req.body;
-        return res.json({userInfo:'success'});
+        
+        // check if userId is registered
+        const user = await db.tb_user.findOne({where: {usr_id: userId}});
+        if(user == null){
+            return res.status(400).json({
+                message: 'userId is not registered'
+            });
+        } else {
+            // check if userToken is correct
+            const isCorrect = await verifyToken(userToken, userId);
+            if(isCorrect){
+                return res.status(200).json({
+                    message: 'user info',
+                    userId: user.usr_id,
+                    userName: user.usr_name,
+                    userGender: user.usr_gender,
+                    userBirth: user.usr_birth_day,
+                    userPhone: user.usr_phone
+                });
+            } else {
+                return res.status(400).json({
+                    message: 'userToken is incorrect or expired'
+                })
+            }
+        };
     } catch (error) {
         console.log(error);
-        return res.json({userInfo:'fail'});
+        return res.status(400).json({
+            userInfo:'fail'
+        });
+    }
+});
+
+// post user info function
+router.post('/info', async (req, res) => {
+    console.log(req.body);
+    try {
+        console.log(req.body);
+        return res.status(200).json({
+            message: 'user info'
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            userInfo:error
+        });
     }
 });
 
@@ -145,6 +188,7 @@ router.get('/info', async (req, res) => {
 router.post('/license', async (req, res) => {
     console.log(req.body);
     try {
+        // Mocking
         return res.json({userInfo:'success'});
     } catch (error) {
         console.log(error);
@@ -156,6 +200,9 @@ router.post('/license', async (req, res) => {
 router.get('/:userID/grade', async (req, res) => {
     console.log(req.body);
     try {
+        // get grade from db
+        // const grade = await db.tb_car.findAll({where: {car_owner: req.params.userID}});
+
         return res.json({userGrade:'success'});
     } catch (error) {
         console.log(error);
