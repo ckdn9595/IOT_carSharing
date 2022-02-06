@@ -45,7 +45,17 @@
 
 ## 프로젝트 상세 설명
 
-리액트를 사용하여 명세서상의 기능 구현
+1. 프론트
+
+> [프론트 상세설명으로 이동](https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104/-/blob/develop/frontend/README.md/)
+
+2. 백엔드
+
+> [백엔드 상세설명으로 이동](https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104/-/blob/develop/backend/README.md/)
+
+3. 하드웨어
+
+> [하드웨어 상세설명으로 이동](https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104/-/blob/develop/hw/README.md/)
 
 ## 실행 방법
 
