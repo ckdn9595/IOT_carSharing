@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken')
 const {verifyToken} = require('../utils/jwt')
 const {upload} = require('../utils/multer')
 const fs = require('fs');
-
 const router = express.Router();
 
 // register function
@@ -166,25 +165,56 @@ router.get('/info', async (req, res) => {
             userInfo:'fail'
         });
     }
-});
+}); // end of GET user info function
 
 // post user info function
 router.post('/info', async (req, res) => {
     console.log(req.body);
     try {
         console.log(req.body);
-        return res.status(200).json({
-            message: 'user info'
-        });
+        const {
+            userName,
+            userPassword,
+            userGender,
+            userBirth,
+            userPhone,
+            userToken
+        } = req.body;
+        
+        // compare userToken
+        const isCorrect = await verifyToken(userToken, userId);
+        if(isCorrect){
+            // check if all values are filled
+            if(userName==null || userGender==null || userBirth==null || userPhone==null){
+                return res.status(400).json({
+                    message: 'fill all the required fields'
+                });
+            } else {
+                // update user info
+                await db.tb_user.update({ // update user info
+                    usr_name: userName,
+                    usr_gender: userGender,
+                    usr_birth_day: userBirth,
+                    usr_phone: userPhone
+                });
+                return res.status(200).json({
+                    message: 'user info updated'
+                });
+            }
+        } else {
+            return res.status(400).json({
+                message: 'userToken is incorrect or expired'
+            })
+        }
     } catch (error) {
         console.log(error);
         return res.status(400).json({
             userInfo:error
         });
     }
-});
+}); // end of post user info function
 
-// 유저 면허 등록
+// user driver license function
 router.post('/license', async (req, res) => {
     console.log(req.body);
     try {
@@ -194,7 +224,7 @@ router.post('/license', async (req, res) => {
         console.log(error);
         return res.json({userInfo:'fail'});
     }
-});
+}); // end of user driver license function
 
 // 유저 평점
 router.get('/:userID/grade', async (req, res) => {
