@@ -8,6 +8,8 @@ const {upload} = require('../utils/multer')
 const fs = require('fs');
 const router = express.Router();
 
+process.env.JWT_SECRET = "secret";
+
 // register function
 router.post('/register', async(req, res) => {
     console.log(req.body);
@@ -100,12 +102,9 @@ router.post('/login', async (req, res) => {
             // check if userPassword is correct
             const isCorrect = await comparePassword(userPassword, user.usr_pwd);
             if(isCorrect){
-                process.env.JWT_SECRET = user.usr_id;
                 // generate token
                 const token = jwt.sign({
-                    userId: user.usr_id,
-                    userName: user.usr_name,
-                    userGender: user.usr_gender
+                    userId: user.usr_id
                 }, process.env.JWT_SECRET, {
                     expiresIn: '1h'
                 });
@@ -131,38 +130,36 @@ router.get('/info', async (req, res) => {
     console.log(req.body);
     try {
         const {
-            userId,
             userToken
         } = req.body;
         
         // check if userId is registered
-        const user = await db.tb_user.findOne({where: {usr_id: userId}});
-        if(user == null){
+        const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
+
+        if(decodedUserToken == null){
             return res.status(400).json({
-                message: 'userId is not registered'
+                message: 'invailed token'
+            });
+        } else if (decodedUserToken.exp < Date.now()/1000){
+            return res.status(400).json({
+                message: 'token expired'
             });
         } else {
-            // check if userToken is correct
-            const isCorrect = await verifyToken(userToken, userId);
-            if(isCorrect){
-                return res.status(200).json({
-                    message: 'user info',
-                    userId: user.usr_id,
-                    userName: user.usr_name,
-                    userGender: user.usr_gender,
-                    userBirth: user.usr_birth_day,
-                    userPhone: user.usr_phone
-                });
-            } else {
-                return res.status(400).json({
-                    message: 'userToken is incorrect or expired'
-                })
-            }
+            // get user info from db
+            const userInfo = await db.tb_user.findOne({where: {usr_id: user.userId}});
+            return res.status(200).json({
+                message: 'user info',
+                userId: userInfo.usr_id,
+                userName: userInfo.usr_name,
+                userGender: userInfo.usr_gender,
+                userBirth: userInfo.usr_birth_day,
+                userPhone: userInfo.usr_phone
+            });
         };
     } catch (error) {
         console.log(error);
         return res.status(400).json({
-            userInfo:'fail'
+            userInfo:error
         });
     }
 }); // end of GET user info function
@@ -182,8 +179,8 @@ router.post('/info', async (req, res) => {
         } = req.body;
         
         // compare userToken
-        const isCorrect = await verifyToken(userToken, userId);
-        if(isCorrect){
+        const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
+        if(decodedUserToken){
             // check if all values are filled
             if(userName==null || userGender==null || userBirth==null || userPhone==null){
                 return res.status(400).json({
