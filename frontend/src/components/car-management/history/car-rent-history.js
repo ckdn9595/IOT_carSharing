@@ -4,60 +4,80 @@ import axios from 'axios';
 // 자동차의 렌트한 이력 조회
 // 자동차의 id값 prop
 // 차주만 확인가능 하면 차주의 아이디prop
-const RentHistory = () =>{
-
-
-
-  const option = {
-    url =`http://localhost:3000/api/car/${carID}/history`,
-    method:'GET',
-    data:{
- 
-    }
+const dump = {
+  car_res_seq:1,
+  owner_seq:12,
+  usr_seq:3,
+  res_info_seq:1101,
+  car_seq:1232,
+  chat_seq:11,
+  res_date:'2022-01-01-18:00 ~ 2022-01-02-14:00:',
+  res_realtime:600,
+  res_rate:60000,
+  res_img:'',
+  res_check:'',
+  res_pay_valid:true,
+  res_end_valid:true,
+  res_drive_valid:false,
+  res_door_on:false,
   }
+const RentHistory = (props) =>{
+  const {id} = props
+  const [clickOn, setClickOn] = useState(false)
+  const [data, setData] = useState({})
+  const [isDone, setIsDone] = useState(false)
 
-  useEffect( () =>{
-    const fetch = async () => {
-      try{
-        const response = await axios(option)
-        console.log(response.data)
-      }catch(err){
-        console.log(err)
-      }
-    }
-    fetch()
-    
+  // const getData = async() =>{
+  //   try{
+  //     // const response = await axios({
+  //     //   url =`http://localhost:3000/api/car/${carId}/history`,
+  //     //   method:'GET',
+  //     // })
+  //     const response = await axios.get(
+  //       url =`http://localhost:3000/api/car/${carId}/history`
+  //       )
+  //     console.log(response.data)
+  //     setData(response.data)
+  //   } catch (error){
+  //     alert('error!')
+  //   }
+  // }
+  useEffect(()=>{
+    setData(dump)
+    setIsDone(dump.res_end_valid)
   },[])
+
+
+
   return(
     <div>
-      <p>자동차의 렌트이력을 조회합니다.</p>
       <table class="tg">
 <thead>
   <tr>
     <th class="tg-0lax">이용번호</th>
-    <th class="tg-0lax">1</th>
+    <th class="tg-0lax">{data.res_info_seq}</th>
   </tr>
 </thead>
 <tbody>
   <tr>
     <td class="tg-0lax">차번호</td>
-    <td class="tg-0lax">12가나</td>
+    <td class="tg-0lax">{data.car_seq}</td>
   </tr>
   <tr>
     <td class="tg-0lax">차종</td>
-    <td class="tg-0lax">쏘나타</td>
+    <td class="tg-0lax">{data.car_seq}의 차</td>
   </tr>
   <tr>
     <td class="tg-0lax">사용시간</td>
-    <td class="tg-0lax">어제~오늘</td>
+    <td class="tg-0lax">{data.res_date}</td>
   </tr>
   <tr>
     <td class="tg-0lax">이동거리</td>
-    <td class="tg-0lax">1000키로</td>
+    <td class="tg-0lax">api찾기</td>
   </tr>
   <tr>
     <td class="tg-0lax">이용요금</td>
-    <td class="tg-0lax">천만원</td>
+    <td class="tg-0lax">{data.res_rate}</td>
   </tr>
   <tr>
     <td class="tg-0lax">차량상태사진</td>
@@ -72,8 +92,7 @@ const RentHistory = () =>{
     <td class="tg-0lax">이용후사진</td>
   </tr>
   <tr>
-    <td class="tg-0lax">고객센터버튼</td>
-    <td class="tg-0lax">이용종료버튼</td>
+      { isDone? <td class="tg-0lax">'사용완료'</td>:<td class="tg-0lax">고객센터버튼</td>}
   </tr>
 </tbody>
 </table>
