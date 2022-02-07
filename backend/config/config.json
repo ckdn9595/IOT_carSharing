@@ -8,7 +8,8 @@
     "dialect": "mysql",
     "define": {
       "timestamps": false
-    }
+    },
+    "timezone": "+09:00"
   },
   "test": {
     "username": "root",
