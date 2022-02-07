@@ -4,26 +4,21 @@ import { Container, Button, Checkbox, FormGroup, FormControlLabel, Box } from '@
 
 // 보험확인설정
 //prop id받아서 보험 체크
-const Insurance =() =>{
+const Insurance = () =>{
   const [isAgree, setIsAgree]= useState(false)
 
   function agreeCheckHandle(){
     setIsAgree(!isAgree)
   }
 
-  // useEffect(() =>{
-  //   const fetch = async () => {
-  //     try{ 
-  //       const response = await axios.post('http://localhost:3000/api/insurance',{
-  //       agree: 동의})
-  //       console.log(response.data)
-  //     }catch(err){
-  //       console.log(err)
-  //     }
-  //   }
-  //   fetch()
-
-  // },[agree])
+  const agreeSend= async()=>{
+    try{
+      const resposne = await axios.post('http://localhost:3000/api/insurance', {agree:true})
+      console.log(response.data)
+    }catch(err){
+      console.log('failed')
+      }
+  }
 
   return(
     <>
@@ -44,7 +39,10 @@ const Insurance =() =>{
       
       <FormGroup>
         <FormControlLabel control={<Checkbox checked={isAgree} onChange={agreeCheckHandle}/>} label="약관에 동의합니다" />
-      <Button variant="contained"> 제출하기 </Button>
+      <Button 
+        variant="contained"
+        onClick={agreeSend}
+      > 제출하기 </Button>
       </FormGroup>
 
     </Container>
