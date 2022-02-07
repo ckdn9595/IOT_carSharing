@@ -6,8 +6,9 @@ const jwt = require('jsonwebtoken')
 const {verifyToken} = require('../utils/jwt')
 const {upload} = require('../utils/multer')
 const fs = require('fs');
-
 const router = express.Router();
+
+process.env.JWT_SECRET = "secret";
 
 // register function
 router.post('/register', async(req, res) => {
@@ -101,12 +102,9 @@ router.post('/login', async (req, res) => {
             // check if userPassword is correct
             const isCorrect = await comparePassword(userPassword, user.usr_pwd);
             if(isCorrect){
-                process.env.JWT_SECRET = user.usr_id;
                 // generate token
                 const token = jwt.sign({
-                    userId: user.usr_id,
-                    userName: user.usr_name,
-                    userGender: user.usr_gender
+                    userId: user.usr_id
                 }, process.env.JWT_SECRET, {
                     expiresIn: '1h'
                 });
@@ -125,37 +123,113 @@ router.post('/login', async (req, res) => {
         console.log(error);
         return res.status(400).json({login:error});
     }
-});
+}); // end of login function
 
-// user info function
+// GET user info function
 router.get('/info', async (req, res) => {
     console.log(req.body);
     try {
         const {
             userToken
         } = req.body;
-        return res.json({userInfo:'success'});
+        
+        // check if userId is registered
+        const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
+
+        if(decodedUserToken == null){
+            return res.status(400).json({
+                message: 'invailed token'
+            });
+        } else if (decodedUserToken.exp < Date.now()/1000){
+            return res.status(400).json({
+                message: 'token expired'
+            });
+        } else {
+            // get user info from db
+            const userInfo = await db.tb_user.findOne({where: {usr_id: user.userId}});
+            return res.status(200).json({
+                message: 'user info',
+                userId: userInfo.usr_id,
+                userName: userInfo.usr_name,
+                userGender: userInfo.usr_gender,
+                userBirth: userInfo.usr_birth_day,
+                userPhone: userInfo.usr_phone
+            });
+        };
     } catch (error) {
         console.log(error);
-        return res.json({userInfo:'fail'});
+        return res.status(400).json({
+            userInfo:error
+        });
     }
-});
+}); // end of GET user info function
 
-// 유저 면허 등록
+// post user info function
+router.post('/info', async (req, res) => {
+    console.log(req.body);
+    try {
+        console.log(req.body);
+        const {
+            userName,
+            userPassword,
+            userGender,
+            userBirth,
+            userPhone,
+            userToken
+        } = req.body;
+        
+        // compare userToken
+        const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
+        if(decodedUserToken){
+            // check if all values are filled
+            if(userName==null || userGender==null || userBirth==null || userPhone==null){
+                return res.status(400).json({
+                    message: 'fill all the required fields'
+                });
+            } else {
+                // update user info
+                await db.tb_user.update({ // update user info
+                    usr_name: userName,
+                    usr_gender: userGender,
+                    usr_birth_day: userBirth,
+                    usr_phone: userPhone
+                });
+                return res.status(200).json({
+                    message: 'user info updated'
+                });
+            }
+        } else {
+            return res.status(400).json({
+                message: 'userToken is incorrect or expired'
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            userInfo:error
+        });
+    }
+}); // end of post user info function
+
+// user driver license function
 router.post('/license', async (req, res) => {
     console.log(req.body);
     try {
+        // Mocking
         return res.json({userInfo:'success'});
     } catch (error) {
         console.log(error);
         return res.json({userInfo:'fail'});
     }
-});
+}); // end of user driver license function
 
 // 유저 평점
 router.get('/:userID/grade', async (req, res) => {
     console.log(req.body);
     try {
+        // get grade from db
+        // const grade = await db.tb_car.findAll({where: {car_owner: req.params.userID}});
+
         return res.json({userGrade:'success'});
     } catch (error) {
         console.log(error);
