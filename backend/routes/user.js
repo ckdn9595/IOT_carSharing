@@ -146,7 +146,7 @@ router.get('/info', async (req, res) => {
             });
         } else {
             // get user info from db
-            const userInfo = await db.tb_user.findOne({where: {usr_id: user.userId}});
+            const userInfo = await db.tb_user.findOne({where: {usr_id: decodedUserToken.userId}});
             return res.status(200).json({
                 message: 'user info',
                 userId: userInfo.usr_id,
@@ -193,7 +193,7 @@ router.post('/info', async (req, res) => {
                     usr_gender: userGender,
                     usr_birth_day: userBirth,
                     usr_phone: userPhone
-                });
+                }, {where: {usr_id: decodedUserToken.userId}});
                 return res.status(200).json({
                     message: 'user info updated'
                 });
