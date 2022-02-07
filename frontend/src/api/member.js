@@ -10,20 +10,20 @@ async function login(member, success, fail) {
     .catch(fail);
 }
 
-async function findById(id, success, fail) {
-  axios.defaults.headers["access-token"] =
-    sessionStorage.getItem("access-token");
-  console.log(id);
+async function getUserInfo(success, fail) {
+  axios.defaults.headers["access_token"] =
+    sessionStorage.getItem("access_token");
+  console.log(axios.defaults.headers);
   await axios
-    .get(`http://localhost:8000/user/info/${id}`)
+    .get(`${API_BASE_URL}/user/info`)
     .then(success)
     .catch(fail);
 }
 
-function registerUser(user, success, fail) {
-  console.log(user);
-  return axios
-    .post(`http://localhost:8000/user`, JSON.stringify(user))
+async function registerUser(data, success, fail) {
+  console.log(data);
+  await axios
+    .post(`${API_BASE_URL}/user/register`, JSON.stringify(data))
     .then(success)
     .catch(fail);
 }
@@ -40,4 +40,4 @@ function deleteUser(id, success, fail) {
 }
 // function logout(success, fail)
 
-export { login, findById, registerUser, modifyUser, deleteUser };
+export { login, getUserInfo, registerUser, modifyUser, deleteUser };

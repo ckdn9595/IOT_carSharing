@@ -3,6 +3,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import DateFnsUtils from '@date-io/date-fns';
 import {
   Box,
   Button,
@@ -11,52 +12,113 @@ import {
   FormHelperText,
   Link,
   TextField,
-  Typography
+  RadioGroup,
+  FormLabel,
+  FormControlLabel,
+  Typography,
+  Radio,
+  FormControl
 } from '@mui/material';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { registerUser } from "../api/member.js";
+
+const makeDatetoString = (date) => {
+    let year = date.getFullYear();
+    let month = ('0' + (date.getMonth() + 1)).slice(-2);
+    let day = ('0' + date.getDate()).slice(-2);
+    return year + '/' + month + '/' + day;
+}
 
 const Register = () => {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: '',
-      firstName: '',
-      lastName: '',
-      password: '',
-      policy: false
+      userId: '',
+      userName: '',
+      userPassword: '',
+      userPasswordCh: '',
+      userPhone: '',
+      userGender: '',
+      userBirth: new Date(),
+      userPrivacyPolicy: false,
+      userLocationBasedService: false
     },
     validationSchema: Yup.object({
-      email: Yup
+      userId: Yup
         .string()
         .email(
-          'Must be a valid email')
+          'Must be a valid userId')
         .max(255)
         .required(
-          'Email is required'),
-      firstName: Yup
+          'Id is required'),
+      userName: Yup
         .string()
         .max(255)
         .required(
-          'First name is required'),
-      lastName: Yup
+          'Name is required'),
+      userPassword: Yup
         .string()
-        .max(255)
-        .required(
-          'Last name is required'),
-      password: Yup
-        .string()
+        .matches(
+          /(?=.*\d)(?=.*[a-z]).{8,}/,
+          "영어소문자, 숫자 포함 8자 이상의 비밀번호"
+        )
         .max(255)
         .required(
           'Password is required'),
-      policy: Yup
+      userPasswordCh: Yup
+        .string()
+        .max(255)
+        .required('Password is required')
+        .oneOf([Yup.ref("userPassword"), null], "Passwords must match"),
+      userPhone: Yup
+        .string()
+        .max(255)
+        .matches(
+          /^\d{11}$/,
+          "숫자 11자리"
+        )
+        .required(
+          'phone is required'),
+      userBirth: Yup
+        .date()
+        .required(
+          'date is required')
+        .nullable(),
+      userGender: Yup
+        .string()
+        .max(2),
+      userPrivacyPolicy: Yup
+        .boolean()
+        .oneOf(
+          [true],
+          'This field must be checked'
+        ),
+      userLocationBasedService: Yup
         .boolean()
         .oneOf(
           [true],
           'This field must be checked'
         )
     }),
-    onSubmit: () => {
-      router.push('/');
+    onSubmit: async (data, {setSubmitting}) => {
+      setSubmitting(true);
+      let date = data.userBirth;
+      data.userBirth = makeDatetoString(date);
+      await registerUser(
+        data,
+        (response) =>{
+          console.log(response);
+          if (response.status === 200 ) {
+            alert('가입 성공')
+            router.push('/');
+          } else {
+            alert('가입 실패, 다시 시도해주세요');
+          }
+        },
+        () => {alert('가입 실패!!')}
+      );
+      setSubmitting(false);
     }
   });
 
@@ -101,69 +163,145 @@ const Register = () => {
                 gutterBottom
                 variant="body2"
               >
-                회원가입 하쎄용!!
+                회원가입!!
               </Typography>
             </Box>
             <TextField
-              error={Boolean(formik.touched.firstName && formik.errors.firstName)}
+              error={Boolean(formik.touched.userId && formik.errors.userId)}
               fullWidth
-              helperText={formik.touched.firstName && formik.errors.firstName}
-              label="수"
+              helperText={formik.touched.userId && formik.errors.userId}
+              label="id"
               margin="normal"
-              name="firstName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.firstName}
-              variant="outlined"
-            />
-            <TextField
-              error={Boolean(formik.touched.lastName && formik.errors.lastName)}
-              fullWidth
-              helperText={formik.touched.lastName && formik.errors.lastName}
-              label="정"
-              margin="normal"
-              name="lastName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.lastName}
-              variant="outlined"
-            />
-            <TextField
-              error={Boolean(formik.touched.email && formik.errors.email)}
-              fullWidth
-              helperText={formik.touched.email && formik.errors.email}
-              label="예"
-              margin="normal"
-              name="email"
+              name="userId"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               type="email"
-              value={formik.values.email}
+              value={formik.values.userId}
               variant="outlined"
             />
             <TextField
-              error={Boolean(formik.touched.password && formik.errors.password)}
+              error={Boolean(formik.touched.userName && formik.errors.userName)}
               fullWidth
-              helperText={formik.touched.password && formik.errors.password}
-              label="정"
+              helperText={formik.touched.userName && formik.errors.userName}
+              label="name"
               margin="normal"
-              name="password"
+              name="userName"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.userName}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.userPassword && formik.errors.userPassword)}
+              fullWidth
+              helperText={formik.touched.userPassword && formik.errors.userPassword}
+              label="password"
+              margin="normal"
+              name="userPassword"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               type="password"
-              value={formik.values.password}
+              value={formik.values.userPassword}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.userPasswordCh && formik.errors.userPasswordCh)}
+              fullWidth
+              helperText={formik.touched.userPasswordCh && formik.errors.userPasswordCh}
+              label="password"
+              margin="normal"
+              name="userPasswordCh"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="password"
+              value={formik.values.userPasswordCh}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.userPhone && formik.errors.userPhone)}
+              fullWidth
+              helperText={formik.touched.userPhone && formik.errors.userPhone}
+              label="phone ex) 01012345678"
+              margin="normal"
+              name="userPhone"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.userPhone}
               variant="outlined"
             />
             <Box
               sx={{
                 alignItems: 'center',
                 display: 'flex',
-                ml: -1
+                ml: 1
+              }}
+            >
+              <MuiPickersUtilsProvider 
+                utils={DateFnsUtils} 
+                >
+                <KeyboardDatePicker
+                  disableToolbar
+                  variant='dialog'
+                  format='MM/dd/yyyy'
+                  margin='normal'
+                  id='date-picker'
+                  name='userBirth'
+                  label='date of birth'
+                  value={formik.values.userBirth}
+                  onChange={ (e) => {formik.setFieldValue('userBirth', e);}}
+                  KeyboardButtonProps={
+                    {'aria-label':'change date'}
+                  }
+                  />
+              </MuiPickersUtilsProvider>
+            </Box>
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                ml: 1
+              }}
+            >
+              <FormControl margin="normal">
+                <FormLabel> 성별</FormLabel>
+                <Box
+                  sx={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    ml: 3,
+                    mt: 2
+                  }}
+                >
+                  <RadioGroup 
+                    defaultValue={formik.values.userGender}
+                    margin="normal"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    name="userGender"
+                    >
+                    <FormControlLabel
+                      value="M" 
+                      control={<Radio />} 
+                      label="Male" />
+                    <FormControlLabel 
+                      value="F" 
+                      control={<Radio />} 
+                      label="Female" />
+                  </RadioGroup>
+                </Box>
+              </FormControl>
+            </Box>
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                ml: 1,
+                mt: 2
               }}
             >
               <Checkbox
-                checked={formik.values.policy}
-                name="policy"
+                // checked={formik.values.userPrivacyPolicy}
+                name="userPrivacyPolicy"
                 onChange={formik.handleChange}
               />
               <Typography
@@ -179,15 +317,52 @@ const Register = () => {
                     underline="always"
                     variant="subtitle2"
                   >
-                    이용약관
+                    개인정보처리방침
                   </Link>
                 </NextLink>
                 에 동의합니다.
               </Typography>
             </Box>
-            {Boolean(formik.touched.policy && formik.errors.policy) && (
+            {Boolean(formik.touched.userPrivacyPolicy && formik.errors.userPrivacyPolicy) && (
               <FormHelperText error>
-                {formik.errors.policy}
+                {formik.errors.userPrivacyPolicy}
+              </FormHelperText>
+            )}
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                ml: 1,
+                mt: 2
+              }}
+            >
+              <Checkbox
+                // checked={formik.values.userLocationBasedService}
+                name="userLocationBasedService"
+                onChange={formik.handleChange}
+              />
+              <Typography
+                color="textSecondary"
+                variant="body2"
+              >
+                <NextLink
+                  href="#"
+                  passHref
+                >
+                  <Link
+                    color="primary"
+                    underline="always"
+                    variant="subtitle2"
+                  >
+                    위치정보활용
+                  </Link>
+                </NextLink>
+                에 동의합니다.
+              </Typography>
+            </Box>
+            {Boolean(formik.touched.userLocationBasedService && formik.errors.userLocationBasedService) && (
+              <FormHelperText error>
+                {formik.errors.userLocationBasedService}
               </FormHelperText>
             )}
             <Box sx={{ py: 2 }}>
