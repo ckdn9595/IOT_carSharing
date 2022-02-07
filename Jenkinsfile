@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Pull') {
       steps {
-        git(url: 'https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104.git', branch: 'develop', poll: false, changelog: true, credentialsId: '5b334aab-1ca1-4f1f-add2-69c9ecc40e3d')
+        git(url: 'https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104.git', branch: 'develop', changelog: true, credentialsId: '5b334aab-1ca1-4f1f-add2-69c9ecc40e3d')
       }
     }
 
@@ -43,7 +43,7 @@ pipeline {
         stage('Deploy-back') {
           steps {
             sh 'docker ps -aq --filter "name=backend" | grep -q . && docker stop backend && docker rm -fv backend'
-            sh 'docker run -d --name backend -p 8001:8001 -u root nodejs/back'
+            sh 'docker run -d --name backend -p 8001:8001 -v backend-images:/app/uploads -u root nodejs/back'
           }
         }
 
