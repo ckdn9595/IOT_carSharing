@@ -36,7 +36,7 @@ pipeline {
         stage('Deploy-front') {
           steps {
             sh 'docker ps -aq --filter "name=frontend" | grep -q . && docker stop frontend && docker rm -fv frontend'
-            sh 'docker run -d --name frontend -p 3000:3000 -v /home/ubuntu/Workspace/certs:/home/ubuntu/Workspace/certs -u root nodejs/front'
+            sh 'docker run -d --name frontend -p 3000:3000 -u root nodejs/front'
           }
         }
 
