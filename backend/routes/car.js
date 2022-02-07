@@ -18,15 +18,6 @@ router.post('/register', upload.single('carImg'), async(req, res) => {
         // JWT 유효성 검증
         const decodedUserToken = await jwt.verify(req.body['userToken'], process.env.JWT_SECRET);
 
-        if (decodedUserToken) {
-            if (decodedUserToken.exp < Date.now()/1000) {
-                return res.status(400).json({message: 'jwt expired'});
-            }
-        }
-        else {
-            return res.status(400).json({message: 'invalid jwt'});
-        }
-
         // 받아온 carImg가 .png || .jpeg이 아닌 경우 에러
         if (req.file.mimetype !== 'image/png' && req.file.mimetype !== 'image/jpeg') {
             return res.status(400).json({status_code: 1});

@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Pull') {
       steps {
-        git(url: 'https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104.git', branch: 'develop', poll: true, changelog: true, credentialsId: '5b334aab-1ca1-4f1f-add2-69c9ecc40e3d')
+        git(url: 'https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104.git', branch: 'develop', poll: false, changelog: true, credentialsId: '5b334aab-1ca1-4f1f-add2-69c9ecc40e3d')
       }
     }
 
