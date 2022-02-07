@@ -7,25 +7,40 @@ import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Facebook as FacebookIcon } from '../icons/facebook';
 import { Google as GoogleIcon } from '../icons/google';
-import { login } from "../api/member.js";
-import { useUsersDispatch } from 'src/context/UserContext.js';
-import { useContext } from 'react';
+import { login, getUserInfo } from "../api/member.js";
+import { useUsersState, useUsersDispatch } from 'src/context/UserContext.js';
 
 const Login = () => {
   const dispatch = useUsersDispatch();
+  const getInfo = async() => {
+    await getUserInfo(
+      (response) => {
+        console.log(response);
+        if (response.status === 200 ) {
+          dispatch({ type: 'GET_USER_SUCCESS', data: response.data });
+          localStorage.loginData = JSON.stringify(response.data);
+        } else {
+         console.log("유저 정보 가져오기 오류");
+        }
+      },
+      () => {
+             console.log("유저 정보 가져오기 연결 오류");
+            }
+    );
+  }
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      id: '',
-      password: ''
+      userId: '',
+      userPassword: ''
     },
     validationSchema: Yup.object({
-      id: Yup
+      userId: Yup
         .string()
         .max(255)
         .required(
           'id is required'),
-      password: Yup
+      userPassword: Yup
         .string()
         .max(255)
         .required(
@@ -40,9 +55,9 @@ const Login = () => {
           console.log(member);
           console.log(response);
           if (response.status === 200 ) {
-            let token = response.data["access_token"];
+            let token = response.data["token"];
             sessionStorage.setItem("access_token", token);
-            dispatch({ type: 'GET_USER_SUCCESS', data: response.data });
+            getInfo();
             router.push('/');
           } else {
             dispatch({ type: 'GET_USER_ERROR', error: e });
@@ -169,11 +184,11 @@ const Login = () => {
               helperText={formik.touched.id && formik.errors.id}
               label="id"
               margin="normal"
-              name="id"
+              name="userId"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               type="id"
-              value={formik.values.id}
+              value={formik.values.userId}
               variant="outlined"
             />
             <TextField
@@ -182,11 +197,11 @@ const Login = () => {
               helperText={formik.touched.password && formik.errors.password}
               label="Password"
               margin="normal"
-              name="password"
+              name="userPassword"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               type="password"
-              value={formik.values.password}
+              value={formik.values.userPassword}
               variant="outlined"
             />
             <Box sx={{ py: 2 }}>

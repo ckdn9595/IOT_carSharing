@@ -132,9 +132,7 @@ export const DashboardSidebar = (props) => {
                     href={'/myPage'}
                     title={
                       (userState.data != null) && 
-                      <a>
-                        {userState.data.id}님
-                      </a>
+                        `${userState.data.userName}님`
                     }
                 />
                </Grid>
