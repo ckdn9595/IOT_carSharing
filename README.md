@@ -59,20 +59,56 @@
 
 > [하드웨어 상세설명으로 이동](https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104/-/blob/develop/hw/README.md/)
 
+## 업무 흐름도
+
+```mermaid
+gantt
+    dateFormat  YYYY-MM-DD
+    section 기획
+    서비스 기획        :a1, 2022-01-10, 7d
+    기술 기획          :a2, after a1, 7d
+    section 프론트엔드
+    보일러플레이트 작성   :f1, after a2, 4d
+    회원가입 페이지 구현  :f2, after f1, 2d
+    로그인 페이지 구현    :f3, after f1, 2d
+    차량등록 페이지 구현  :f4, after f3, 5d
+    예약정보 페이지 구현  :f5, after f3, 5d
+    차량관리 페이지 구현  :f6, after f4, 3d
+    마이페이지 구현      :f7, after f4, 3d
+    기능 고도화          :f8, after f7, 5d
+    section 백엔드
+    회원가입 API 구현        :b1, after a2, 3d
+    로그인 API 구현          :b2, after a2, 3d
+    차량등록 API 구현        :b3, after b1, 5d
+    차량예약 API 구현        :b4, after b1, 5d
+    실시간 차량정보 API 구현  :b5, after b3, 5d
+    DB 연동                 :b6, after b1, 9d
+    Swagger 도입            :b7, after b1, 9d
+    기능 고도화              :b8, after b5, 3d
+    section 하드웨어
+    하드웨어 설계      :h1, after b1, 7d
+    서버통신 구현      :h2, after h1, 5d
+    section 디버깅
+    프론트엔드 디버깅  :d1, after f8, 6d
+    백엔드 디버깅      :d2, after b8, 9d
+    하드웨어 디버깅    :d3, after h2, 10d
+    프로젝트 종료일    :milestone, 2022-02-18
+```
+
 ## 실행 방법
 
 서버
 ```bash
 $ cd backend
 $ npm install
-$ npx nodemon
+$ npx nodemon server.js (debug)
+$ pm2 start server.js (live/background)
 ```
 프론트
 ```bash
 $ cd frontend
 $ npm install
-$ npm run dev (개발 모드)
-$ npm start
+$ npm run start
 ```
 > 프론트에서 Critial vulnerability가 나온다면 ``npm audit fix --force`` 명령어를 사용하여 오류를 수정.  
 > high, critical 레벨의 오류가 아니라면 진행 가능하다.
