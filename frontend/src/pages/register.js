@@ -27,7 +27,7 @@ const makeDatetoString = (date) => {
     let year = date.getFullYear();
     let month = ('0' + (date.getMonth() + 1)).slice(-2);
     let day = ('0' + date.getDate()).slice(-2);
-    return year + '/' + month + '/' + day;
+    return year + '' + month + '' + day;
 }
 
 const Register = () => {
@@ -116,7 +116,7 @@ const Register = () => {
             alert('가입 실패, 다시 시도해주세요');
           }
         },
-        () => {alert('가입 실패!!')}
+        (response) => {console.log(response)}
       );
       setSubmitting(false);
     }
