@@ -6,9 +6,9 @@ import axios from 'axios';
 // 수정 삭제
 // 버튼은 
 const CarState = () =>{
-  const [사진, set]= useState(['사진'])
-  const [차량상태, set] = useState([])
-  const [차량소개, set] = useState([])
+  const [사진, set사진]= useState(['사진'])
+  const [차량상태, set차량상태] = useState([])
+  const [차량소개, set차량소개] = useState([])
 
   
   const option = {

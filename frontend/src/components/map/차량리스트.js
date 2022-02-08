@@ -3,8 +3,7 @@ import axios from 'axios';
 
 // 등록된 차량 불러오기
 const CarList = () =>{
-  const 차
-  useEffect(() =>{
+  const [차, set차] = useEffect(() =>{
     axios.get(`http://localhost:3000/api/search/detail/${carID}`)
 
     .then(response => console.log(response.data))

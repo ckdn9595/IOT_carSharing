@@ -23,9 +23,7 @@ const Login = () => {
          console.log("유저 정보 가져오기 오류");
         }
       },
-      () => {
-             console.log("유저 정보 가져오기 연결 오류");
-            }
+      () => {}
     );
   }
   const router = useRouter();

@@ -31,10 +31,10 @@ const Customers = () => (
         </Box>
       </Container>
     </Box> */}
-    <Insurance/>
+    {/* <Insurance/>
     <CarReview/>
     <ReviewList/>
-    <Review/>
+    <Review/> */}
     <CarRegister/>
 
   </>

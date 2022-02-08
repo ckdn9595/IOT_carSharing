@@ -6,7 +6,7 @@ const RentPeriodSet = () =>{
   const [차량이용기간, set] = useState()
 
   const option = {
-    url =`http://localhost:3000/api/car/${carID}/time`,
+    url: `http://localhost:3000/api/car/${carID}/time`,
     method:'POST',
     data:{
 

@@ -8,10 +8,10 @@ const CarReservation = () =>{
   const [items , set]= useState({
     대여기간:"",
   })
-  const 차량번호
-  const 임차인아이디
-  const 결제성공여부
-  const 임대인확인여부
+  // const 차량번호
+  // const 임차인아이디
+  // const 결제성공여부
+  // const 임대인확인여부
 
   useEffect( () =>{
     const fetch = async () => {
