@@ -64,7 +64,9 @@ const Login = () => {
             alert('아이디/비밀번호 확인해주세요.');
           }
         },
-        () => {
+        (response) => {
+                console.log(response.message);
+                alert('아이디/비밀번호 확인해주세요.');
                 dispatch({ type: 'GET_USER_ERROR', error: e });
               }
       );
