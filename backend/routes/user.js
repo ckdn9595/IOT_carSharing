@@ -39,7 +39,7 @@ router.post('/register', async(req, res) => {
                 message: 'userPassword is required and must be 8 characters at least'
             });
         }
-        if(userName==null || userGender==null || userBirth==null || userPhone==null || userDriverLicense==null || userPrivacyPolicy==null || userLocationBasedService==null){
+        if(userName==null || userGender==null || userBirth==null || userPhone==null ||  userPrivacyPolicy==null || userLocationBasedService==null){
             return res.status(400).json({
                 message: 'fill all the required fields'
             });
@@ -104,7 +104,6 @@ router.post('/login', async (req, res) => {
             // check if userPassword is correct
             const isCorrect = await comparePassword(userPassword, user.usr_pwd);
             if(isCorrect){
-                console.log("@@@@@@@@@@@@@");
                 // generate token
                 const token = jwt.sign({
                     userId: user.usr_id
@@ -116,7 +115,6 @@ router.post('/login', async (req, res) => {
                     token: token
                 });
             } else {
-                console.log("##############");
                 return res.status(400).json({
                     message: 'userPassword is incorrect'
                 });
