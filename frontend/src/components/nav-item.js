@@ -4,15 +4,18 @@ import PropTypes from 'prop-types';
 import { Box, Button, ListItem } from '@mui/material';
 
 export const NavItem = (props) => {
-  const { href, icon, title, ...others } = props;
+  const { href, icon, title, isShow, ...others } = props;
   const router = useRouter();
   const active = href ? (router.pathname === href) : false;
-
+  let display = 'flex';
+  if(isShow == false){
+    display = 'none'
+  }
   return (
     <ListItem
       disableGutters
       sx={{
-        display: 'flex',
+        display,
         mb: 0.5,
         py: 0,
         px: 2
@@ -57,5 +60,6 @@ export const NavItem = (props) => {
 NavItem.propTypes = {
   href: PropTypes.string,
   icon: PropTypes.node,
-  title: PropTypes.string
+  title: PropTypes.string,
+  isShow: PropTypes.bool
 };

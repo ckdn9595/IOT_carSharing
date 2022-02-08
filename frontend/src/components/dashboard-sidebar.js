@@ -15,6 +15,8 @@ import { Users as UsersIcon } from '../icons/users';
 import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
+import { useUsersState, useUsersDispatch } from '../context/UserContext';
+
 
 const items = [
   {
@@ -55,13 +57,18 @@ const items = [
 ];
 
 export const DashboardSidebar = (props) => {
+  const dispatch = useUsersDispatch();
+  const userState = useUsersState().user;
   const { open, onClose } = props;
   const router = useRouter();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
     defaultMatches: true,
     noSsr: false
   });
-
+  const logOutClick = e => {
+    e.preventDefault;
+    dispatch({ type: 'GET_LOGOUT', data: null });
+  }
   useEffect(
     () => {
       if (!router.isReady) {
@@ -111,31 +118,76 @@ export const DashboardSidebar = (props) => {
                   </a>
                 </NextLink>
               </Grid>
-              <Grid
-                item
-                lg={3}
-                md={3}
-                xs={12}
-              >
-                <NavItem
-                  // icon={<LockIcon fontSize="small" />}
-                  href={'/login'}
-                  title={'로그인'}
-                />
-              </Grid>
-              <Grid
+              
+              {(userState.isLogin)  && 
+              <>
+                <Grid
                 item
                 lg={6}
                 md={6}
                 xs={12}
-              >
+                >
+                <NavItem
+                    // icon={<LockIcon fontSize="small" />}
+                    href={'/myPage'}
+                    title={
+                      (userState.data != null) && 
+                        `${userState.data.userName}님`
+                    }
+                />
+               </Grid>
+               <Grid
+                item
+                lg={3}
+                md={3}
+                xs={12}
+                >
+                 <Button
+                    sx={{
+                      height: 42,
+                      width: 75,
+                      fontSize: 6
+                    }}
+                    color="inherit"
+                    onClick={logOutClick}
+                  >
+                  로그아웃
+                 </Button>
+                </Grid>
+               </>
+              }
+               {(!userState.isLogin)  && 
+               <>
+                <Grid
+                item
+                lg={3}
+                md={3}
+                xs={12}
+                >
                 <NavItem
                   // icon={<LockIcon fontSize="small" />}
-                  href={'/register'}
-                  title={'회원가입'}
+                  
+                  href={'/login'}
+                  title={'로그인'}
                 />
-              </Grid>
+                </Grid>
+                <Grid
+                  item
+                  lg={6}
+                  md={6}
+                  xs={12}
+                >
+                  <NavItem
+                    // icon={<LockIcon fontSize="small" />}
+                    href={'/register'}
+                    title={'회원가입'}
+                  />
+                  </Grid>
+                </>
+              }
+              
             </Grid>
+
           </Box>
           <Box sx={{ px: 2 }}>
             <Box

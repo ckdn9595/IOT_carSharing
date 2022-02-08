@@ -230,7 +230,7 @@ export const theme = createTheme({
   ],
   typography: {
     button: {
-      fontWeight: 600
+      fontWeight: 600,
     },
     fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     body1: {
