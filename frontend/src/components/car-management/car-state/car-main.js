@@ -22,7 +22,7 @@ import {
 import CarRegister from './car-register';
 const CarMain = () =>{
   const [register, setRegister] = useState([])
-  const [valid, setValid] = useState(false)
+  const [visible, setVisible] = useState(false)
 
 
   const getData = async() =>{
@@ -37,7 +37,7 @@ const CarMain = () =>{
       console.log(response.data)
       setRegister(response.data)
     } catch (error){
-      alert('등록된 차량이없스빈다.')
+      console.log('등록된 차량이없스빈다.')
     }
   }
 
@@ -47,7 +47,7 @@ const CarMain = () =>{
 
 
   const onClickHandle = () =>{
-    setValid(!valid)
+    setVisible(!visible)
   }
 
 
@@ -61,7 +61,7 @@ const CarMain = () =>{
       차량 등록
     </Button>
     {/* map */}
-    {valid  ? <CarRegister/>:''}
+    {visible  ? <CarRegister setVisible={setVisible}/>:''}
     {register === ![] ?    <CarState/>:''}
 
     </>
