@@ -95,13 +95,16 @@ router.post('/login', async (req, res) => {
         // check if userId is registered
         const user = await db.tb_user.findOne({where: {usr_id: userId}});
         if(user == null){
+            
             return res.status(400).json({
                 message: 'userId is not registered'
             });
         } else {
+            
             // check if userPassword is correct
             const isCorrect = await comparePassword(userPassword, user.usr_pwd);
             if(isCorrect){
+                console.log("@@@@@@@@@@@@@");
                 // generate token
                 const token = jwt.sign({
                     userId: user.usr_id
@@ -113,6 +116,7 @@ router.post('/login', async (req, res) => {
                     token: token
                 });
             } else {
+                console.log("##############");
                 return res.status(400).json({
                     message: 'userPassword is incorrect'
                 });
