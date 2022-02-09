@@ -1,9 +1,5 @@
 # Backend
 
-## [AWS EC2](https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104/-/wikis/%EC%84%9C%EB%B2%84)  
-
-서버로 활용중인 AWS EC2 컨테이너에 관한 설명이 있는 페이지
-
 ## [Node.js(Express)](https://lab.ssafy.com/s06-webmobile3-sub2/S06P12A104/-/wikis/Node.js)
 
 백엔드 통신을 구현한 Node.js 서버에 대한 설명이 있는 페이지
