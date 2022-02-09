@@ -13,7 +13,6 @@ async function login(member, success, fail) {
 async function getUserInfo(success, fail) {
   axios.defaults.headers["access_token"] =
     sessionStorage.getItem("access_token");
-  console.log(axios.defaults.headers);
   await axios
     .get(`${API_BASE_URL}/user/info`)
     .then(success)
@@ -28,8 +27,13 @@ async function registerUser(data, success, fail) {
     .catch(fail);
 }
 
-function modifyUser(user, success, fail) {
-  return axios.put("http://localhost:8000/user/{id}").then(success).catch(fail);
+function modifyUser(data, success, fail) {
+  axios.defaults.headers["access_token"] =
+    sessionStorage.getItem("access_token");
+  return axios
+  .post(`${API_BASE_URL}/user/info`, JSON.stringify(data))
+  .then(success)
+  .catch(fail);
 }
 
 function deleteUser(id, success, fail) {

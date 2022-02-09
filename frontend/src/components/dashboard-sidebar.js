@@ -68,6 +68,7 @@ export const DashboardSidebar = (props) => {
   const logOutClick = e => {
     e.preventDefault;
     dispatch({ type: 'GET_LOGOUT', data: null });
+    localStorage.removeItem('loginData')
   }
   useEffect(
     () => {
