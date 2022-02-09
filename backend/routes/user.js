@@ -174,8 +174,7 @@ router.post('/info', async (req, res) => {
         console.log(req.body);
         const {
             userPassword,
-            userPhone,
-            userToken
+            userPhone
         } = req.body;
         const userToken = req.header('access_token');
 
