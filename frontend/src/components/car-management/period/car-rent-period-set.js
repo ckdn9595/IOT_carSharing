@@ -20,14 +20,6 @@ const RentPeriodSet = (props) =>{
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
 
-<<<<<<< HEAD
-  const option = {
-    url: `http://localhost:3000/api/car/${carID}/time`,
-    method:'POST',
-    data:{
-
-    }
-=======
   const {setSettingTime, setVisible} = props
   // 자식에서 부모한테 보내기 설정
   // const [visible, setVisible ] = useState(false)
@@ -65,7 +57,6 @@ const RentPeriodSet = (props) =>{
       console.log(err)
       alert('전송실패')
       }
->>>>>>> feature/fronted-car-management
   }
 
 

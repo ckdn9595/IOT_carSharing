@@ -24,18 +24,6 @@ import {
 // 자동차의 렌트한 이력 조회
 // 자동차의 id값 prop
 // 차주만 확인가능 하면 차주의 아이디prop
-<<<<<<< HEAD
-const RentHistory = () =>{
-
-
-
-  const option = {
-    url: `http://localhost:3000/api/car/${carID}/history`,
-    method:'GET',
-    data:{
- 
-    }
-=======
 const dump = {
   car_res_seq:1,
   owner_seq:12,
@@ -52,7 +40,6 @@ const dump = {
   res_end_valid:true,
   res_drive_valid:false,
   res_door_on:false,
->>>>>>> feature/fronted-car-management
   }
 const RentHistory = (props) =>{
   const [clickOn, setClickOn] = useState(false)
