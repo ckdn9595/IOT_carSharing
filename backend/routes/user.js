@@ -175,10 +175,10 @@ router.post('/info', async (req, res) => {
             userPassword,
             userGender,
             userBirth,
-            userPhone,
-            userToken
+            userPhone
         } = req.body;
-        
+        const userToken = req.header('access_token');
+
         // compare userToken
         const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
         if(decodedUserToken){
