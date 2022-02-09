@@ -30,6 +30,74 @@ const dump = [
   {id:1111}
 ]
 
+const RentSummary = (props)=>{
+  const [items, setItems] = useState([])
+  const {data} = props
+  const [open, setOpen] = useState(false)
+
+  useEffect(()=>{
+    setItems(data)
+    console.log('콘솔로그',items,data)
+  },[])
+
+  const onClickBtn = () =>{
+    setOpen(!open)
+  }
+
+  return(
+    <>
+    <Box sx={{display:'flex'}}>
+      <Grid
+        item xs={6} key={items}
+        display='flex'
+        justifyContent='center'
+        direction='column'
+      >
+          <Typography
+            textAlign="center"
+            color="textPrimary"
+            gutterBottom
+            variant="h6"
+          >
+            이용번호 : {items}
+          </Typography>
+          <Typography
+            textAlign="center"
+            color="textPrimary"
+            gutterBottom
+            variant="body1"  
+          >
+            사용시간
+          </Typography>
+        </Grid>
+
+        <Grid itme xs={6}
+          display='flex'
+          direction='column'
+          justifyContent='center'
+          >
+        <Typography>
+            이용상태 : 이용중{}
+          </Typography>
+          
+        <Button
+        justifyContent='center' 
+        onClick={onClickBtn} 
+        >
+          자세히보기
+        </Button>
+          </Grid>
+
+    </Box>
+        <Box>
+          {open?<RentHistory
+          key={items}
+          data={items}
+          />:''}
+        </Box>
+    </>
+    )
+  }
 const RentHistoryList = (props) =>{
   const [items, setItems] = useState([])
   // const {car_res_seq, res_rate} = props
@@ -68,90 +136,19 @@ const RentHistoryList = (props) =>{
     
   // },[])
 
-  const RentSummary = (props)=>{
-  const [items, setItems] = useState([])
-  const {data} = props
-  const [open, setOpen] = useState(false)
-
-  useEffect(()=>{
-    setItems(data)
-    console.log('콘솔로그',items,data)
-  },[])
-
-  const onClickBtn = () =>{
-    setOpen(!open)
-  }
+  
 
   return(
-    <Box>
-    <Grid
-      container
-      direction='row'
-      justifyContent='center'
-      alignItems='center'
-      spacing={3}
+    <>
+    <Box
+      xs={{display:'flex',
+    }}
     >
-      <Grid
-        item xs={6} key={items}
-        display='flex'
-        justifyContent='center'
-        direction='column'
-      >
-          <Typography
-            textAlign="center"
-            color="textPrimary"
-            gutterBottom
-            variant="h6"
-          >
-            이용번호 : {items}
-          </Typography>
-          <Typography
-            textAlign="center"
-            color="textPrimary"
-            gutterBottom
-            variant="body1"  
-          >
-            사용시간
-          </Typography>
-        </Grid>
-
-        <Grid itme xs={6}
-          display='flex'
-          direction='column'
-          justifyContent='center'
-          >
-        <Typography>
-            이용상태 : 이용중{}
-          </Typography>
-        <Grid
-          item
-          >            
-        <Button
-        justifyContent='center' 
-        onClick={onClickBtn} 
-        >
-          이용종료 : 자세히보기
-        </Button>
-
-          </Grid>
-          </Grid>
-          {open?<RentHistory
-          key={items}
-          data={items}
-          />:''}
-    </Grid>
-    </Box>
-    )
-  }
-
-  return(
-    <div>
-      <p>자동차의 렌트이력을 조회합니다.</p>
       {/* 맵 */}
       {items.map(data => (
         <RentSummary
           key={data.id}
-          data={data.id}
+          id={data.id}
         />
       ))}
       {/* {items.map(data => (
@@ -160,8 +157,8 @@ const RentHistoryList = (props) =>{
           // id={data.id}
         />
       ))} */}
-    
-    </div>
+    </Box>
+    </>
   )
 }
 

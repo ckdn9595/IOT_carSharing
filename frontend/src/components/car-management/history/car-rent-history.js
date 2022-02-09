@@ -59,7 +59,6 @@ const RentHistory = (props) =>{
       console.log(response.data)
       setData(response.data)
     } catch (error){
-      alert('error!')
     }
   }
   useEffect(()=>{
@@ -83,12 +82,7 @@ const RentHistory = (props) =>{
         display='flex'
         justifyContent='center'
         direction='column'
-
       >
-        <Grid item xs={6}
-          display='flex'
-          justifyContent='center'
-        >
           <Typography
             textAlign="center"
             color="textPrimary"
@@ -97,40 +91,28 @@ const RentHistory = (props) =>{
           >          
             이용 번호 :{data.res_info_seq}
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
          <Typography
             color="textPrimary"
             variant="body1"
          >
             차 번호 :{data.car_seq}
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
           <Typography>
             사용 시간 :{data.res_date}
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
           <Typography>
             이동거리:{data.res_rate}
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
          <Typography>
             이용요금 :{data.res_rate}
           </Typography>
-        </Grid>
       </Grid>
-
-        <Grid itme xs={6}
-          display='flex'
-          justifyContent='center'
-        >
           <Typography>
             이용상황 : 이용완료!{}
           </Typography>
-          </Grid>
+        <Button>
+          이용완료 승인하기
+        </Button>
         </Grid>
     </Box>
     </>
