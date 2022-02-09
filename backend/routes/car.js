@@ -16,7 +16,9 @@ router.post('/register', upload.single('carImg'), async(req, res) => {
     console.log(req.body);
     try {
         // JWT 유효성 검증
-        const decodedUserToken = await jwt.verify(req.body['userToken'], process.env.JWT_SECRET);
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const token = fullToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
 
         // 받아온 carImg가 .png || .jpeg이 아닌 경우 에러
         if (req.file.mimetype !== 'image/png' && req.file.mimetype !== 'image/jpeg') {
@@ -24,7 +26,7 @@ router.post('/register', upload.single('carImg'), async(req, res) => {
         }
 
         // 필요한 항목이 모두 req.body에 있는 경우 진행
-        if (req.body['userToken', 'carNum', 'carModel', 'carYear', 'carSegment', 'carFuel', 'carRate', 'carImg', 'rentInsurance']) {
+        if (req.body['carNum', 'carModel', 'carYear', 'carSegment', 'carFuel', 'carRate', 'carImg', 'rentInsurance']) {
             // 동일한 차량번호가 이미 DB에 존재하는 지 확인
             if (await db['tb_car'].findOne({where: {car_num: req.body['carNum']}}) != null) {
                 return res.status(400).json({message: 'carNum is already in use'});
@@ -48,19 +50,26 @@ router.post('/register', upload.single('carImg'), async(req, res) => {
                 usr_seq: user.usr_seq,
                 car_year: req.body['carYear']
             });
-            return res.status(200).json({status_code: 0});
+
+            await db['tb_car_res_info'].create({
+                car_seq: car.car_seq,
+                usr_seq: user.usr_seq,
+                res_reg_dt: Date.now()
+            });
+
+            return res.status(200).json({statusCode: 0});
         }
         else {
-            return res.status(400).json({status_code: 1})
+            return res.status(400).json({statusCode: 1})
         }
     } catch (error) {
         console.log(error);
-        return res.status(400).json({status_code: 1});
+        return res.status(400).json({statusCode: 1});
     }
 });
 
 
-// 보험가입 API
+// 보험가입 API mocking
 router.post('/insurance', async(req, res) => {
     console.log(req.body);
     try {
@@ -76,30 +85,56 @@ router.post('/insurance', async(req, res) => {
 router.get('/:carID/time', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({getCarTime:'success'});
+        const carTime = await db['tb_car_res_info'].findOne({
+            where: {car_seq: req.params.carID}
+        });
+        if (carTime) {
+            return res.status(200).json({
+                car_res_date_start: carTime.car_res_date_start,
+                car_res_date_end: carTime.car_res_date_end
+            });
+        }
+        else {
+            return res.status(404).json({statusCode: 2});
+        }
     } catch (error) {
         console.log(error);
-        return res.json({getCarTime:'fail'});
-    }
-});
-
-router.post('/:carID/time', async(req, res) => {
-    console.log(req.body);
-    try {
-        return res.json({postCarTime:'success'});
-    } catch (error) {
-        console.log(error);
-        return res.json({postCarTime:'fail'});
+        return res.status(400).json({statusCode: 1});
     }
 });
 
 router.patch('/:carID/time', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({patchCarTime:'success'});
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const token = fullToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+        if (decodedUserToken && req.body['car_res_date_start', 'car_res_date_end']) {
+            const ownerRequest = decodedUserToken.userId;
+            const owner = await db['tb_car'].findOne({
+                where: {usr_id: decodedUserToken.userId}
+            });
+
+            await db['tb_car_res_info'].update({ 
+                car_res_date_start: req.body['car_res_date_start'], 
+                car_res_date_end: req.body['car_res_date_end'],
+                res_reg_dt: Date.now() }, {
+                where: {
+                    usr_seq: owner.usr_seq,
+                    car_seq: req.params.carID
+                }
+            });
+
+            return res.status(200).json({statusCode: 0});
+        }
+        else {
+            return res.status(403).json({message: 'invalid jwt'});
+        }
+
     } catch (error) {
         console.log(error);
-        return res.json({patchCarTime:'fail'});
+        return res.status(400).json({statusCode: 1});
     }
 });
 
