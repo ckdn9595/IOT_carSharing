@@ -177,7 +177,8 @@ router.post('/info', async (req, res) => {
             userPhone,
             userToken
         } = req.body;
-        
+        const userToken = req.header('access_token');
+
         // compare userToken
         const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
         if(decodedUserToken){
