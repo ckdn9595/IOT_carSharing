@@ -15,17 +15,9 @@
 		+ theme `전반적인 UI에 적용할 디자인 정의`
 		+ util `기타 요소들`
 
-#  수정
+#  화면 레이아웃 설명
 
----
+| ![UI_desc1.png](../public/UI_desc1.png) |
+| ![UI_desc2.png](../public/UI_desc2.png) |
 
 
-## 예정
-
-SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
-
-|                |ASCII                          |HTML                         |
-|----------------|-------------------------------|-----------------------------|
-|Single backticks|`'Isn't this fun?'`            |'Isn't this fun?'            |
-|Quotes          |`"Isn't this fun?"`            |"Isn't this fun?"            |
-|Dashes          |`-- is en-dash, --- is em-dash`|-- is en-dash, --- is em-dash|
