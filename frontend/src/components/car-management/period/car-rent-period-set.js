@@ -1,57 +1,149 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { DatePicker, DateTimePicker, StaticDatePicker } from '@mui/lab';
+import { 
+  TextField, 
+  Grid, 
+  ProductCard, 
+  Wrapper, 
+  Box, 
+  Container, 
+  Button,
+  Typography,
+} from '@mui/material';
+import { LocalizationProvider } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { start } from 'nprogress';
 
 // 차량 이용 기간 설정
-const RentPeriodSet = () =>{
-  const [차량이용기간, set] = useState()
+const RentPeriodSet = (props) =>{
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
 
+<<<<<<< HEAD
   const option = {
     url: `http://localhost:3000/api/car/${carID}/time`,
     method:'POST',
     data:{
 
     }
+=======
+  const {setSettingTime, setVisible} = props
+  // 자식에서 부모한테 보내기 설정
+  // const [visible, setVisible ] = useState(false)
+  let start = {
+    year: startDate.getFullYear(),
+    month: startDate.getMonth()+1,
+    day: startDate.getDate(),
+    hours: startDate.getHours(),
+    minutes: startDate.getMinutes(),
+  }
+  let end = {
+    year: endDate.getFullYear(),
+    month: endDate.getMonth()+1,
+    day: endDate.getDate(),
+    hours: endDate.getHours(),
+    minutes: endDate.getMinutes(),
+  }
+  
+  let startMessage  = `${start.year}년 ${start.month}월${start.day}일${start.hours}시${start.minutes}분`
+  let endMessage  = `${end.year}년 ${end.month}월${end.day}일${end.hours}시${end.minutes}분`
+  
+  // const carId = ''
+  // const option = {
+  //   url :`http://localhost:3000/api/car/${carId}/time`,
+  //   method:'POST',
+  //   data: [start, end],
+  //   }
+    
+  const onClickEvent =  () =>{
+    try{
+      // const response = await axios(option)
+      setSettingTime([start, end])
+      setVisible(false)
+    }catch(err){
+      console.log(err)
+      alert('전송실패')
+      }
+>>>>>>> feature/fronted-car-management
   }
 
+
+  // const handleChange = (event)=>{
+  //   setStartDate(event.value)
+
+  // }
+
+
   useEffect( () =>{
-    const fetch = async () => {
-      try{
-        const response = await axios(option)
-        console.log(response.data)
-      }catch(err){
-        console.log(err)
-      }
-    }
-    fetch()
+    startDate > endDate ?  setEndDate(startDate) : ''
+  },[startDate])
 
-  },[])
+  return(       
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Box
+            sx={{border:'1px solid'}}  
+        >
+          <Grid item
+            sx={{p:1,
+                m:1,
+                }}
+          >
+            <DateTimePicker
+              renderInput={(props) => <TextField {...props}/>}
+              label="시작시간"
+              value={startDate}
+              inputFormat="yyyy/MM/dd hh:mm a"
+              onChange={(newValue)=> {
+                setStartDate(newValue)
+                console.log(startDate)
+              }}
+              />
+          </Grid>
+          <Grid item
+            sx={{p:1,
+                m:1,
+                }}
+          >
+            <DateTimePicker
+              renderInput={(props) => <TextField {...props}/>}
+              label="종료시간"
+              value={endDate}
+              minDateTime={startDate}
+              inputFormat="yyyy/MM/dd hh:mm a"
+              onChange={(newValue)=> {
+                setEndDate(newValue)
+                console.log(endDate)
+              }}
+              />
+            </Grid>
+          <Grid container 
+                sx={{
+                    border:'1px solid',
+                    justifyContent:'center',
+                    }}
+          >
+          <Button 
+            variant="contained"
+            color="primary"
+            onClick={onClickEvent}
+            sx={{m:1}}
+          >
+              확인
+          </Button>
+          <Button 
+            variant="contained"
+            color="primary"
+            onClick={()=>{setVisible(false)}}
+            className='cancel-button'
+            sx={{m:1}}
 
-  return(
-    <div>
-      <p>차량 이용기간 설정</p>
-      <table class="tg">
-<thead>
-  <tr>
-    <th class="tg-0lax">임대가능기간설정</th>
-    <th class="tg-0lax"></th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td class="tg-0lax">시작일자</td>
-    <td class="tg-0lax">1일</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">종료일자</td>
-    <td class="tg-0lax">2일</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">확인</td>
-    <td class="tg-0lax">취소</td>
-  </tr>
-</tbody>
-</table>
-    </div>
+          >
+            취소
+          </Button>
+          </Grid>
+        </Box> 
+      </LocalizationProvider>
   )
 }
 
