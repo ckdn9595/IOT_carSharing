@@ -39,7 +39,7 @@ router.post('/register', async(req, res) => {
                 message: 'userPassword is required and must be 8 characters at least'
             });
         }
-        if(userName==null || userGender==null || userBirth==null || userPhone==null || userDriverLicense==null || userPrivacyPolicy==null || userLocationBasedService==null){
+        if(userName==null || userGender==null || userBirth==null || userPhone==null ||  userPrivacyPolicy==null || userLocationBasedService==null){
             return res.status(400).json({
                 message: 'fill all the required fields'
             });
@@ -95,10 +95,12 @@ router.post('/login', async (req, res) => {
         // check if userId is registered
         const user = await db.tb_user.findOne({where: {usr_id: userId}});
         if(user == null){
+            
             return res.status(400).json({
                 message: 'userId is not registered'
             });
         } else {
+            
             // check if userPassword is correct
             const isCorrect = await comparePassword(userPassword, user.usr_pwd);
             if(isCorrect){
