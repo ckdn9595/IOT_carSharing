@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Avatar,
   Box,
@@ -14,27 +14,74 @@ import {
   TextField
 } from '@mui/material';
 import { useUsersState, useUsersDispatch } from 'src/context/UserContext';
+import { modifyUser } from "src/api/member.js";
 
 export const AccountProfile = (props) => {
+  const dispatch = useUsersDispatch();
   const userState = useUsersState().user;
   const [showEdit, setShow] = useState(false);
-  const changeShowValue = e => {
-    e.preventDefault();
-    setShow(showEdit?false:true);
-    console.log(showEdit);
-  }
   const [values, setValues] = useState({
-    phone: '',
-    password: 'Alabama',
-    country: 'USA'
+    userPhone: userState.data.userPhone,
+    userPassword: '',
   });
+  const [userPhoneError, setUserPhoneError] = useState(false);
+  const [userPassError, setUserPassError] = useState(false);
+  
+  useEffect(  ()=>{
+    console.log("phoneChange");
+    const regexPhone = /^\d{11}$/;
+    setUserPhoneError(!regexPhone.test(values.userPhone));
+    if(values.userPhone=='')setUserPhoneError(false);
+  }, [values.userPhone]);
 
+  useEffect(  ()=>{
+    const regexPass = /(?=.*\d)(?=.*[a-z]).{8,}/;
+    setUserPassError(!regexPass.test(values.userPassword));
+    if(values.userPassword=='')setUserPassError(false);
+  }, [values.userPassword]);
+
+  const clickEditInfo = async (e) => {
+    if(values.userPhone==''){
+      alert("번호는 채워져야합니다.");
+      return;
+    }
+    if(userPhoneError || userPassError ){
+      alert("올바른 정보를 입력바랍니다.");
+      return;
+    }
+    if(values.userPhone==userState.data.userPhone && values.userPassword==''){
+      alert("변경된 정보가 없습니다.");
+      return;
+    }
+    
+    await modifyUser(
+      values,
+      (response) => {
+        console.log(response);
+        if (response.status === 200 ) {
+          let userData = userState.data;
+          userData.userPhone = values.userPhone;
+          dispatch({ type: 'GET_USER_SUCCESS', data: userData });
+        } else {
+          console.log(response.message);
+        }
+      },
+      (response) => {
+        console.log(response.message);
+      }
+    );
+  }
   const handleChange = (event) => {
     setValues({
       ...values,
       [event.target.name]: event.target.value
     });
   };
+  const changeShowValue = e => {
+    e.preventDefault();
+    setShow(showEdit?false:true);
+  }
+ 
   return(
     <Grid
         container
@@ -126,12 +173,14 @@ export const AccountProfile = (props) => {
               xs={12}
             >
               <TextField
+                error={userPhoneError}
                 fullWidth
+                helperText="숫자 11자리"
                 label="Phone Number"
-                name="phone"
+                name="userPhone"
                 onChange={handleChange}
                 type="number"
-                value={values.phone}
+                value={values.userPhone}
                 variant="outlined"
               />
             </Grid>
@@ -142,12 +191,14 @@ export const AccountProfile = (props) => {
             >
               <TextField
                 fullWidth
-                label="Country"
-                name="country"
+                error={userPassError}
+                helperText="영어소문자, 숫자 포함 8자 이상의 비밀번호"
+                label="Password"
+                name="userPassword"
                 onChange={handleChange}
-                required
-                value={values.country}
+                value={values.userPassword}
                 variant="outlined"
+                type="password"
               />
             </Grid>
            
@@ -164,6 +215,7 @@ export const AccountProfile = (props) => {
           <Button
             color="primary"
             variant="contained"
+            onClick={clickEditInfo}
           >
             수 정
           </Button>
