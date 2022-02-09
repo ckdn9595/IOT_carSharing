@@ -26,19 +26,20 @@ import { NavItem } from 'src/components/nav-item';
 const CarRegister = ( props ) =>{ 
   const [imageUrl, setImageUrl] = useState(null)
   const imgRef = useRef()
-  const {setVisible} = props
+  const {register, setVisible, setRegister} = props
   // const [pic, setPic] = useState({outPic:[],inPic:[]})
   // const [outPic, setOutPic] = useState('')
   const [inputs, setInputs] = useState({
-    carNum:'',
-    carKind:'',
-    carYear:'',
+    carNum:'', //차량번호
+    carModel:'', //차량이름
+    carYear:'', //차량연식
+    carSegment:'', //차량크기
     carPic: {outPic:[], inPic:[]},
     carIntro:'',
-    carLicense:''
+    carLicense:'' //자동차등록증
   })
 
-  const { car_num, car_kind, car_year, car_pic, car_intro} = inputs
+  const { carNum, carYear, carPic, carIntro} = inputs
 
   const onChange = event =>{
     const {name, value} = event.target
@@ -82,8 +83,10 @@ const CarRegister = ( props ) =>{
 
   const onSubmit = async() =>{
     try{
+      setRegister(register.concat(inputs))
+      console.log(inputs)
       const response = await axios(option)
-      console.log('response.data')
+      console.log(response.data)
     }catch(err){
       // console.log(err)
       // setValid(false) 
@@ -105,19 +108,15 @@ const CarRegister = ( props ) =>{
       <Typography variant="h3">
         차량 등록
       </Typography>
-      <Box component='form' sx={{mt: 4}}> 
-        <Grid container spacing={2}  justifyContent="flex-end">
-          <Grid item xs={6}>
+      <Box  sx={{ display:'flex', border:'1px solid', flexDirection:'column'}}> 
+        <Grid item xs={12} >
           <TextField name="carNum" label="차량번호" onChange={onChange} />
-          </Grid>
-        <Grid item xs={6}>
-          <TextField name="carKind" label="차종입력" onChange={onChange} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} >
+          <TextField name="carModel" label="차종입력" onChange={onChange} />
+        </Grid>
+        <Grid item xs={6} >
           <TextField name="carYear" label="연식입력" onChange={onChange}/>
-        </Grid>
-        <Grid item xs={6}>
-          <TextField name="carIntro" label="차량소개" onChange={onChange}/>
         </Grid>
         <Grid item xs={12}>
           <Typography>
@@ -162,6 +161,7 @@ const CarRegister = ( props ) =>{
         <Grid>
           {/* {inputs.car_pic.pic_out} */}
         </Grid>
+            {/* <TextField name="carIntro" label="차량소개" onChange={onChange}/> */}
 
         <Grid item xs={12}>
           <Typography>
@@ -183,7 +183,7 @@ const CarRegister = ( props ) =>{
               </Button>
           </label>
         </Grid>
-      </Grid>
+
       <Button
        variant='contained'
        onClick={onSubmit}
