@@ -16,8 +16,7 @@
 		+ util `기타 요소들`
 
 #  화면 레이아웃 설명
-
-| ![UI_desc1.png](../public/UI_desc1.png) |
-| ![UI_desc2.png](../public/UI_desc2.png) |
+<img src="../public/UI_desc1.png"  width="650" height="400" margin-left="100"/>
+<img src="../public/UI_desc2.png"  width="650" height="400"/>
 
 
