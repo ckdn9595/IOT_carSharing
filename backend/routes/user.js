@@ -63,6 +63,8 @@ router.post('/register', async(req, res) => {
             usr_gender: userGender,
             usr_phone: userPhone,
             usr_birth_day: userBirth,
+            usr_ps_info_proc_agmt_yn: userPrivacyPolicy,
+            usr_loc_base_svc_agmt_yn: userLocationBasedService,
         });
 
         // return success message
@@ -171,10 +173,7 @@ router.post('/info', async (req, res) => {
     try {
         console.log(req.body);
         const {
-            userName,
             userPassword,
-            userGender,
-            userBirth,
             userPhone,
             userToken
         } = req.body;
@@ -183,21 +182,34 @@ router.post('/info', async (req, res) => {
         const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
         if(decodedUserToken){
             // check if all values are filled
-            if(userName==null || userGender==null || userBirth==null || userPhone==null){
+            if(userPhone==null){
                 return res.status(400).json({
                     message: 'fill all the required fields'
                 });
             } else {
+                const userInfo = await db.tb_user.findOne({where: {usr_id: decodedUserToken.userId}});
                 // update user info
-                await db.tb_user.update({ // update user info
-                    usr_name: userName,
-                    usr_gender: userGender,
-                    usr_birth_day: userBirth,
-                    usr_phone: userPhone
-                }, {where: {usr_id: decodedUserToken.userId}});
-                return res.status(200).json({
-                    message: 'user info updated'
-                });
+                if(userPassword==null){
+                    await db.tb_user.update({ // update user info
+                        usr_phone: userPhone,
+                    }, {where: {usr_id: decodedUserToken.userId}});
+                    return res.status(200).json({
+                        message: 'user info updated'
+                    });
+                } else if (userPassword!=null){
+                    // hash userPassword
+                    const hashedPassword = await hashPassword(userPassword);
+
+                    await db.tb_user.update({ // update user info
+                        usr_phone: userPhone,
+                        usr_befo_pwd: userInfo.usr_pwd,
+                        usr_pwd: hashedPassword
+                    }, {where: {usr_id: decodedUserToken.userId}});
+                    return res.status(200).json({
+                        message: 'user info updated'
+                    });
+                }
+                
             }
         } else {
             return res.status(400).json({
@@ -229,7 +241,7 @@ router.get('/:userID/grade', async (req, res) => {
     console.log(req.body);
     try {
         // get grade from db
-        // const grade = await db.tb_car.findAll({where: {car_owner: req.params.userID}});
+        const user = await db.tb_car.findAll({where: {car_owner: req.params.userID}});
 
         return res.json({userGrade:'success'});
     } catch (error) {
@@ -293,7 +305,7 @@ router.post('/:userID/question/:questionID', async (req, res) => {
     }
 })
 
-// 이용요금 관리
+// payment manage function
 router.post('/payment', async (req, res) => {
     console.log(req.body);
     try {
@@ -302,6 +314,6 @@ router.post('/payment', async (req, res) => {
         console.log(error);
         return res.json({payment:'fail'});
     }
-})
+}) // end of payment manage function
 
 module.exports = router;
