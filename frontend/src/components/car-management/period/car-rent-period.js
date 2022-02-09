@@ -68,24 +68,34 @@ const RentPeriod = () =>{
       const response = await axios(option)
       setSettingTime(response.data)
     }catch(err){
-      alert('no data')
       console.log(settingTime)
       }
   }
 
   useEffect(() => {
     getDate()
+    console.log(settingTime)
   }, [settingTime])
 
   const {year} = settingTime[0]
   return(
     <>
-    <Grid>
-      <Grid>
-        <Typography>
-          임대 가능 상태
-          {year}
-        </Typography>
+    <Box
+       sx={{display: 'flex',
+       alignItems: 'center',
+       flexDirection: 'column',
+       p: 1,
+       m: 1,
+       border: '1px solid',}}
+    >
+      <Grid item
+            sx={{
+                  border:'1px solid',
+                  p:1,
+                  m:1
+          }}           
+      >
+          임대 기간 : {settingTime.map(date=>( <p>{date.year}년 {date.month}월 {date.day}일</p>))}
       </Grid>
       <Grid>
     <Button
@@ -93,13 +103,9 @@ const RentPeriod = () =>{
       onClick={onClickEvent}
       > 시간 설정 하기</Button>
       </Grid>
-
-    </Grid>
-      
-
-
-
-    {visible ? <RentPeriodSet setVisible={setVisible} />:''}
+    {visible ? <RentPeriodSet setSettingTime={setSettingTime} setVisible={setVisible} />:''}
+    </Box>
+    
     </>
 
   )
