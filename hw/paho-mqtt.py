@@ -1,5 +1,7 @@
-import paho.mqtt.client as mqtt
+from pprint import isreadable
 from time import sleep
+import paho.mqtt.client as mqtt
+import random
 import RPi.GPIO as GPIO
 import json
 
@@ -8,8 +10,22 @@ GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # 초기 설정 값
 tempCount = 0
-topic = "paho/test"
+topic = "test/5/location"
+subTopic = "test/5/#"
 clientName = "ChaKeyJoBa01"
+
+# Mocking을 위해 필요한 임시 Data들
+curDrivenDistance = 0
+curDoorStatus = False
+locationPreset= {
+    "{\"latitude\":\"37.47\",\"longitude\":\"127.0\"}",
+    "{\"latitude\":\"37.47\",\"longitude\":\"127.0\"}",
+    "{\"latitude\":\"37.47\",\"longitude\":\"127.0\"}",
+    "{\"latitude\":\"37.47\",\"longitude\":\"127.0\"}",
+    "{\"latitude\":\"37.47\",\"longitude\":\"127.0\"}"
+}
+isReported = False
+
 
 # mqtt broker서버와 연결되면 paho/test를 subscribe
 def onConnect(client, userdata, flags, rc):
@@ -60,6 +76,15 @@ GPIO.add_event_detect(23, GPIO.RISING, callback=risingEdge, bouncetime=100)
 while True:
     try:
         sleep(5)
+        if(curDoorStatus):
+            isReported = False
+            curDrivenDistance += random.random()
+            # publishMessage = json.dumps({"drivenDistance":curDrivenDistance})
+            client.publish(topic, publishMessage, 0)
+        elif (not isReported):
+            isReported = True
+            publishMessage = locationPreset[random.randint(0,4)]
+            client.publish(topic, publishMessage, 0)
     except KeyboardInterrupt:
         print("\nBye!")
         client.loop_stop()
