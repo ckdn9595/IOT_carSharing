@@ -51,8 +51,12 @@ router.post('/register', upload.single('carImg'), async(req, res) => {
                 car_year: req.body['carYear']
             });
 
+            const justCreateCar = await db['tb_car'].findOne({
+                where: {car_num: req.body['carNum']}
+            });
+
             await db['tb_car_res_info'].create({
-                car_seq: car.car_seq,
+                car_seq: justCreateCar.car_seq,
                 usr_seq: user.usr_seq,
                 res_reg_dt: Date.now()
             });
@@ -113,7 +117,7 @@ router.patch('/:carID/time', async(req, res) => {
         if (decodedUserToken && req.body['car_res_date_start', 'car_res_date_end']) {
             const ownerRequest = decodedUserToken.userId;
             const owner = await db['tb_car'].findOne({
-                where: {usr_id: decodedUserToken.userId}
+                where: {usr_id: ownerRequest}
             });
 
             await db['tb_car_res_info'].update({ 
@@ -143,30 +147,81 @@ router.patch('/:carID/time', async(req, res) => {
 router.get('/:carID/info', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({getCarInfo:'success'});
+        const carInfo = await db['tb_car'].findOne({
+            where: {car_seq: req.params.carID}
+        });
+        if (carInfo) {
+            return res.status(200).json({
+                car_num: carInfo.car_num,
+                car_isValid: carInfo.car_isValid,
+                car_rent_insurance_yn: carInfo.car_rent_insurance_yn,
+                car_img: carInfo.car_img,
+                car_reg_dt: carInfo.car_reg_dt,
+                car_model: carInfo.car_model,
+                car_segment: carInfo.car_segment,
+                car_fuel: carInfo.car_fuel,
+                car_rate: carInfo.car_rate,
+                car_year: carInfo.car_year,
+                car_dy: carInfo.car_dy,
+                car_dx: carInfo.car_dx
+            });
+        }
+        else {
+            return res.status(404).json({statusCode: 2});
+        }
     } catch (error) {
         console.log(error);
-        return res.json({getCarInfo:'fail'});
-    }
-});
-
-router.post('/:carID/info', async(req, res) => {
-    console.log(req.body);
-    try {
-        return res.json({postCarInfo:'success'});
-    } catch (error) {
-        console.log(error);
-        return res.json({postCarInfo:'fail'});
+        return res.status(400).json({statusCode: 1});
     }
 });
 
 router.patch('/:carID/info', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({patchCarInfo:'success'});
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const token = fullToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+        if (decodedUserToken) {
+            const ownerRequest = await db['tb_user'].findOne({
+                where: {usr_id: decodedUserToken.userId}
+            });
+            const owner = await db['tb_car'].findOne({
+                where: {car_seq: req.params.carID}
+            });
+
+            if (ownerRequest.usr_seq === owner.usr_seq) {
+                //  nullish coalescing을 통해 req.body에 있는 항목만 업데이트
+                await db['tb_car'].update({ 
+                    car_num: req.body.car_num ?? undefined,
+                    car_isValid: req.body.car_isValid ?? undefined,
+                    car_rent_insurance_yn: req.body.car_rent_insurance_yn ?? undefined,
+                    car_img: req.body.car_img ?? undefined,
+                    car_reg_dt: Date.now(),
+                    car_model: req.body.car_model ?? undefined,
+                    car_segment: req.body.car_segment ?? undefined,
+                    car_fuel: req.body.car_fuel ?? undefined,
+                    car_rate: req.body.car_rate ?? undefined,
+                    car_year: req.body.car_year ?? undefined }, {
+                    where: {
+                        usr_seq: owner.usr_seq,
+                        car_seq: req.params.carID
+                    }
+                });
+
+                return res.status(200).json({statusCode: 0});
+            }
+            else {
+                return res.status(400).json({message: 'jwt userID and DB userID does not match'})
+            }
+        }
+        else {
+            return res.status(400).json({message: 'Invalid jwt'});
+        }
+
     } catch (error) {
         console.log(error);
-        return res.json({patchCarInfo:'fail'});
+        return res.status(400).json({statusCode: 1});
     }
 });
 
@@ -175,20 +230,43 @@ router.patch('/:carID/info', async(req, res) => {
 router.get('/:carID/review', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({getCarReview:'success'});
+        const carReview = await db['tb_car_review'].findAll({
+            where: {car_seq: req.params.carID}
+        });
+        if (carReview) {
+            return res.status(200).json(carReview);
+        }
+        else {
+            return res.status(404).json({statusCode: 2});
+        }
     } catch (error) {
         console.log(error);
-        return res.json({getCarReview:'fail'});
+        return res.status(400).json({statusCode: 1});
     }
 });
 
+// 아래로 작업중...
 router.post('/:carID/review', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({postCarReview:'success'});
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const token = fullToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+        if (decodedUserToken) {
+            const userRequest = await db['tb_car_info'].findAll({
+                where: {car_seq: req.params.carID, usr_seq: decodedUserToken.userId, res_end_valid: 'Y'}
+            });
+            
+
+            return res.status(200).json({statusCode: 0});
+        }
+        else {
+            return res.status(400).json({message: 'Invalid jwt'});
+        }
     } catch (error) {
         console.log(error);
-        return res.json({postCarReview:'fail'});
+        return res.status(400).json({statusCode: 1});
     }
 });
 
