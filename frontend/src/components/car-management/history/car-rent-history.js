@@ -20,12 +20,12 @@ import {
   FormControl,
   SliderValueLabel,
 } from '@mui/material';
-import { carContext } from '../carContext';
+import { CarContext } from '../CarContext';
 
 const RentHistory = ({list}) =>{
   const [clickOn, setClickOn] = useState(false)
   const [content, setConTent] = useState({})
-  const {SendConfirm, setSendConfirm} = useContext(carContext)
+  const {SendConfirm, setSendConfirm} = useContext(CarContext)
 
   useEffect(()=>{
     setConTent(list)

@@ -22,7 +22,7 @@ import {
   MenuItem,
   FormControl,
 } from '@mui/material';
-import { carContext } from '../carContext';
+import { CarContext } from '../CarContext';
 import { Filter } from '@mui/icons-material';
 import ReviewList from '../review/review-list';
 
@@ -46,7 +46,7 @@ const CarState = ({car}) =>{
         history, setHistory,
         insurance, setInsurance,
         register, setRegister,
-      } = useContext(carContext)
+      } = useContext(CarContext)
   useEffect(()=>{
     setData(car)
   },[])

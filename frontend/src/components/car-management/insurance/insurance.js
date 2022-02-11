@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Container, Button, Checkbox, FormGroup, FormControlLabel, Box, Typography } from '@mui/material';
-import { carContext } from '../carContext';
+import { CarContext } from '../CarContext';
 
 
 const Insurance = ({carId}) =>{
   // { carId } = props 차량 정보 받아오기
-  const {insurance, setInsurance} =useContext(carContext)
+  const {insurance, setInsurance} =useContext(CarContext)
   // const [rent, setRent]= useState(false)
-  const {rent, setRent}= useContext(carContext) //체크버튼 활성화,비활성화
+  const {rent, setRent}= useContext(CarContext) //체크버튼 활성화,비활성화
   function agreeCheckHandle(){
     setRent(!rent)
   }

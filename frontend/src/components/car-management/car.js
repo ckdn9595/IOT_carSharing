@@ -1,13 +1,16 @@
-import React, {useEffect, useState} from 'react'
+import App from '../../pages/_app'
+import React, {useContext, useEffect, useState} from 'react'
+import Customers from 'src/pages/reservation'
+import { DashboardLayout } from '../dashboard-layout'
 import CarMain from './car-state/car-main'
 
-import {carContext} from './carContext'
+import {CarContext} from './CarContext'
 
-const car = () => {
+const Car = () => {
     // car-main
     const [register, setRegister] = useState([])
     const [visible, setVisible] = useState(false)
-    const [carList, setCalList] = useState([])
+    const [carList, setCarList] = useState([])
     // car-register
     const [inputs, setInputs] = useState({
         carNum:'', //차량번호
@@ -40,8 +43,12 @@ const car = () => {
     // car-rent-history-list
     const [list, setList] = useState([])
     // car-rent-history
-    const [rentSendConfirm, setSendConfirm] = useState(true)
-
+    const [sendConfirm, setSendConfirm] = useState(true)
+    
+    // useEffect(()=>{
+    //   // setRegister([])
+    //   // setVisible(false)
+    // },[])
 
 
     //
@@ -65,31 +72,30 @@ const car = () => {
 
 
   return (
-      <carContext.Provider value={{
-        //car-main
-        register,setRegister,
-        visible, setVisible,
-        carList, setCalList,
-        // car-register
-        inputs, setInputs,
-        postfiles, setPostfiles,
-        imageUrl, setImageUrl,
-        //car-state
-        time, setTime,
-        history, setHistory,
-        insurance, setInsurance,
-        insuranceCheck, setInsuranceCheck,
-        //insurance
-        rent, setRent,
-        //car-rent-historylist
-        list, setList,
-        //car-rent-history
-        rentSendConfirm, setSendConfirm,
-    
+    <CarContext.Provider value={{
+      //car-main
+      register,setRegister,
+      visible, setVisible,
+      carList, setCarList,
+      // car-register
+      inputs, setInputs,
+      postfiles, setPostfiles,
+      imageUrl, setImageUrl,
+      //car-state
+      time, setTime,
+      history, setHistory,
+      insurance, setInsurance,
+      insuranceCheck, setInsuranceCheck,
+      //insurance
+      rent, setRent,
+      //car-rent-historylist
+      list, setList,
+      //car-rent-history
+      sendConfirm, setSendConfirm,
+        
       }}>
     <CarMain/>
-    </carContext.Provider>
+    </CarContext.Provider>
   )
 }
-
-export default car
+export default Car
