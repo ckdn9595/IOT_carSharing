@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import CarState from './car-state';
+import {carContext} from '../carContext'
 import { 
   Box, 
   Grid,
@@ -22,8 +23,32 @@ import {
 import CarRegister from './car-register';
 import axios from 'axios';
 
-const OpenCarState = (props) => {
-  const {register} =props
+// 차량정보 불러와서 목록 조회하기
+const OpenCarState = () => {
+  const {register} = useContext(carContext)
+  const [carList,setCarList] = useState([])
+  
+  // const option = {
+  //   url:`http://localhost:8001/api/car/`,
+  //   method:'GET',
+  //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+  //   }
+
+    const getList= async() =>{
+      try{
+        // const response = await axios(option)
+        // setCarList([resposnse.data])
+        // console.log(response.data)
+      }catch(err){
+        console.log('list get error')
+        }
+    }
+
+  useEffect(()=>{
+        getList()
+  },[register])
+
+  
 return (
   <>
   {register.map(car =>(
@@ -32,38 +57,20 @@ return (
   </>
 )}
 
+// 차량관리 구조
 const CarMain = () =>{
-  const [register, setRegister] = useState([])
-  const [visible, setVisible] = useState(false)
-
-  // const getCarList = async() =>{
-  //   const response = await axios.get(
-  //     url = `http://localhost:8001/api/users/${carId}/info`
-  //   )
-  // }
+  const {register, setRegister, visible, setVisible, carList, setCalList,} = useContext(carContext)
   const getData = async() =>{
     try{
-      // const response = await axios({
-      //   url =`http://localhost:3000/api/car/${carId}/info`,
-      //   method:'GET',
-      // })
-      // const response = await axios.get(
-      //   url =`http://localhost:8001/api/car/${carId}/info`
-      //   )
-      // console.log(response.data)
-      // setRegister(response.data)
       console.log(register)
     } catch (error){
       console.log('등록된 차량이없스빈다.')
     }
   }
   
-
-  
-
+//차량 정보
   useEffect( ()=> {
     getData()
-
   },[register])
 
 
@@ -105,9 +112,8 @@ const CarMain = () =>{
         border: '1px solid',
       }}
     >    
-    {/* map */}
      <Grid item xs={12} sx={{border: '1px solid'}} >
-    {visible  ? <CarRegister register={register} setRegister={setRegister}  setVisible={setVisible}/>:''}
+    {visible ? <CarRegister/>:''}
       </Grid>
     </Box>
     <Box
@@ -122,9 +128,8 @@ const CarMain = () =>{
       }}
       >
         <Grid item xs={12} sx={{border: '1px solid'}} >
-      { 1 === 1? <OpenCarState register={register} /> : <Typography variant='h5' > 등록된 차량이 없습니다. </Typography> }
+      { carList.length === 0 ? <OpenCarState /> : <Typography>no data</Typography> }
         </Grid>
-
     </Box>
     </>
   )

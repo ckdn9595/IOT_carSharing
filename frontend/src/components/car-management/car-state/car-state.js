@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import RentHistoryList from '../history/car-rent-history-list';
 import RentPeriod from '../period/car-rent-period';
@@ -22,11 +22,10 @@ import {
   MenuItem,
   FormControl,
 } from '@mui/material';
+import { carContext } from '../carContext';
+import { Filter } from '@mui/icons-material';
+import ReviewList from '../review/review-list';
 
-// 차량정보수정
-// 차량 정보 보는 페이지
-// 수정 삭제
-// 버튼은 
 const dump = {
   carName:'good car',
   carKind:'sonata',
@@ -37,46 +36,38 @@ const dump = {
     },
   carIntro:'',
 }
-const CarState = (props) =>{
+const CarState = ({car}) =>{
   const [data, setData]= useState({})
-  const [time, setTime] = useState(false)
-  const [history, setHistory] = useState(false)
-  const [insurance, setInsurance] = useState(false)
+  // const [time, setTime] = useState(false)
+  // const [history, setHistory] = useState(false)
+  // const [insurance, setInsurance] = useState(false)
+  // const [insuranceCheck, setInsuranceCheck] = useState(false)
+ const {time, setTime,
+        history, setHistory,
+        insurance, setInsurance,
+        register, setRegister,
+      } = useContext(carContext)
+  useEffect(()=>{
+    setData(car)
+  },[])
+  const option = {
+    url:`http://localhost:8001/api/car/${car.carId}`,
+    method:'DELETE',
+    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+    }
 
-  // const carId = prop.users_car
-  // const getData = async() =>{
+  // const delButton = async() =>{
   //   try{
-  //     // const response = await axios({
-  //     //   url =`http://localhost:3000/api/car/${carId}/info`,
-  //     //   method:'GET',
-  //     // })
-  //     const response = await axios.get(
-  //       url =`http://localhost:3000/api/car/${carId}/info`
-  //       )
-  //     console.log(response.data)
-  //     setData(response.data)
+  //     // const response = await axios(option)
+  //     await setRegister(register.filter(car => car.carNum !== data.carNum))
   //   } catch (error){
   //     alert('error!')
   //   }
   // }
-  const delData = async() =>{
-    try{
-      // const response = await axios({
-      //   url =`http://localhost:3000/api/car/${carId}/info`,
-      //   method:'GET',
-      // })
-      const response = await axios.delete(
-        url =`http://localhost:3000/api/car/${carId}/info`
-        )
-      console.log(response.data)
-      setData(response.data)
-    } catch (error){
-      alert('error!')
-    }
+  const delButton = ()=>{
+    setRegister(register.filter(car => car.carNum !== data.carNum))
   }
-  useEffect(()=>{
-    setData(props.car)
-  },[])
+
   
   return(
     <>
@@ -105,17 +96,17 @@ const CarState = (props) =>{
                     }}>
 
           <Typography>
-            차종입니다  {data.carKind}
+            차종입니다  {car.carModel}
           </Typography>
           <Typography>
-            차량번호입니다 {data.carYear}
+            차량번호입니다 {car.carYear}
           </Typography>
           </Box>
         <Box>
         <Button 
             variant="contained"
             color="secondary"
-            onClick={()=>{delData}}
+            onClick={delButton}
             >
             차량삭제
         </Button>
@@ -139,13 +130,14 @@ const CarState = (props) =>{
             justifyContent:'center',
             }}
       >
-      <Button 
+        {car.rentInsurance === true? <Typography>보험가입완료</Typography>:     
+          <Button 
             variant="contained"
             color="primary"
             onClick={()=>{setInsurance(!insurance)}}
           >
             보험가입
-        </Button>
+        </Button>}
         <Button 
             variant="contained"
             color="primary"
@@ -164,10 +156,17 @@ const CarState = (props) =>{
         </Grid>
         <Grid item xs={12}>
 
-        {insurance? <Insurance/>:''}
-        {time? <RentPeriod/>:''}
-        {history? <RentHistoryList/>:''}
+        {insurance? <Insurance carId={car.carId} />:''}
+        {time? <RentPeriod carId={car.carId} />:''}
+        {history? <RentHistoryList carId={car.carId} />:''}
         </Grid>
+        {/* <Button 
+            variant="contained"
+            color="primary"
+            onClick={()=>{setHistory(!리뷰)}}
+          >
+        </Button> */}
+        {history? <ReviewList carId={car.carId}/>:""}
     </Box>
     </Box>
     </>

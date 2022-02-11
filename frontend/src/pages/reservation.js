@@ -5,10 +5,7 @@ import { CustomerListToolbar } from '../components/customer/customer-list-toolba
 import { DashboardLayout } from '../components/dashboard-layout';
 import { customers } from '../__mocks__/customers';
 import Insurance from 'src/components/car-management/insurance/insurance';
-import CarReview from 'src/components/car-management/review/car-review-create';
-import Review from 'src/components/car-management/review/review'
-import ReviewList from 'src/components/car-management/review/review-list'
-import CarRegister from 'src/components/car-management/car-register';
+import CarMain from 'src/components/car-management/car-state/car-main';
 
 const Customers = () => (
   <>
@@ -35,7 +32,7 @@ const Customers = () => (
     <CarReview/>
     <ReviewList/>
     <Review/> */}
-    <CarRegister/>
+    <CarMain/>
 
   </>
 );

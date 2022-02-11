@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { 
   Box, 
@@ -21,25 +21,19 @@ import {
   SliderValueLabel,
 } from '@mui/material';
 import { NavItem } from 'src/components/nav-item';
+import { carContext } from '../carContext';
 // 차량등록
 // 사용자 prop
-const CarRegister = ( props ) =>{ 
-  const [imageUrl, setImageUrl] = useState(null)
-  const imgRef = useRef()
-  const {register, setVisible, setRegister} = props
-  // const [pic, setPic] = useState({outPic:[],inPic:[]})
-  // const [outPic, setOutPic] = useState('')
-  const [inputs, setInputs] = useState({
-    carNum:'', //차량번호
-    carModel:'', //차량이름
-    carYear:'', //차량연식
-    carSegment:'', //차량크기
-    carPic: {outPic:[], inPic:[]},
-    carIntro:'',
-    carLicense:'' //자동차등록증
-  })
+const CarRegister = () =>{ 
+  const { inputs, setInputs,
+    postfiles, setPostfiles,
+    imageUrl, setImageUrl,
+    register, setRegister,
+    setVisible,
+  } = useContext(carContext)
 
-  const { carNum, carYear, carPic, carIntro} = inputs
+  const imgRef = useRef()
+  const { carNum, carYear, carImg,} = inputs
 
   const onChange = event =>{
     const {name, value} = event.target
@@ -47,18 +41,6 @@ const CarRegister = ( props ) =>{
       ...inputs,
       [name]: value,
     })
-  }
-
-  const onImgChange =  event =>{
-    const {name, value} = event.target
-    console.log(name,value)
-    setInputs(
-      {...inputs,
-      carPic: {...inputs.carPic, [name]:[...inputs.carPic[name], value] },
-      }
-    )
-
-    console.log(inputs)
   }
 
 //   const thumbNail = map()
@@ -75,26 +57,54 @@ const CarRegister = ( props ) =>{
     imgRef.current.click()
   }
 
-  // const option = {
-  //   url =`http://localhost:3000/api/car/register`,
-  //   method:'POST',
-  //   data: inputs
-  //   }
+  const option = {
+    url:`http://localhost:8001/api/car/register`,
+    method:'POST',
+    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+    data: inputs
+    }
 
   const onSubmit = async() =>{
     try{
       setRegister(register.concat(inputs))
-      console.log(inputs)
-      const response = await axios(option)
-      console.log(response.data)
-    }catch(err){
-      // console.log(err)
-      // setValid(false) 
+      // const response = await axios(option)
+      // console.log(response.data)
       setVisible(false)
-      // alert('잘못된 요청입니다.')
+    }catch(err){
+      setVisible(false)
       }
   }
 
+  const uploadFile = (e) => {
+    e.stopPropagation();
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    const filesInArr = Array.from(e.target.files);
+    const formData = new FormData()
+    formData.append('carImg', file)
+    for (let value of formData.values()) {
+      console.log(value);
+    }
+    console.log(formData.mimetype)
+  
+    reader.onloadend = async() => {
+      await setPostfiles({
+        file: filesInArr,
+        previewURL: reader.result,
+      });
+      await setInputs({...inputs, carImg:formData})   
+    };
+  
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+  let preview = null;
+  if (postfiles.file !== null) {
+    preview = postfiles.file[0]?.type.includes("image/") ? (
+      <img src={postfiles.previewURL} />
+    ) : ''
+  }
   return(
   <Container>
     <Box 
@@ -124,37 +134,23 @@ const CarRegister = ( props ) =>{
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <label htmlFor="contained-button-file-license">
-            <Input
-              multiple type='file'
-              id="contained-button-file-license"
-              accept='image/*'
-              onChange={onChange}
-              style={{ 'display':'none' }}
-              name='carLicense'
-              />
-              <Button variant="contained" component="span">
-                사진등록
-              </Button>
-          </label>
-        </Grid>
-        <Grid item xs={12}>
           <Typography>
-            외부 사진 등록
+          사진 등록
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <label htmlFor="contained-button-file">
+          <label htmlFor="input-file">
             <Input
-              multiple type='file'
-              id="contained-button-file"
-              accept='image/*'
-              onChange={onImgChange}
+              multiple
+              type='file'
+              id="input-file"
+              inputProps={{accept:"image/*"}}
+              onChange={uploadFile}
               style={{ 'display':'none' }}
-              name='outPic'
+              name='carImg'
               />
               <Button variant="contained" component="span">
-                사진등록
+              사진등록
               </Button>
           </label>
         </Grid>
@@ -162,28 +158,6 @@ const CarRegister = ( props ) =>{
           {/* {inputs.car_pic.pic_out} */}
         </Grid>
             {/* <TextField name="carIntro" label="차량소개" onChange={onChange}/> */}
-
-        <Grid item xs={12}>
-          <Typography>
-            내부 사진 등록
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <label htmlFor="contained-button-file-in">
-            <Input
-              multiple type='file'
-              id="contained-button-file-in"
-              accept='image/*'
-              onChange={onImgChange}
-              style={{ 'display':'none' }}
-              name='inPic'
-              />
-              <Button variant="contained" component="span">
-                사진등록
-              </Button>
-          </label>
-        </Grid>
-
       <Button
        variant='contained'
        onClick={onSubmit}
@@ -192,10 +166,10 @@ const CarRegister = ( props ) =>{
       </Button>
       </Box>
     </Box>
+    {preview}
     <p>차량 번호{inputs.carNum}</p>
-    <p>차량 종류{inputs.carKind}</p>
+    <p>차량 종류{inputs.carModel}</p>
     <p>차량 연식{inputs.carYear}</p>
-    <p>차량 소개{[inputs.carIntro]}</p>
   </Container>
   )
 }
