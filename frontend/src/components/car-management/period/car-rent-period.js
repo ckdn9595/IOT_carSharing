@@ -33,31 +33,15 @@ const dump = [
 ]
 
 // 차량 이용 기간 설정
-const RentPeriod = () =>{
+const RentPeriod = ({carId}) =>{
   const [visible, setVisible] = useState(false)
   const [settingTime, setSettingTime] = useState(dump)
 
-  // const option = {
-  //   url =`http://localhost:3000/api/car/${carID}/time`,
-  //   method:'GET',
-  //   data:{
-
-  //   }
-  // }
-  // let start = {
-  //   year: visible.start.getFullYear(),
-  //   month: visible.start.getMonth(),
-  //   date: visible.start.getDate(),
-  //   hours: visible.start.getHours(),
-  //   minutes: visible.start.getMinutes(),
-  // }
-  // let end = {
-  //   year: visible.end.getFullYear(),
-  //   month: visible.end.getMonth(),
-  //   date: visible.end.getDate(),
-  //   hours: visible.end.getHours(),
-  //   minutes: visible.end.getMinutes(),
-  // }
+  const option = {
+    url:`http://localhost:8001/api/car/${carId}/time`,
+    method:'GET',
+    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+    }
 
   const onClickEvent= () =>{
     setVisible(!visible)
@@ -68,13 +52,12 @@ const RentPeriod = () =>{
       const response = await axios(option)
       setSettingTime(response.data)
     }catch(err){
-      console.log(settingTime)
+      console.log(err)
       }
   }
 
   useEffect(() => {
     getDate()
-    console.log(settingTime)
   }, [settingTime])
 
   const {year} = settingTime[0]
@@ -103,7 +86,7 @@ const RentPeriod = () =>{
       onClick={onClickEvent}
       > 시간 설정 하기</Button>
       </Grid>
-    {visible ? <RentPeriodSet setSettingTime={setSettingTime} setVisible={setVisible} />:''}
+    {visible ? <RentPeriodSet setSettingTime={setSettingTime} setVisible={setVisible} carId={carId} />:''}
     </Box>
     
     </>

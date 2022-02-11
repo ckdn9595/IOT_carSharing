@@ -1,20 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Container, Button, Checkbox, FormGroup, FormControlLabel, Box, Typography } from '@mui/material';
+import { carContext } from '../carContext';
 
-// 보험확인설정
-//prop id받아서 보험 체크
-const Insurance = () =>{
-  const [isAgree, setIsAgree]= useState(false)
 
+const Insurance = ({carId}) =>{
+  // { carId } = props 차량 정보 받아오기
+  const {insurance, setInsurance} =useContext(carContext)
+  // const [rent, setRent]= useState(false)
+  const {rent, setRent}= useContext(carContext) //체크버튼 활성화,비활성화
   function agreeCheckHandle(){
-    setIsAgree(!isAgree)
+    setRent(!rent)
   }
+
+  // const option = {
+  //   url:`http://localhost:8001/api/car/${carid}`,
+  //   method:'PUT',
+  //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+  //   data: {rentInsurance:true}
+  //   }
 
   const agreeSend= async()=>{
     try{
-      const resposne = await axios.post('http://localhost:3000/api/insurance', {agree:true})
-      console.log(response.data)
+      //가입등료화면과  창닫기
+      // const responsne = await axios(option)
+      // console.log(response.data)
+      await setInsurance(!insurance)
     }catch(err){
       console.log('failed')
       }
@@ -23,7 +34,6 @@ const Insurance = () =>{
   return(
     <>
     <Box>
-
       <h1>보험 등록하기</h1>
       <Box
         sx={{
@@ -49,7 +59,7 @@ const Insurance = () =>{
       </Box >
       
       <FormGroup>
-        <FormControlLabel control={<Checkbox checked={isAgree} onChange={agreeCheckHandle}/>} label="약관에 동의합니다" />
+        <FormControlLabel control={<Checkbox checked={rent} onChange={agreeCheckHandle}/>} label="약관에 동의합니다" />
       <Button 
         variant="contained"
         onClick={agreeSend}

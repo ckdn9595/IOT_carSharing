@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useContext }  from 'react';
 import axios from 'axios';
 import Review from './review'
 import {
@@ -13,16 +13,37 @@ import {
   Divider,
   TextField
 } from '@mui/material';
-// 리뷰 목록 불러오기
-// 차량정보 확인할 때
-// 차량id prop
-function ReviewList() {
+import { Reviews, ReviewsSharp } from '@mui/icons-material';
+import { set } from 'nprogress';
+//차량의 리뷰 가져와서 
+function ReviewList({carId}) {
+  const [reviews, setReviews] = useState([{id:1, title:'good',content:'gooosss'}])
+  
+  const option = {
+    url:`http://localhost:8001/api/car/${carId}`,
+    method:'GET',
+    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+    }
+  // const getReviewList= async () =>{
+  //   try{
+  //     const response = await axios(option)
+  //     console.log(response.data)
+  //     setReviews(response.data)
+  //   }catch(err){
+  //     console.log(err)
+  //   }
+  // }
+  // useEffect(()=>{
+  //   getReviewList()
+  // },[])
 
 
-  return <div>
+  return <>
     <p>이차의 리뷰 목록</p>
-    <Review/>
-  </div>;
+    {reviews.map( review=>(
+      <Review key={review.id} review={review} />
+    ))}
+  </>
 }
 
 export default ReviewList;

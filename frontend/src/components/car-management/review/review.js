@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Container,
+  Title,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
   Grid,
   Typography,
+  Link,
   Box,
   Button,
   Card,
@@ -13,18 +20,28 @@ import {
   TextField
 } from '@mui/material';
 
-// 리뷰 수정, 삭제, 보기
-function Review() {
-  return <div>
-    <tr>
-      <td>
+function Review({review}) {
+  const [content, setContent] = useState({})
+
+  useEffect(()=> {
+    setContent({review})
+  },[])
+  const preventDefault=()=>{}
+
+  return(<>
+      <Typography  variant="h4">
         제목
-      </td>
-      <td> 본문</td>
-      <td> 평점</td>
-      <td> 작성날짜</td>
-      </tr>
-  </div>;
+      </Typography>
+      <Typography color="text.secondary" sx={{ flex: 1 }}>
+        리뷰내용
+      </Typography>
+      <div>
+        <Link color="primary" href="#" onClick={preventDefault}>
+          정보
+        </Link>
+      </div>
+    </>
+  )
 }
 
 
