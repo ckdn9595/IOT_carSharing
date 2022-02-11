@@ -51,8 +51,12 @@ router.post('/register', upload.single('carImg'), async(req, res) => {
                 car_year: req.body['carYear']
             });
 
+            const justCreateCar = await db['tb_car'].findOne({
+                where: {car_num: req.body['carNum']}
+            });
+
             await db['tb_car_res_info'].create({
-                car_seq: car.car_seq,
+                car_seq: justCreateCar.car_seq,
                 usr_seq: user.usr_seq,
                 res_reg_dt: Date.now()
             });
@@ -212,7 +216,7 @@ router.patch('/:carID/info', async(req, res) => {
             }
         }
         else {
-            return res.status(400).json({message: 'invalid jwt'});
+            return res.status(400).json({message: 'Invalid jwt'});
         }
 
     } catch (error) {
@@ -241,13 +245,28 @@ router.get('/:carID/review', async(req, res) => {
     }
 });
 
+// 아래로 작업중...
 router.post('/:carID/review', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({postCarReview:'success'});
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const token = fullToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+        if (decodedUserToken) {
+            const userRequest = await db['tb_car_info'].findAll({
+                where: {car_seq: req.params.carID, usr_seq: decodedUserToken.userId, res_end_valid: 'Y'}
+            });
+            
+
+            return res.status(200).json({statusCode: 0});
+        }
+        else {
+            return res.status(400).json({message: 'Invalid jwt'});
+        }
     } catch (error) {
         console.log(error);
-        return res.json({postCarReview:'fail'});
+        return res.status(400).json({statusCode: 1});
     }
 });
 
