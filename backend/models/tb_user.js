@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       primaryKey: true,
     },
+    usr_befo_pwd: DataTypes.STRING,
     usr_pwd: DataTypes.STRING,
     usr_name: DataTypes.STRING,
     usr_gender: DataTypes.STRING,
