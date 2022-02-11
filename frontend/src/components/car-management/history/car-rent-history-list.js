@@ -21,7 +21,7 @@ import {
   FormControl,
   SliderValueLabel,
 } from '@mui/material';
-import { carContext } from '../carContext';
+import { CarContext } from '../CarContext';
 
 // 자동차의 렌트한 이력 조회
 // 자동차의 id값 prop
@@ -111,7 +111,7 @@ const RentSummary = ({list})=>{
     )
   }
 const RentHistoryList = ({carId}) =>{
-  const {list, setList, rentSendConfirm} = useContext(carContext)
+  const {list, setList, rentSendConfirm} = useContext(CarContext)
   // const {car_res_seq, res_rate} = props
   
 

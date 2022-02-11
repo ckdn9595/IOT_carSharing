@@ -21,7 +21,7 @@ import {
   SliderValueLabel,
 } from '@mui/material';
 import { NavItem } from 'src/components/nav-item';
-import { carContext } from '../carContext';
+import { CarContext } from '../CarContext';
 // 차량등록
 // 사용자 prop
 const CarRegister = () =>{ 
@@ -30,7 +30,7 @@ const CarRegister = () =>{
     imageUrl, setImageUrl,
     register, setRegister,
     setVisible,
-  } = useContext(carContext)
+  } = useContext(CarContext)
 
   const imgRef = useRef()
   const { carNum, carYear, carImg,} = inputs

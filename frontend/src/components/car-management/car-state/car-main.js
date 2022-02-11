@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import CarState from './car-state';
-import {carContext} from '../carContext'
+import {CarContext} from '../CarContext'
 import { 
   Box, 
   Grid,
@@ -22,10 +22,11 @@ import {
 } from '@mui/material';
 import CarRegister from './car-register';
 import axios from 'axios';
+import Car from '../Car'
 
 // 차량정보 불러와서 목록 조회하기
 const OpenCarState = () => {
-  const {register} = useContext(carContext)
+  const {register} = useContext(CarContext)
   const [carList,setCarList] = useState([])
   
   // const option = {
@@ -58,26 +59,18 @@ return (
 )}
 
 // 차량관리 구조
-const CarMain = () =>{
-  const {register, setRegister, visible, setVisible, carList, setCalList,} = useContext(carContext)
-  const getData = async() =>{
-    try{
-      console.log(register)
-    } catch (error){
-      console.log('등록된 차량이없스빈다.')
-    }
-  }
-  
-//차량 정보
-  useEffect( ()=> {
-    getData()
-  },[register])
-
-
+const CarMain = () => {
+  const {visible, setVisible, carList} = React.useContext(CarContext)
+  const [registerVisible, setRegisterVisible] = useState(false)
   const onClickHandle = () =>{
     setVisible(!visible)
-  }
+    console.log(visible)
 
+  }
+ useEffect(()=>{
+   console.log(setVisible)
+   console.log(visible)
+ },[])
 
   return(
     <>
@@ -128,11 +121,11 @@ const CarMain = () =>{
       }}
       >
         <Grid item xs={12} sx={{border: '1px solid'}} >
-      { carList.length === 0 ? <OpenCarState /> : <Typography>no data</Typography> }
+      { carList && carList.length === 0 ? <OpenCarState /> : <Typography>no data</Typography> }
         </Grid>
     </Box>
     </>
   )
 }
 
-export default CarMain;
+export default CarMain

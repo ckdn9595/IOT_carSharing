@@ -6,7 +6,9 @@ import { DashboardLayout } from '../components/dashboard-layout';
 import { customers } from '../__mocks__/customers';
 import Insurance from 'src/components/car-management/insurance/insurance';
 import CarMain from 'src/components/car-management/car-state/car-main';
+import Car from 'src/components/car-management/Car';
 
+import {useCarProvider} from 'src/components/car-management/Car'
 const Customers = () => (
   <>
     <Head>
@@ -29,11 +31,11 @@ const Customers = () => (
       </Container>
     </Box> */}
     {/* <Insurance/>
-    <CarReview/>
     <ReviewList/>
-    <Review/> */}
-    <CarMain/>
-
+  <Review/> */}
+    {/* <Car/> */}
+  {/* <Insurance/> */}
+  <Car/>
   </>
 );
 Customers.getLayout = (page) => (

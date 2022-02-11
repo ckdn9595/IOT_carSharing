@@ -1,3 +1,3 @@
-import { createContext } from "react";
+import  { createContext } from "react";
 
-export const carContext = createContext(null);
+export const CarContext = createContext(null);
