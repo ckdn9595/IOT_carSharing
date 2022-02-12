@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import { AppBar, Avatar, Badge, Box, IconButton, Toolbar, Tooltip } from '@mui/material';
+import { TextField, AppBar, Avatar, Badge, Box, IconButton, Toolbar, Tooltip } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
+import { Search as SearchIcon } from '../icons/search';
 import { Bell as BellIcon } from '../icons/bell';
 import { UserCircle as UserCircleIcon } from '../icons/user-circle';
 import { Users as UsersIcon } from '../icons/users';
+import { useEffect, useState } from 'react';
+import { useCommonState } from '../context/CommonContext';
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -14,7 +16,15 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
-
+  const [isResPage, setResPage] = useState();
+  const commonDatas = useCommonState();
+  const pageName = commonDatas.pageName;
+  
+  useEffect( () => {
+    if(pageName === '/')setResPage(true);
+    else setResPage(false);
+  }, [pageName]);
+  
   return (
     <>
       <DashboardNavbarRoot
@@ -46,11 +56,25 @@ export const DashboardNavbar = (props) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-          <Tooltip title="Search">
-            <IconButton sx={{ ml: 1 }}>
-              <SearchIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
+          {(isResPage) && 
+          <>
+            <Tooltip title="Search">
+              <IconButton sx={{ ml: 1 }}>
+                <SearchIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            { <TextField
+              fullWidth
+              // helperText="숫자 11자리"
+              // label="Phone Number"
+              name="userPhone"
+              // onChange={handleChange}
+              // type="number"
+              value={commonDatas.address + (commonDatas.roadAddr == ''? '':'   ('+ commonDatas.roadAddr + ')')}
+              variant="outlined"
+            /> }
+          </>
+          }
           <Box sx={{ flexGrow: 1 }} />
           <Tooltip title="Contacts">
             <IconButton sx={{ ml: 1 }}>
