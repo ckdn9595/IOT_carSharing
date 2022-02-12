@@ -11,8 +11,10 @@ const MemberInfo = () => {
         <Typography
         sx={{ mb: 3 }}
         variant="h4"
-        >
-        {userState.data.userName}님 정보
+        >{
+            (userState.data != null) &&
+             `${userState.data.userName}님 정보`
+        }
         </Typography>
         <AccountProfile />
     </Container>

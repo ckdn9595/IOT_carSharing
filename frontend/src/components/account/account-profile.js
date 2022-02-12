@@ -21,7 +21,7 @@ export const AccountProfile = (props) => {
   const userState = useUsersState().user;
   const [showEdit, setShow] = useState(false);
   const [values, setValues] = useState({
-    userPhone: userState.data.userPhone,
+    userPhone: (userState.data) ? userState.data.userPhone : '',
     userPassword: '',
   });
   const [userPhoneError, setUserPhoneError] = useState(false);
@@ -83,147 +83,158 @@ export const AccountProfile = (props) => {
   }
  
   return(
-    <Grid
-        container
-        spacing={3}
-    >
+      <Grid
+          container
+          spacing={3}
+      >
+        <Grid
+        item
+        lg={12}
+        md={12}
+        xs={12}
+        >
+      {(userState.isLogin)  && 
+        <Card {...props}>
+          <CardContent>
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              <Avatar
+                src={
+                  (userState.data != null) && `${userState.data.avatar}`
+                }
+                  sx={{
+                  height: 64,
+                  mb: 2,
+                  width: 64
+                }}
+              />
+              <Typography
+                color="textPrimary"
+                gutterBottom
+                variant="h5"
+              >{
+                (userState.data != null) && 
+                `${userState.data.userName}`
+              }
+              </Typography>
+              <Typography
+                color="textSecondary"
+                variant="body2"
+              >{
+                (userState.data != null) && 
+                `${userState.data.userId}`
+              }
+              </Typography>
+              <Typography
+                color="textSecondary"
+                variant="body2"
+              >{
+                (userState.data != null) && 
+                `${userState.data.userPhone}`
+              }
+              </Typography>
+            </Box>
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <Button
+              color="primary"
+              fullWidth
+              variant="text"
+              onClick={changeShowValue}
+            >
+              개인정보 수정
+            </Button>
+          </CardActions>
+        </Card>
+      }
+      </Grid>
+      {showEdit && 
       <Grid
       item
       lg={12}
       md={12}
       xs={12}
       >
-      <Card {...props}>
-        <CardContent>
+        <form
+        autoComplete="off"
+        noValidate
+        {...props}
+        >
+        <Card>
+          <CardHeader
+            subheader="The information can be edited"
+            title="Profile"
+          />
+          <Divider />
+          <CardContent>
+            <Grid
+              container
+              spacing={3}
+            >
+              <Grid
+                item
+                md={6}
+                xs={12}
+              >
+                <TextField
+                  error={userPhoneError}
+                  fullWidth
+                  helperText="숫자 11자리"
+                  label="Phone Number"
+                  name="userPhone"
+                  onChange={handleChange}
+                  type="number"
+                  value={values.userPhone}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid
+                item
+                md={6}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  error={userPassError}
+                  helperText="영어소문자, 숫자 포함 8자 이상의 비밀번호"
+                  label="Password"
+                  name="userPassword"
+                  onChange={handleChange}
+                  value={values.userPassword}
+                  variant="outlined"
+                  type="password"
+                />
+              </Grid>
+            
+            </Grid>
+          </CardContent>
+          <Divider />
           <Box
             sx={{
-              alignItems: 'center',
               display: 'flex',
-              flexDirection: 'column'
+              justifyContent: 'flex-end',
+              p: 2
             }}
           >
-            <Avatar
-              src={userState.data.avatar}
-              sx={{
-                height: 64,
-                mb: 2,
-                width: 64
-              }}
-            />
-            <Typography
-              color="textPrimary"
-              gutterBottom
-              variant="h5"
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={clickEditInfo}
             >
-              {userState.data.userName}
-            </Typography>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
-              {userState.data.userId}
-            </Typography>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
-              {userState.data.userPhone}
-            </Typography>
+              수 정
+            </Button>
           </Box>
-        </CardContent>
-        <Divider />
-        <CardActions>
-          <Button
-            color="primary"
-            fullWidth
-            variant="text"
-            onClick={changeShowValue}
-          >
-            개인정보 수정
-          </Button>
-        </CardActions>
-      </Card>
-    </Grid>
-    {showEdit && 
-    <Grid
-    item
-    lg={12}
-    md={12}
-    xs={12}
-    >
-      <form
-      autoComplete="off"
-      noValidate
-      {...props}
-      >
-      <Card>
-        <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
-        />
-        <Divider />
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                error={userPhoneError}
-                fullWidth
-                helperText="숫자 11자리"
-                label="Phone Number"
-                name="userPhone"
-                onChange={handleChange}
-                type="number"
-                value={values.userPhone}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                error={userPassError}
-                helperText="영어소문자, 숫자 포함 8자 이상의 비밀번호"
-                label="Password"
-                name="userPassword"
-                onChange={handleChange}
-                value={values.userPassword}
-                variant="outlined"
-                type="password"
-              />
-            </Grid>
-           
-          </Grid>
-        </CardContent>
-        <Divider />
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            p: 2
-          }}
-        >
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={clickEditInfo}
-          >
-            수 정
-          </Button>
-        </Box>
-      </Card>
-      </form>
-    </Grid>
-    }
-  </Grid>
+        </Card>
+        </form>
+      </Grid>
+      }
+      </Grid>
+     
   );
 };
