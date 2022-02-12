@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import CarRegister from './car-register';
 import axios from 'axios';
-import Car from '../Car'
+import Car from '../car'
 
 // 차량정보 불러와서 목록 조회하기
 const OpenCarState = () => {
