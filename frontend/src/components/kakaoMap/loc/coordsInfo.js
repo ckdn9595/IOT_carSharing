@@ -2,6 +2,7 @@
 const CoordsInfo = (map, dispatch) =>{
     
     const geocoder = new window.kakao.maps.services.Geocoder();
+    
     const clusterer = new window.kakao.maps.MarkerClusterer({
       map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
       averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
@@ -12,7 +13,6 @@ const CoordsInfo = (map, dispatch) =>{
       if (status === window.kakao.maps.services.Status.OK) {
         const roadAddr = !!result[0].road_address ? result[0].road_address.address_name : '';
         const address = result[0].address.address_name;
-       
         dispatch({ type: 'SET_ADDR', data: {address:address, roadAddr:roadAddr} });
        }
       const coords = map.getCenter();
@@ -22,6 +22,8 @@ const CoordsInfo = (map, dispatch) =>{
       });
       clusterer.addMarker(marker);
      });
+
+     
     // var marker = new kakao.maps.Marker(), // 클릭한 위치를 표시할 마커입니다
     //     infowindow = new kakao.maps.InfoWindow({zindex:1}); // 클릭한 위치에 대한 주소를 표시할 인포윈도우입니다
 

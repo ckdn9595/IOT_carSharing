@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useState, useEffect } from "react";
 import useCurrentLocation from "../kakaoMap/loc/initLoc"
 import CoordsInfo from "../kakaoMap/loc/coordsInfo"
+import GetCarInfo from "../kakaoMap/loc/GetCarInfo"
 import { useCommonDispatch } from 'src/context/CommonContext';
 
 const Map = () => {
@@ -24,6 +25,7 @@ const Map = () => {
           };
           const map = new window.kakao.maps.Map(container, options);
           CoordsInfo(map, dispatch);
+          GetCarInfo(map);
           
         });
       };

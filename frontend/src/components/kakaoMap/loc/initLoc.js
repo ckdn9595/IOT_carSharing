@@ -18,6 +18,10 @@ const useCurrentLocation = () => {
 
   // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
   const handleError = (error) => {
+    setLocation({
+      latitude:37.50127,
+      longitude:127.03966,
+    });
     setError(error.message);
   };
 
