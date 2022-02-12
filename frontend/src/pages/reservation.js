@@ -6,9 +6,9 @@ import { DashboardLayout } from '../components/dashboard-layout';
 import { customers } from '../__mocks__/customers';
 import Insurance from 'src/components/car-management/insurance/insurance';
 import CarMain from 'src/components/car-management/car-state/car-main';
-import Car from 'src/components/car-management/Car';
+import Car from 'src/components/car-management/car';
 
-import {useCarProvider} from 'src/components/car-management/Car'
+import {useCarProvider} from 'src/components/car-management/car'
 const Customers = () => (
   <>
     <Head>

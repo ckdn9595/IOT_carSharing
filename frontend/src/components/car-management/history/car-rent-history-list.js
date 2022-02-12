@@ -21,7 +21,7 @@ import {
   FormControl,
   SliderValueLabel,
 } from '@mui/material';
-import { CarContext } from '../CarContext';
+import { CarContext } from '../carContext';
 
 // 자동차의 렌트한 이력 조회
 // 자동차의 id값 prop

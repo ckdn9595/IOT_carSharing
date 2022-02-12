@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import CarState from './car-state';
-import {CarContext} from '../CarContext'
+import {CarContext} from '../carContext'
 import { 
   Box, 
   Grid,

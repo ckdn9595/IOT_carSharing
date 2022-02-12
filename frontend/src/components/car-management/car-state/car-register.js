@@ -21,7 +21,7 @@ import {
   SliderValueLabel,
 } from '@mui/material';
 import { NavItem } from 'src/components/nav-item';
-import { CarContext } from '../CarContext';
+import { CarContext } from '../carContext';
 // 차량등록
 // 사용자 prop
 const CarRegister = () =>{ 

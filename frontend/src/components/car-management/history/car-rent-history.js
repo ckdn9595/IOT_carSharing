@@ -20,7 +20,7 @@ import {
   FormControl,
   SliderValueLabel,
 } from '@mui/material';
-import { CarContext } from '../CarContext';
+import { CarContext } from '../carContext';
 
 const RentHistory = ({list}) =>{
   const [clickOn, setClickOn] = useState(false)
