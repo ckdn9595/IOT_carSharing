@@ -1,9 +1,17 @@
 import React, { createContext, useReducer, useContext } from "react";
 
+const date = new Date();
+
 const initialState = {
   pageName: '',
   roadAddr: '',
-  address: ''
+  address: '',
+  map: null,
+  searchOption:{
+    carSizes: [true,true,true,true,true,true],
+    startDate: date,
+    endDate: date.setDate(date.getDate() + 1)
+  }
 };
 
 // const setPage = data => ({
@@ -28,6 +36,17 @@ function commonReducer(state, action) {
         address: (action.data.address),
         roadAddr: (action.data.roadAddr)
      };
+    case 'SET_MAP':
+      return{
+        ...state,
+        map: (action.data),
+     };
+    case 'SET_OPTION':
+      return{
+        ...state,
+        isOption: true,
+        searchOption: (action.data)
+      }
     default:
       throw new Error(`Unhanded action type: ${action.type}`);
   }

@@ -9,4 +9,13 @@ async function getCarInfo(param ,success, fail) {
     .then(success)
     .catch(fail);
 }
-export { getCarInfo};
+
+async function searchAddressByName(keyWord ,success, fail){
+  axios.defaults.headers["Authorization"] 
+    = `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_API_SEARCH}`;
+  await axios
+    .get(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${keyWord}`)
+    .then(success)
+    .catch(fail);
+}
+export { getCarInfo, searchAddressByName};

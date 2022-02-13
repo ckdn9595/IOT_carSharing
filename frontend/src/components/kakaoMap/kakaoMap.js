@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 import useCurrentLocation from "../kakaoMap/loc/initLoc"
 import CoordsInfo from "../kakaoMap/loc/coordsInfo"
 import GetCarInfo from "../kakaoMap/loc/GetCarInfo"
-import { useCommonDispatch } from 'src/context/CommonContext';
+import { useCommonState, useCommonDispatch } from 'src/context/CommonContext';
 
 const Map = () => {
   const dispatch = useCommonDispatch();
+  const commonDatas = useCommonState();
   const { location, error } = useCurrentLocation();
 
   useEffect(() => {
-    
     const mapScript = document.createElement("script");
     mapScript.async = true;
     mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API}&libraries=services,clusterer&autoload=false`;
@@ -25,8 +25,9 @@ const Map = () => {
           };
           const map = new window.kakao.maps.Map(container, options);
           CoordsInfo(map, dispatch);
-          GetCarInfo(map);
-          
+          const option = commonDatas.searchOption;
+          GetCarInfo(map, option);
+          dispatch({ type: 'SET_MAP', data: map });
         });
       };
       mapScript.addEventListener("load", onLoadKakaoMap);
