@@ -21,15 +21,27 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 }));
 
 export const DashboardNavbar = (props) => {
-  const date = new Date();
+  const curr = new Date();
+  const utc = 
+        curr.getTime() + 
+        (curr.getTimezoneOffset() * 60 * 1000);
+  const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+  const sDate =  new Date(utc + (KR_TIME_DIFF));
+  let eDate =  new Date(utc + (KR_TIME_DIFF));
+  eDate.setDate(eDate.getDate()+1);
   const { onSidebarOpen, ...other } = props;
   const [isResPage, setResPage] = useState();
   const [isSearch, setSearch] = useState(false);
   const [isOption, setOption] = useState(false);
   const [searchInfo, setSearchInfo] = useState([]);
-  const [startDate, setStartDate] = useState(date);
-  const [endDate, setEndDate] = useState(date.setDate(date.getDate() + 1));
-  const carSizes = [false,false,false,false,false,false];
+  const [startDate, setStartDate] = useState(sDate);
+  const [endDate, setEndDate] = useState(eDate);
+  const [checkq, setCheckQ] = useState(false);
+  const [checkw, setCheckW] = useState(false);
+  const [checke, setCheckE] = useState(false);
+  const [checkr, setCheckR] = useState(false);
+  const [checkt, setCheckT] = useState(false);
+  const [checky, setCheckY] = useState(false);
   const commonDatas = useCommonState();
   const commonDispatch = useCommonDispatch();
   
@@ -50,11 +62,12 @@ export const DashboardNavbar = (props) => {
   }
   const setOptionValue = () => {
     const searchOption = {
-      carSizes,
+      carSizes:[checkq,checkw,checke,checkr,checkt,checky],
       startDate,
       endDate
     }
-    commonDispatch({ type: 'SET_OPTION', data: searchOption });
+    console.log(searchOption);
+    commonDispatch({ type:'SET_OPTION', data: searchOption });
     setOption(!isOption);
   }
   const searchByAddr = async () => {
@@ -83,8 +96,19 @@ export const DashboardNavbar = (props) => {
   };
   const handleChange = (e) => {
     const carIndex = Number(e.target.id) - 1;
-    const carIndexValue = !carSizes[carIndex];
-    carSizes[carIndex] = carIndexValue;
+    if(carIndex == 0){
+      setCheckQ(!checkq);
+    }else if(carIndex == 1){
+      setCheckW(!checkw);
+    }else if(carIndex == 2){
+      setCheckE(!checke);
+    }else if(carIndex == 3){
+      setCheckR(!checkr);
+    }else if(carIndex == 4){
+      setCheckT(!checkt);
+    }else if(carIndex == 5){
+      setCheckY(!checky);
+    }
   };
   useEffect( () => {
     if(pageName === '/')setResPage(true);
@@ -258,6 +282,7 @@ export const DashboardNavbar = (props) => {
                         color="primary"
                         id="1"
                         onChange={handleChange}
+                        checked={checkq}
                       />
                     )}
                     label="경형"
@@ -268,6 +293,7 @@ export const DashboardNavbar = (props) => {
                         color="primary"
                         id="2"
                         onChange={handleChange}
+                        checked={checkw}
                       />
                     )}
                     label="준중형"
@@ -277,6 +303,7 @@ export const DashboardNavbar = (props) => {
                       <Checkbox 
                         id="3"
                         onChange={handleChange}
+                        checked={checke}
                       />)}
                     label="중형"
                   />
@@ -286,6 +313,7 @@ export const DashboardNavbar = (props) => {
                         color="primary"
                         id="4"
                         onChange={handleChange}
+                        checked={checkr}
                       />
                     )}
                     label="준대형"
@@ -296,6 +324,7 @@ export const DashboardNavbar = (props) => {
                         color="primary"
                         id="5"
                         onChange={handleChange}
+                        checked={checkt}
                       />
                     )}
                     label="대형"
@@ -306,6 +335,7 @@ export const DashboardNavbar = (props) => {
                         color="primary"
                         id="6"
                         onChange={handleChange}
+                        checked={checky}
                       />
                     )}
                     label="승합"
