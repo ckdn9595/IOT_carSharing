@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Container, Button, Checkbox, FormGroup, FormControlLabel, Box, Typography } from '@mui/material';
-import { CarContext } from '../CarContext';
+import { CarContext } from '../carContext';
 
 
 const Insurance = ({carId}) =>{

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import CarState from './car-state';
-import {CarContext} from '../CarContext'
+import {CarContext} from '../carContext'
 import { 
   Box, 
   Grid,
@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import CarRegister from './car-register';
 import axios from 'axios';
-import Car from '../Car'
+import Car from '../car'
 
 // 차량정보 불러와서 목록 조회하기
 const OpenCarState = () => {

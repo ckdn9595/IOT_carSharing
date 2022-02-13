@@ -4,7 +4,7 @@ import Customers from 'src/pages/reservation'
 import { DashboardLayout } from '../dashboard-layout'
 import CarMain from './car-state/car-main'
 
-import {CarContext} from './CarContext'
+import {CarContext} from './carContext'
 
 const Car = () => {
     // car-main
