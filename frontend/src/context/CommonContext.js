@@ -1,6 +1,13 @@
 import React, { createContext, useReducer, useContext } from "react";
 
-const date = new Date();
+const curr = new Date();
+const utc = 
+      curr.getTime() + 
+      (curr.getTimezoneOffset() * 60 * 1000);
+const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+let sDate =  new Date(utc + (KR_TIME_DIFF));
+let eDate =  new Date(utc + (KR_TIME_DIFF));
+eDate.setDate(eDate.getDate()+1);
 
 const initialState = {
   pageName: '',
@@ -8,9 +15,9 @@ const initialState = {
   address: '',
   map: null,
   searchOption:{
-    carSizes: [true,true,true,true,true,true],
-    startDate: date,
-    endDate: date.setDate(date.getDate() + 1)
+    carSizes: [false,false,false,false,false,false],
+    startDate: sDate,
+    endDate: eDate
   }
 };
 
@@ -22,6 +29,7 @@ const initialState = {
 //   roadAddr: data.roadAddr,
 //   address: data.address
 // })
+
 
 function commonReducer(state, action) {
   switch (action.type) {
@@ -44,7 +52,6 @@ function commonReducer(state, action) {
     case 'SET_OPTION':
       return{
         ...state,
-        isOption: true,
         searchOption: (action.data)
       }
     default:
