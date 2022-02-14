@@ -65,13 +65,17 @@ router.post('/', async (req, res) => {
                 carsResAvailableSeq.push(carsResAvailable[i].car_seq);
             }
 
-            const carsResult = await db['tb_car'].findAll({
+            let carsResult = await db['tb_car'].findAll({
                 where: {
                     car_seq: {
                         [Op.or]: carsResAvailableSeq
                     }
                 }
             });
+            for (let i = 0; i < carsResult.length; i++) {
+                carsResult[i].car_reg_dt.setHours(carsResult[i].car_reg_dt.getHours() + 9);
+            }
+
             return res.status(200).json(carsResult);
         }
     } catch (error) {

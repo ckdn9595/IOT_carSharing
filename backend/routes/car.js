@@ -153,7 +153,7 @@ router.get('/:carID/info', async(req, res) => {
             where: {car_seq: req.params.carID}
         });
         if (carInfo) {
-            const carRegDt = carInfo.car_reg_dt.setHours(carInfo.car_reg_dt.getHours + 9);
+            const carRegDt = carInfo.car_reg_dt.setHours(carInfo.car_reg_dt.getHours() + 9);
             return res.status(200).json({
                 car_num: carInfo.car_num,
                 car_isValid: carInfo.car_isValid,
