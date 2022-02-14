@@ -28,6 +28,11 @@ const items = [
   {
     href: '/reservation',
     icon: (<UsersIcon fontSize="small" />),
+    title: '차량 관리'
+  },
+  {
+    href: '/driving',
+    icon: (<UsersIcon fontSize="small" />),
     title: '실시간 이용정보'
   },
   {

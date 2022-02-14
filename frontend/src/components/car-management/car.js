@@ -19,7 +19,7 @@ const Car = () => {
         carSegment:'', //차량크기
         carFuel:'10',// 차량연료
         carRate:'', //차량 요금
-        carImg:[], //차량 이미지
+        // carImg:[], //차량 이미지
         rentInsurance:false//보험유무
       })
     const [postfiles, setPostfiles] = useState({

@@ -14,7 +14,6 @@ import {
   TextField
 } from '@mui/material';
 import { Reviews, ReviewsSharp } from '@mui/icons-material';
-import { set } from 'nprogress';
 //차량의 리뷰 가져와서 
 function ReviewList({carId}) {
   const [reviews, setReviews] = useState([{id:1, title:'good',content:'gooosss'}])

@@ -56,22 +56,38 @@ const CarRegister = () =>{
     event.preventDefault()
     imgRef.current.click()
   }
-
+  const uploadContent = new FormData()
   const option = {
     url:`http://localhost:8001/api/car/register`,
     method:'POST',
-    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-    data: inputs
+    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`, 'Content-Type': `multipart/form-data`},
+    data: uploadContent
     }
-
-  const onSubmit = async() =>{
+  
+  const uploading = () =>{
+    for (let key in inputs){
+      uploadContent.append(key,inputs[key])
+      // console.log('업로드',key)
+    }
+    for (let value of uploadContent.values()) {
+      console.log(value,'사진밸류');
+    }
+  
+  }
+  const onSubmit = async(event) =>{
+    event.preventDefault()
     try{
-      setRegister(register.concat(inputs))
-      // const response = await axios(option)
-      // console.log(response.data)
+      await uploading()
+      // setRegister(register.concat(inputs))
+      const response = await axios(option)
+      console.log(response.data)
       setVisible(false)
     }catch(err){
       setVisible(false)
+      for (let key of uploadContent.keys()) {
+        console.log(key, uploadContent.values(key));
+      }
+      console.log('22',uploadContent.values('carImg'))
       }
   }
 
@@ -83,9 +99,8 @@ const CarRegister = () =>{
     const formData = new FormData()
     formData.append('carImg', file)
     for (let value of formData.values()) {
-      console.log(value);
+      console.log(value,'사진밸류');
     }
-    console.log(formData.mimetype)
   
     reader.onloadend = async() => {
       await setPostfiles({

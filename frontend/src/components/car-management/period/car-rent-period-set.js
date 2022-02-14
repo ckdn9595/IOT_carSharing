@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { start } from 'nprogress';
 
 // 차량 이용 기간 설정
 const RentPeriodSet = (props) =>{

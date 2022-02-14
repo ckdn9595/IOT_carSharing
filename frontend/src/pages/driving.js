@@ -4,15 +4,13 @@ import { CustomerListResults } from '../components/customer/customer-list-result
 import { CustomerListToolbar } from '../components/customer/customer-list-toolbar';
 import { DashboardLayout } from '../components/dashboard-layout';
 import { customers } from '../__mocks__/customers';
-import Insurance from 'src/components/car-management/insurance/insurance';
-import CarMain from 'src/components/car-management/car-state/car-main';
-import Car from 'src/components/car-management/car';
 
-const Customers = () => (
+import Drive from 'src/components/drive/Drive';
+const Driving = () => (
   <>
     <Head>
       <title>
-        차량정보 | 차키줘봐
+      차량이용정보 | 차키줘봐
       </title>
     </Head>
     {/* <Box
@@ -29,22 +27,13 @@ const Customers = () => (
         </Box>
       </Container>
     </Box> */}
-    {/* <Insurance/>
-    <ReviewList/>
-  <Review/> */}
-    {/* <Car/> */}
-  {/* <Insurance/> */}
-  {/* <Car/> */}
-  {/* <DriveStart/> */}
-  {/* <CarMain/> */}
-  <Car/>
-  {/* <Car/> */}
+  <Drive/>
   </>
 );
-Customers.getLayout = (page) => (
+Driving.getLayout = (page) => (
   <DashboardLayout>
     {page}
   </DashboardLayout>
 );
 
-export default Customers;
+export default Driving;
