@@ -60,7 +60,19 @@ router.post('/', async (req, res) => {
             return res.status(200).json({statusCode: 1});
         }
         else {
-            return res.status(200).json(carsResAvailable);
+            let carsResAvailableSeq = [];
+            for (let i = 0; i < carsResAvailable.length; i++) {
+                carsResAvailableSeq.push(carsResAvailable[i].car_seq);
+            }
+
+            const carsResult = await db['tb_car'].findAll({
+                where: {
+                    car_seq: {
+                        [Op.or]: carsResAvailableSeq
+                    }
+                }
+            });
+            return res.status(200).json(carsResult);
         }
     } catch (error) {
         console.log(error);

@@ -89,10 +89,12 @@ router.post('/insurance', async(req, res) => {
 router.get('/:carID/time', async(req, res) => {
     console.log(req.body);
     try {
-        const carTime = await db['tb_car_res_info'].findOne({
+        let carTime = await db['tb_car_res_info'].findOne({
             where: {car_seq: req.params.carID}
         });
         if (carTime) {
+            carTime.car_res_date_start.setHours(carTime.car_res_date_start.getHours() + 9);
+            carTime.car_res_date_end.setHours(carTime.car_res_date_end.getHours() + 9);
             return res.status(200).json({
                 car_res_date_start: carTime.car_res_date_start,
                 car_res_date_end: carTime.car_res_date_end
@@ -151,12 +153,13 @@ router.get('/:carID/info', async(req, res) => {
             where: {car_seq: req.params.carID}
         });
         if (carInfo) {
+            const carRegDt = carInfo.car_reg_dt.setHours(carInfo.car_reg_dt.getHours + 9);
             return res.status(200).json({
                 car_num: carInfo.car_num,
                 car_isValid: carInfo.car_isValid,
                 car_rent_insurance_yn: carInfo.car_rent_insurance_yn,
                 car_img: carInfo.car_img,
-                car_reg_dt: carInfo.car_reg_dt,
+                car_reg_dt: carRegDt,
                 car_model: carInfo.car_model,
                 car_segment: carInfo.car_segment,
                 car_fuel: carInfo.car_fuel,
