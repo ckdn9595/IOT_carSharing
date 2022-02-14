@@ -16,6 +16,7 @@ import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
 import { useUsersState, useUsersDispatch } from '../context/UserContext';
+import { useCommonDispatch } from '../context/CommonContext';
 
 
 const items = [
@@ -62,6 +63,7 @@ const items = [
 ];
 
 export const DashboardSidebar = (props) => {
+  const commonDispatch = useCommonDispatch();
   const dispatch = useUsersDispatch();
   const userState = useUsersState().user;
   const { open, onClose } = props;
@@ -84,6 +86,7 @@ export const DashboardSidebar = (props) => {
       if (open) {
         onClose?.();
       }
+      commonDispatch({ type: 'SET_PAGE', data: router.asPath });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router.asPath]

@@ -36,14 +36,14 @@ pipeline {
         stage('Deploy-front') {
           steps {
             sh 'docker ps -aq --filter "name=frontend" | grep -q . && docker stop frontend && docker rm -fv frontend'
-            sh 'docker run -d --name frontend -p 3000:3000 -u root nodejs/front'
+            sh 'docker run -d --name frontend -v /home/ubuntu/Workspace/uploads:/app/uploads -p 3000:3000 -u root nodejs/front'
           }
         }
 
         stage('Deploy-back') {
           steps {
             sh 'docker ps -aq --filter "name=backend" | grep -q . && docker stop backend && docker rm -fv backend'
-            sh 'docker run -d --name backend -p 8001:8001 -v backend-images:/app/uploads -u root nodejs/back'
+            sh 'docker run -d --name backend -p 8001:8001 -v /home/ubuntu/Workspace/uploads:/app/uploads -u root nodejs/back'
           }
         }
 

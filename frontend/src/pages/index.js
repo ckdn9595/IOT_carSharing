@@ -1,16 +1,22 @@
 import Head from 'next/head';
 import { Box, Container, Grid } from '@mui/material';
-import { Budget } from '../components/dashboard/budget';
-import { LatestOrders } from '../components/dashboard/latest-orders';
-import { LatestProducts } from '../components/dashboard/latest-products';
-import { Sales } from '../components/dashboard/sales';
-import { TasksProgress } from '../components/dashboard/tasks-progress';
-import { TotalCustomers } from '../components/dashboard/total-customers';
-import { TotalProfit } from '../components/dashboard/total-profit';
-import { TrafficByDevice } from '../components/dashboard/traffic-by-device';
 import { DashboardLayout } from '../components/dashboard-layout';
+import React, { useEffect } from "react";
+import Map from 'src/components/kakaoMap/kakaoMap';
 
-const Dashboard = () => (
+const Dashboard = () => {
+  // const container = useRef(null);
+  // useEffect(() => {
+  //   const options = {
+  //     //지도를 생성할 때 필요한 기본 옵션
+  //     center: new window.kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+  //     level: 3, //지도의 레벨(확대, 축소 정도)
+  //   };
+  //   new window.kakao.maps.Map(container.current, options); //지도 생성 및 객체 리턴
+  //   return () => {};
+  // }, []);
+
+  return (
   <>
     <Head>
       <title>
@@ -21,91 +27,21 @@ const Dashboard = () => (
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8
+        py: 1
       }}
     >
       <Container maxWidth={false}>
-        <Grid
-          container
-          spacing={3}
-        >
-          <Grid
-            item
-            lg={3}
-            sm={6}
-            xl={3}
-            xs={12}
-          >
-            <Budget />
-          </Grid>
-          <Grid
-            item
-            xl={3}
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <TotalCustomers />
-          </Grid>
-          <Grid
-            item
-            xl={3}
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <TasksProgress />
-          </Grid>
-          <Grid
-            item
-            xl={3}
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <TotalProfit sx={{ height: '100%' }} />
-          </Grid>
-          <Grid
-            item
-            lg={8}
-            md={12}
-            xl={9}
-            xs={12}
-          >
-            <Sales />
-          </Grid>
-          <Grid
-            item
-            lg={4}
-            md={6}
-            xl={3}
-            xs={12}
-          >
-            <TrafficByDevice sx={{ height: '100%' }} />
-          </Grid>
-          <Grid
-            item
-            lg={4}
-            md={6}
-            xl={3}
-            xs={12}
-          >
-            <LatestProducts sx={{ height: '100%' }} />
-          </Grid>
-          <Grid
-            item
-            lg={8}
-            md={12}
-            xl={9}
-            xs={12}
-          >
-            <LatestOrders />
-          </Grid>
-        </Grid>
+        <Map/>
+      {/* <div
+        className="map"
+        style={{ width: "500px", height: "500px" }}
+        ref={container}
+      ></div> */}
       </Container>
     </Box>
   </>
-);
+  )
+};
 
 Dashboard.getLayout = (page) => (
   <DashboardLayout>
