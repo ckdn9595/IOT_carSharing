@@ -85,4 +85,46 @@ router.post('/', async (req, res) => {
 });
 
 
+router.get('/detail/:carID', async (req, res) => {
+    try {
+        const carInfo = await db['tb_car'].findOne({
+            where: {car_seq: req.params.carID}
+        });
+        if (carInfo) {
+            const carRegDt = carInfo.car_reg_dt.setHours(carInfo.car_reg_dt.getHours() + 9);
+
+            let carRes = await db['tb_car_res_info'].findOne({
+                where: {car_seq: req.params.carID}
+            });
+            carRes.car_res_date_start.setHours(carRes.car_res_date_start.getHours() + 9);
+            carRes.car_res_date_end.setHours(carRes.car_res_date_end.getHours() + 9);
+
+            return res.status(200).json({
+                car_num: carInfo.car_num,
+                car_isValid: carInfo.car_isValid,
+                car_rent_insurance_yn: carInfo.car_rent_insurance_yn,
+                car_img: carInfo.car_img,
+                car_reg_dt: carRegDt,
+                car_model: carInfo.car_model,
+                car_segment: carInfo.car_segment,
+                car_fuel: carInfo.car_fuel,
+                car_rate: carInfo.car_rate,
+                car_year: carInfo.car_year,
+                car_dy: carInfo.car_dy,
+                car_dx: carInfo.car_dx,
+                car_res_date_start: carRes.car_res_date_start,
+                car_res_date_end: carRes.car_res_date_end
+            });
+        }
+        else {
+            return res.status(404).json({statusCode: 2});
+        }
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({statusCode: 1});
+    }
+});
+
+
 module.exports = router;
