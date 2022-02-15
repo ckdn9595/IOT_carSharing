@@ -187,12 +187,17 @@ router.get('/:carID/info', async(req, res) => {
     }
 });
 
-router.patch('/:carID/info', async(req, res) => {
+router.patch('/:carID/info', upload.single('car_img'), async(req, res) => {
     console.log(req.body);
     try {
         const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
         const token = fullToken.replace(/^Bearer\s+/, "");
         const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+        // 받아온 carImg가 .png || .jpeg이 아닌 경우 에러
+        if (req.file && req.file.mimetype !== 'image/png' && req.file.mimetype !== 'image/jpeg') {
+            return res.status(400).json({status_code: 1});
+        }
 
         if (decodedUserToken) {
             const ownerRequest = await db['tb_user'].findOne({
@@ -202,29 +207,56 @@ router.patch('/:carID/info', async(req, res) => {
                 where: {car_seq: req.params.carID}
             });
 
-            if (ownerRequest.usr_seq === owner.usr_seq) {
-                //  nullish coalescing을 통해 req.body에 있는 항목만 업데이트
-                await db['tb_car'].update({ 
-                    car_num: req.body.car_num ?? undefined,
-                    car_isValid: req.body.car_isValid ?? undefined,
-                    car_rent_insurance_yn: req.body.car_rent_insurance_yn ?? undefined,
-                    car_img: req.body.car_img ?? undefined,
-                    car_reg_dt: Date.now(),
-                    car_model: req.body.car_model ?? undefined,
-                    car_segment: req.body.car_segment ?? undefined,
-                    car_fuel: req.body.car_fuel ?? undefined,
-                    car_rate: req.body.car_rate ?? undefined,
-                    car_year: req.body.car_year ?? undefined }, {
-                    where: {
-                        usr_seq: owner.usr_seq,
-                        car_seq: req.params.carID
-                    }
-                });
+            if (req.file) {
+                if (ownerRequest.usr_seq === owner.usr_seq) {
+                    //  nullish coalescing을 통해 req.body에 있는 항목만 업데이트
+                    await db['tb_car'].update({ 
+                        car_num: req.body.car_num ?? undefined,
+                        car_isValid: req.body.car_isValid ?? undefined,
+                        car_rent_insurance_yn: req.body.car_rent_insurance_yn ?? undefined,
+                        car_img: req.file.path ?? undefined,
+                        car_reg_dt: Date.now(),
+                        car_model: req.body.car_model ?? undefined,
+                        car_segment: req.body.car_segment ?? undefined,
+                        car_fuel: req.body.car_fuel ?? undefined,
+                        car_rate: req.body.car_rate ?? undefined,
+                        car_year: req.body.car_year ?? undefined }, {
+                        where: {
+                            usr_seq: owner.usr_seq,
+                            car_seq: req.params.carID
+                        }
+                    });
 
-                return res.status(200).json({statusCode: 0});
+                    return res.status(200).json({statusCode: 0});
+                }
+                else {
+                    return res.status(400).json({message: 'jwt userID and DB userID does not match'})
+                }
             }
             else {
-                return res.status(400).json({message: 'jwt userID and DB userID does not match'})
+                if (ownerRequest.usr_seq === owner.usr_seq) {
+                    //  nullish coalescing을 통해 req.body에 있는 항목만 업데이트
+                    await db['tb_car'].update({ 
+                        car_num: req.body.car_num ?? undefined,
+                        car_isValid: req.body.car_isValid ?? undefined,
+                        car_rent_insurance_yn: req.body.car_rent_insurance_yn ?? undefined,
+                        car_reg_dt: Date.now(),
+                        car_model: req.body.car_model ?? undefined,
+                        car_segment: req.body.car_segment ?? undefined,
+                        car_fuel: req.body.car_fuel ?? undefined,
+                        car_rate: req.body.car_rate ?? undefined,
+                        car_year: req.body.car_year ?? undefined }, {
+                        where: {
+                            usr_seq: owner.usr_seq,
+                            car_seq: req.params.carID
+                        }
+                    });
+
+                    return res.status(200).json({statusCode: 0});
+                }
+                else {
+                    return res.status(400).json({message: 'jwt userID and DB userID does not match'})
+                }
             }
         }
         else {
@@ -285,6 +317,10 @@ router.post('/:carID/review', async(req, res) => {
 router.patch('/:carID/review', async(req, res) => {
     console.log(req.body);
     try {
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const token = fullToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
+
         return res.json({patchCarReview:'success'});
     } catch (error) {
         console.log(error);
@@ -297,7 +333,19 @@ router.patch('/:carID/review', async(req, res) => {
 router.get('/:carID/history', async(req, res) => {
     console.log(req.body);
     try {
-        return res.json({carHistory:'success'});
+        let carInfoHistory = await db['tb_car_info'].findAll({
+            where: {
+                car_seq: req.params.carID,
+                res_end_valid: 'Y'
+            }
+        });
+        for (let i = 0; i < carInfoHistory.length; i++) {
+            carInfoHistory[i].res_date_start.setHours(carInfoHistory[i].res_date_start.getHours() + 9);
+            carInfoHistory[i].res_date_end.setHours(carInfoHistory[i].res_date_end.getHours() + 9);
+            carInfoHistory[i].res_realtime_start.setHours(carInfoHistory[i].res_realtime_start.getHours() + 9);
+            carInfoHistory[i].res_realtime_end.setHours(carInfoHistory[i].res_realtime_end.getHours() + 9);
+        }
+        return res.json(carInfoHistory);
     } catch (error) {
         console.log(error);
         return res.json({carHistory:'fail'});
