@@ -32,8 +32,8 @@ const DoorControl = () => {
   //   url:`http://localhost:8001/api/car/아이디/예약정보`,
   //   method:'',
   //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-  //   body:,
   //   }
+  
 // const getResInfo =()=>{
 //   setResInfo(resInfo)
 // }
@@ -70,7 +70,7 @@ const doorClose = async ()=>{
       <Button onClick={doorOpen}>문 열기</Button>
       <Button onClick={doorClose}>문 잠금</Button>
       <Typography>
-        {door === 1? '문이 열였습니다':'문이 잠겨있습니다.'}
+        {door === 1? '문이 열렸습니다':'문이 잠겨있습니다.'}
       </Typography>
     </div>
   )

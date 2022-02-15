@@ -30,15 +30,24 @@ import {
   Card
 } from '@mui/material';
 import DoorControl from '../driveCommon/DoorControl';
+import { CarContext } from 'src/components/car-management/carContext';
 
 const CheckOption = (props) =>{
     const {checkOpen, setCheckOpen} = props
+    const {token} = useContext(CarContext)
+    const [checkMent, setCheckMent] = useState('')
 
+    // 체크멘트 예약정보에 보내기
+    // const option = {
+      //   url:`http://localhost:8001/api/car/아이디/예약정보`,
+      //   method:'POST',
+      //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+      //   body: checkment
+      //   }
 
     return(
         <div>
-            체크리스트입미담
-          <DialogTitle>운행전 Check</DialogTitle>
+          <DialogTitle>운행전 체크하기</DialogTitle>
           <DialogContent>
             <DialogContentText>
               특이사항이 있으면 입력해주세요
@@ -60,8 +69,14 @@ const CheckOption = (props) =>{
 }
 
 const CheckPicture = () =>{
-    const [images, setImages] = useState([]
+    const [images, setImages] = useState({}
         ); 
+    const [frontImage, setFrontImage] = useState('')
+    const [rearImage, setrearImage] = useState('')
+    const [leftSideImage, setLeftSideImage] = useState('')
+    const [rightSideImage, setRightSideImage] = useState('')
+    const [innerImage, setInnerImage] = useState('')
+    const [previewImg, setPreviewImg] = useState({})
     
       // const option = {
       //   url:`http://localhost:8001/api/car/아이디/예약정보`,
@@ -73,23 +88,34 @@ const CheckPicture = () =>{
     const formData = new FormData()
     
     const uploadImage = event =>{
-        event.preventDefault()
-        const file = event.target.files
-        const name = event.target.id
-        const url = URL.createObjectURL(event.target.files[0])
-        console.log(images[1] && true)
-    
-        setImages([...images,  {name:name, file:file, url:url}])
-    
-        console.log(images)
-        // const preview = () =>{
-        //     if(!file) return false;
-        //     const reader = new FileReader()
-        //     reader.onLoad= () =>{
-        //         CardMedia = url(reader.result)
-        //     }
-        //     reader.readAsDataURL(files[0])
-        // }
+        event.stopPropagation();
+        let reader = new FileReader();
+        let file = event.target.files
+        // formData.append(name, file)
+        `set${event.target.id}Image(${event.target.files[0]})`
+
+        console.log(frontImage)
+        const filesInArr = Array.from(event.target.files);
+        reader.onloadend = async() => {
+            await setPreviewImg({
+              ...preview,
+              name: filesInArr,
+              previewURL: reader.result,
+            });
+        // let preview = null
+        // if ([name].file !== null) {
+        //  preview = postfiles.file[0]?.type.includes("image/") ? (
+        // <Avatar
+        //     variant="square"
+        //     src={previewImg.[name].previewURL}
+        //     sx={{
+        //     width: '100%',
+        //     height: '100%'
+        //     }}
+        // />) : '' 
+    }
+
+
     }
     
     const sendImage = async (event)=>{
@@ -120,33 +146,33 @@ const CheckPicture = () =>{
           <>
         <Box
             sx={{
-
-                width: 400,
-                bgcolor: 'background.paper',
-                border: '2px solid #000',
+                bgcolor: 'background.paper', 
                 boxShadow: 24,
                 p: 4,
+                alignItem:'center',
             }}
         >
-        <Grid
-            container
+        <Grid item
             spacing={3}
             sx={{
+                display:'flex',
                 alignItems:'center',
+                flexDirection:'column',
             }}
         >
-            <Card 
-                item
-                xs={4}
-
+            <Card
+                sx={{
+                 width:'100%',
+                }} 
                 >
                 <CardHeader
                     title="전면 사진"
                     subheader="차량 전면부 사진을 올려주세요"
                 />
-                <label htmlFor="front">
+                <label htmlFor="Front">
                 <Input
-                  id='front'
+                  id='Front'
+                  name='Front'
                   type='file'
                   inputProps={{accept:"image/*"}}
                   style={{ 'display':'none' }}
@@ -160,23 +186,22 @@ const CheckPicture = () =>{
                   container
                   component='img'
                   height="140"
-                  image={ images[0] && true ? images[0].url :''}
+                  image={  previewImg.frontImage && previewImg.frontImage.previewURL ? previewImg.frontImage.previewURL :''}
                   />
-                {/* <CardMedia component='img' image={images[0].url}/> */}
             </Card>
     
-            <Card 
-                item
-                xs={4}
-
+            <Card
+                sx={{
+                 width:'100%',
+                }} 
                 >
                 <CardHeader
                     title="후면 사진"
                     subheader="차량 후면 사진을 올려주세요"
                 />
-                <label htmlFor="rear">
+                <label htmlFor="Rear">
                 <Input
-                  id='rear'
+                  id='Rear'
                   type='file'
                   inputProps={{accept:"image/*"}}
                   style={{ 'display':'none' }}
@@ -189,22 +214,22 @@ const CheckPicture = () =>{
               <CardMedia
                   component='img'
                   height="140"
-                  image={ images[1] && true ? images[1].url :''}
+                  image={  previewImg.rearImage &&previewImg.rearImage.previewURL ? previewImg.rearImage.previewURL :''}
                 />
           
             </Card>
-            <Card 
-                item
-                xs={4}
-
+            <Card
+                sx={{
+                 width:'100%',
+                }} 
                 >
                 <CardHeader
                     title="좌측면 사진"
                     subheader="차량 왼쪽 사진을 올려주세요"
                 />           
-                <label htmlFor="leftSide">
+                <label htmlFor="LeftSide">
                 <Input
-                  id='leftSide'
+                  id='LeftSide'
                   type='file'
                   inputProps={{accept:"image/*"}}
                   style={{ 'display':'none' }}
@@ -217,20 +242,22 @@ const CheckPicture = () =>{
               <CardMedia
                   component='img'
                   height="140"
-                  image={ images[2] && true ? images[2].url :''}
+                  image={  previewImg.leftSideImage && previewImg.leftSideImage.previewURL ? previewImg.leftSideImage.previewURL :''}
+
                 />      
             </Card>
-            <Card 
-                item
-                xs={4}
+            <Card
+                sx={{
+                 width:'100%',
+                }} 
                 >
                 <CardHeader
                     title="우측면 사진"
                     subheader="차량 오른쪽 사진을 올려주세요"
                 />
-                <label htmlFor="leftSide">
+                <label htmlFor="RighttSide">
                 <Input
-                  id='leftSide'
+                  id='RightSide'
                   type='file'
                   inputProps={{accept:"image/*"}}
                   style={{ 'display':'none' }}
@@ -243,22 +270,23 @@ const CheckPicture = () =>{
               <CardMedia
                   component='img'
                   height="140"
-                    image={ images[3] && true ? images[3].url :''}
+                  image={  previewImg.rightSideImage && previewImg.rightSideImage.previewURL ? previewImg.rightSideImage.previewURL :''}
+
                   />     
           
             </Card>
-            <Card 
-                item
-                xs={4}
-
+            <Card
+                sx={{
+                 width:'100%',
+                }} 
                 >
                 <CardHeader
                     title="실내 사진"
                     subheader="차량 실내 사진을 올려주세요"
                 />
-                <label htmlFor="inner">
+                <label htmlFor="Inner">
                 <Input
-                  id='inner'
+                  id='Inner'
                   type='file'
                   inputProps={{accept:"image/*"}}
                   style={{ 'display':'none' }}
@@ -271,14 +299,16 @@ const CheckPicture = () =>{
               <CardMedia
                   component='img'
                   height="140"
-                    image={ images[4] && true ? images[4].url :''}
+                  image={  previewImg.innerImage && previewImg.innerImage.previewURL ? previewImg.innerImage.previewURL :''}
+
                   />     
               </Card>
             </Grid>
             <Grid
-                item
-                xs={4} 
-                >
+                sx={{
+                width:'100%',
+                }} 
+            >
             <Button onClick={sendImage}>등록하기</Button>
             </Grid>
         </Box>

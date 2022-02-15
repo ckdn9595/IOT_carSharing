@@ -24,8 +24,19 @@ import {
   Select,
   MenuItem,
   FormControl,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListItemIcon,
+
 } from '@mui/material';
 import DoorControl from '../driveCommon/DoorControl';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import PersonIcon from '@mui/icons-material/Person';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 
 
 const DriveOn = () => {
@@ -45,22 +56,22 @@ const DriveOn = () => {
   // const getResCarInfo =()=>{'
   //   setResCarInfo(resCarDump)
   // }
-  useEffect(()=>{
-    setResInfo(resDump)
-    setResCarInfo(resCarDump)
-    getFare()
-  },[])
+  // useEffect(()=>{
+  //   setResInfo(resDump)
+  //   setResCarInfo(resCarDump)
+  //   getFare()
+  // },[])
 
-  useEffect(()=>{
-    // getResInfo()
-    // getDriveNow()
-    console.log('운행상태',driveNow,resInfo.res_end + resInfo.res_drive_valid)
-  },[resInfo])
+  // useEffect(()=>{
+  //   // getResInfo()
+  //   // getDriveNow()
+  //   console.log('운행상태',driveNow,resInfo.res_end + resInfo.res_drive_valid)
+  // },[resInfo])
 
-  useEffect(()=> {
-    // getResCarInfo()
-    // getFare()
-  },[resCarInfo])
+  // useEffect(()=> {
+  //   // getResCarInfo()
+  //   // getFare()
+  // },[resCarInfo])
 
   const getFare = ()=>{
     const countFare = resCarInfo.res_realtime * 100
@@ -124,56 +135,89 @@ const DriveOn = () => {
 
 
   return (
-    <>
-    <Typography>
-      이용상황
-    </Typography>
-    <Box
-      sx={{display:'flex',
-      border:'1px solid',
-      flexDirection:'column',
-      alignItems:'center',
+    <Container
+      sx={{
+        display:'flex',
+        alignItems:'center',
+        flexDirection:'column',
       }}
     >
-      <Card>
+      <Card
+        sx={{
+          diplay:'flex',
+          width: '500px',
+          bgcolor: 'background.paper',
+          border:'solid 1px',
+          flexDirection:'column',
+          p: 1,
+            }}
+      >
+        <Grid
+          sx={{display:'flex',
+          border:'1px solid',
+          alignItems:'center',
+          flexDirection:'column',
+          }}
+        >
         <CardHeader
           title="실시간 이용정보"
-          subheader="예약번호"
+          subheader={ 1 &&2?'예약정보':'예약번호'}
         />
+        <Grid>
+
           <Button>
               문제신고
           </Button>
           <Button>
               고객센터
           </Button>
-          <CardContent>
-            <Typography>
-              운행상태 :
-              {driveNow}
-            </Typography>
-            <Typography>
-              이용시간: 
-              {resCarInfo.res_realtime}
-            </Typography>
-            <Typography>
-              주행거리
-              :데이터없음
-            </Typography>
-            <Typography>
-              이용요금 : 원
-              {/* {carInfo.car_rate}/원 */}
-            </Typography>
-            <Typography>
-              실시간 이용요금 {fare}
-            </Typography>
+        </Grid>
+          <Grid>
+          <List>
+            <ListItemButton>
+              <ListItemIcon>
+                  <DirectionsCarIcon />
+                  <ListItemText primary={`차량번호 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                  <AccessTimeIcon/>
+                  <ListItemText primary={`이용시간 : ${resInfo.res_info_start}`}/>
+                  <ListItemText primary={`${resInfo.res_info_end}`}/>
+              </ListItemIcon>
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                  <ArrowForwardIcon />
+                  <ListItemText primary={`이동거리 : ${resInfo.car_seq}`}/>
+                  {/* 차량정보가저오기 */}
+              </ListItemIcon>
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                  <ArrowForwardIcon />
+                  <ListItemText primary={`이용요금 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                  <PersonIcon />
+                  <ListItemText primary={`차량주인 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+            </ListItemButton>
+          </List>
+            </Grid>
+          <Grid>
             <DoorControl/>
-          </CardContent>
             <Button> 결제수단 </Button>
             <Button onClick={()=>{setPayOpen(true)}}> 이용종료</Button>
+          </Grid>
+        </Grid>
+      
       </Card>
       {payOpen === true? <DriveEndCheck payOpen={payOpen} setPayOpen={setPayOpen} />:''}
-    </Box>
-    </>
+    </Container>
   )
 }
 
