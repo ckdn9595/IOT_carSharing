@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { DatePicker, DateTimePicker, StaticDatePicker } from '@mui/lab';
 import { 
@@ -13,38 +13,44 @@ import {
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { CarContext } from '../carContext';
 
 // 차량 이용 기간 설정
 const RentPeriodSet = (props) =>{
   const {setSettingTime, setVisible, carId} = props
+  const {token} = useContext(CarContext)
+  
 
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
+  const [start, setStart] = useState({})
+  const [end, setEnd] = useState({})
 
-  let start = {
-    year: startDate.getFullYear(),
-    month: startDate.getMonth()+1,
-    day: startDate.getDate(),
-    hours: startDate.getHours(),
-    minutes: startDate.getMinutes(),
-  }
-  let end = {
-    year: endDate.getFullYear(),
-    month: endDate.getMonth()+1,
-    day: endDate.getDate(),
-    hours: endDate.getHours(),
-    minutes: endDate.getMinutes(),
+  // setStart({
+  //   year: startDate.getFullYear(),
+  //   month: startDate.getMonth()+1,
+  //   day: startDate.getDate(),
+  //   hours: startDate.getHours(),
+  //   minutes: startDate.getMinutes(),
+  // })
+  // setEnd({
+  //   year: endDate.getFullYear(),
+  //   month: endDate.getMonth()+1,
+  //   day: endDate.getDate(),
+  //   hours: endDate.getHours(),
+  //   minutes: endDate.getMinutes(),
+  // })
+  
+  const submitDate = () =>{
+    
   }
   
-  let startMessage  = `${start.year}년 ${start.month}월${start.day}일${start.hours}시${start.minutes}분`
-  let endMessage  = `${end.year}년 ${end.month}월${end.day}일${end.hours}시${end.minutes}분`
-  
-
+  //carid 받아서 time으로 넘기면된다
   const option = {
-    url:`http://localhost:8001/api/car/${carId}/time`,
-    method:'PUT',
-    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-    data:{car_res_date_start: start, car_res_date_end: end}
+    url:`http://localhost:8001/api/car/27/time`,
+    method:'PATCH',
+    headers:token,
+    data:{car_res_date_start: startDate, car_res_date_end: endDate}
     }
 
   const onClickEvent =  async () =>{
@@ -65,7 +71,6 @@ const RentPeriodSet = (props) =>{
   return(       
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Box
-            sx={{border:'1px solid'}}  
         >
           <Grid item
             sx={{p:1,
@@ -79,7 +84,6 @@ const RentPeriodSet = (props) =>{
               inputFormat="yyyy/MM/dd hh:mm a"
               onChange={(newValue)=> {
                 setStartDate(newValue)
-                console.log(startDate)
               }}
               />
           </Grid>
@@ -96,13 +100,11 @@ const RentPeriodSet = (props) =>{
               inputFormat="yyyy/MM/dd hh:mm a"
               onChange={(newValue)=> {
                 setEndDate(newValue)
-                console.log(endDate)
               }}
               />
             </Grid>
           <Grid container 
                 sx={{
-                    border:'1px solid',
                     justifyContent:'center',
                     }}
           >

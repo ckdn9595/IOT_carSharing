@@ -1,71 +1,89 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Container, Button, Checkbox, FormGroup, FormControlLabel, Box, Typography } from '@mui/material';
-import { CarContext } from '../carContext';
+import { Container, Button, Checkbox, FormGroup, FormControlLabel, Box, Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle, 
+  Alert
 
+} from '@mui/material';
+import { CarContext } from '../carContext';
+import { set } from 'nprogress';
 
 const Insurance = ({carId}) =>{
   // { carId } = props 차량 정보 받아오기
-  const {insurance, setInsurance} =useContext(CarContext)
+  const {insurance, setInsurance,
+    openIn, setOpenIn,
+    alert, setAlert,
+    token,
+  
+  } = useContext(CarContext)
   // const [rent, setRent]= useState(false)
   const {rent, setRent}= useContext(CarContext) //체크버튼 활성화,비활성화
+
   function agreeCheckHandle(){
     setRent(!rent)
   }
 
-  // const option = {
-  //   url:`http://localhost:8001/api/car/${carid}`,
-  //   method:'PUT',
-  //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-  //   data: {rentInsurance:true}
-  //   }
 
+  
   const agreeSend= async()=>{
     try{
-      //가입등료화면과  창닫기
+      // const option = {
+      //   url:`http://localhost:8001/api/car/${carid}/info`,
+      //   method:'PATCH',
+      //   headers:token,
+      //   data: {rentInsurance:'Y'}
+      //   }
       // const responsne = await axios(option)
       // console.log(response.data)
-      await setInsurance(!insurance)
+      setInsurance(false)
+      setAlert(false)
     }catch(err){
       console.log('failed')
+      setAlert(false)
       }
   }
 
   return(
     <>
-    <Box>
-      <h1>보험 등록하기</h1>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-          p: 1,
-          m: 1,
-          border: '1px solid',
-          maxWidth: 'sm'
-        }}
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        p: 1,
+        m: 1,
+        maxWidth: 'sm'
+      }}
+    >
+      <Dialog
+        open={insurance}
+        onclose={()=>{setInsurance(false)}}
       >
-        <Typography>
-약관의 규제에 관한 법률 제2조(정의) 이 법에서 사용하는 용어의 정의는 다음과 같다.
-1. "약관"이란 그 명칭이나 형태 또는 범위에 상관없이 계약의 한쪽 당사자가 여러 명의 상대방과 계약을 체결하기 위하여 일정한 형식으로 미리 마련한 계약의 내용을 말한다.
-2. "사업자"란 계약의 한쪽 당사자로서 상대 당사자에게 약관을 계약의 내용으로 할 것을 제안하는 자를 말한다.
-3. "고객"이란 계약의 한쪽 당사자로서 사업자로부터 약관을 계약의 내용으로 할 것을 제안받은 자를 말한 다.
+      <DialogTitle>{'보험 등록'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <Typography>임대차 등록을 위해 보험 가입이 필요합니다.</Typography>
+            <Typography>보험 내용 : 사고 발생시 일정 금액을 보장합니다.</Typography>
+          </DialogContentText>
+            {alert===true?<Alert severity="error">약관에 동의하지 않았습니다!</Alert>:''}
+        </DialogContent>
+        <DialogActions>
 
-다수인을 상대로 동종의 거래를 반복하는 경우에 그 거래를 위하여 미리 작성해 놓은 정형적인 계약조건[1]
-
-독일의 'allgemeine Geschäftsbedingungen'(독일 민법 제305조)을 번역한 용어라서 강학상 '보통거래약관'이라고 했는데, 입법자가 이를 규제하는 법률을 만들면서 심플하게 '약관'이라고 축약해 버렸다.
-        </Typography>
-      </Box >
-      
-      <FormGroup>
-        <FormControlLabel control={<Checkbox checked={rent} onChange={agreeCheckHandle}/>} label="약관에 동의합니다" />
-      <Button 
-        variant="contained"
-        onClick={agreeSend}
-      > 제출하기 </Button>
-      </FormGroup>
-
+          <FormGroup>
+            <FormControlLabel control={<Checkbox checked={rent} onChange={agreeCheckHandle}/>} label="약관에 동의합니다" />
+          </FormGroup>
+          <Button 
+            onClick={()=>{rent===true?agreeSend():setAlert(true)} }
+            > 제출하기 </Button>
+          <Button
+            onClick={()=>{setInsurance(false), setAlert(false)}}
+            > 취소</Button>
+        </DialogActions>
+    </Dialog>
     </Box>
     </>
   )

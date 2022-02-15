@@ -6,6 +6,13 @@ import {
   Grid,
   Container, 
   Typography, 
+  Card,
+  List,
+  ListItem,
+  ListItemButton,
+  Chip,
+  ListItemIcon,
+  ListItemText,
   TextField, 
   Button,
   Avatar,
@@ -21,6 +28,11 @@ import {
   FormControl,
   Modal,
   Dialog } from '@material-ui/core';
+import DoorControl from '../driveCommon/DoorControl';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import PersonIcon from '@mui/icons-material/Person';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const DriveEnd = () => {
   const {resInfo, setResInfo,
@@ -79,67 +91,82 @@ const [checkPicOpen, setCheckPicOpen] = useState(false)
 const [checkOpen, setCheckOpen] = useState(false)
 
   return (
-    <>
-    <Typography>
-      이용완료
-    </Typography>
-    <Box
-      sx={{display:'flex',
-      border:'1px solid',
-      flexDirection:'column',
-      alignItems:'center',
+    <Container
+      sx={{
+        display:'flex',
+        alignItems:'center',
+        flexDirection:'column',
       }}
     >
-      <Grid
-            sx={{display:'flex',
-            border:'1px solid',
-            alignItems:'center',
-            flexDirection:'row'
+      <Card
+        sx={{
+          diplay:'flex',
+          width: '500px',
+          bgcolor: 'background.paper',
+          p: 1,
+          border:'solid 1px',
+          flexDirection:'column',
             }}
       >
-        <Grid>
-          사진차량사진입니다
-          <Typography>
-          예약번호 {resInfo.res_info_seq}
-          </Typography>
-          <Typography>
-            이용기간 {resInfo.car_res_date_start}
-          </Typography>
-          <Typography>
-            차량번호 :22가나000
-          </Typography>
-          <Typography>
-            차량종류 :쏘나다
-          </Typography>
-          <Typography>
-            차량주인 :김싸피
-          </Typography>
-          </ Grid>
+        <Typography
+          textAlign='center'
+          variant='h5'
+        
+        > 이용 정보 </Typography>
+
+        <Grid
+          sx={{
+          display:'flex',
+          border:'1px solid',
+          flexDirection:'column',
+          }}
+        >
+          <List>
+              <ListItemIcon>
+                  <DirectionsCarIcon />
+                  <ListItemText primary={`예약번호 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+              <ListItemIcon>
+                  <AccessTimeIcon/>
+                  <ListItemText primary={`이용기간 : ${resInfo.res_info_start}`}/>
+                  <ListItemText primary={`${resInfo.res_info_end}`}/>
+              </ListItemIcon>
+              <ListItemIcon>
+                  <ArrowForwardIcon />
+                  <ListItemText primary={`차량번호 : ${resInfo.car_seq}`}/>
+              </ListItemIcon>
+              <ListItemIcon>
+                  <ArrowForwardIcon />
+                  <ListItemText primary={`차량종류 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+              <ListItemIcon>
+                  <PersonIcon />
+                  <ListItemText primary={`차량주인 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+              <ListItemIcon>
+                  <DirectionsCarIcon />
+                  <ListItemText primary={`예약번호 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+              <ListItemIcon>
+                  <AccessTimeIcon/>
+                  <ListItemText primary={`이용거리 : ${resInfo.res_info_start}`}/>
+              </ListItemIcon>
+              <ListItemIcon>
+                  <ArrowForwardIcon />
+                  <ListItemText primary={`이용요금 : ${resInfo.car_seq}`}/>
+              </ListItemIcon>
+              <ListItemIcon>
+                  <ArrowForwardIcon />
+                  <ListItemText primary={`결제상태 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+              <ListItemIcon>
+                  <PersonIcon />
+                  <ListItemText primary={`차주승인 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+          </List>
         </Grid>
-    <Grid>
-      <Typography>
-        이용시간
-      </Typography>
-      <Typography>
-        이용거리
-      </Typography>
-      <Typography>
-        총 사용요금
-      </Typography>
-      <Typography>
-        결제상태
-      </Typography>
-      <Typography>
-        차주승인
-      </Typography>
-    </Grid>
-      <Grid>
-        <Button>
-          리뷰 쓰기
-        </Button>
-      </Grid>
-    </Box>
-    </>
+      </Card>
+  </Container>
     
   )
 }

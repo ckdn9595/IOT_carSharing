@@ -19,8 +19,8 @@ const Car = () => {
         carSegment:'', //차량크기
         carFuel:'10',// 차량연료
         carRate:'', //차량 요금
-        // carImg:[], //차량 이미지
-        rentInsurance:false//보험유무
+        carImg:[], //차량 이미지
+        rentInsurance:'N'//보험유무
       })
     const [postfiles, setPostfiles] = useState({
         file: [],
@@ -34,9 +34,10 @@ const Car = () => {
     const [insuranceCheck, setInsuranceCheck] = useState(false)
     //insurance 
     const [rent, setRent]= useState(false)
+    const [alert, setAlert] = useState(false)
     // //car-rent-historylist
     // const [items, setItems] = useState([])
-    // const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false)
     // //car-rent-history
     // const [clickOn, setClickOn] = useState(false)
     // const [isDone, setIsDone] = useState(false)
@@ -44,6 +45,9 @@ const Car = () => {
     const [list, setList] = useState([])
     // car-rent-history
     const [sendConfirm, setSendConfirm] = useState(true)
+    
+    // api
+    const [token, setToken] = useState()
     
     // useEffect(()=>{
     //   // setRegister([])
@@ -53,22 +57,9 @@ const Car = () => {
 
     //
 
-    // useEffect(()=>{
-    //   switch(popState){
-    //     case 'time':
-    //         setTime(true),setHistory(false),setInsurance(false)
-    //         break
-    //     case 'insurance':
-    //         setInsurance(true),setTime(false), setInsurance(false)   
-    //         break
-    //     case 'history':
-    //         setTime(false),setInsurance(false),sethistory(true)
-    //         break
-    //     defalut:
-    //         setTime(false),setInsurance(false),setHistory(false)
-    //     }
-
-    // },[popState])
+    useEffect(()=>{
+      setToken(`Authorization: Bearer ${sessionStorage.getItem("access_token")}`)
+    },[])
 
 
   return (
@@ -88,11 +79,15 @@ const Car = () => {
       insuranceCheck, setInsuranceCheck,
       //insurance
       rent, setRent,
+      alert, setAlert,
       //car-rent-historylist
       list, setList,
+      open, setOpen,
       //car-rent-history
       sendConfirm, setSendConfirm,
-        
+      
+      //api
+      token,
       }}>
     <CarMain/>
     </CarContext.Provider>

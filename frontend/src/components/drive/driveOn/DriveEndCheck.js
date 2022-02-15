@@ -26,10 +26,12 @@ import {
   FormControl,
 } from '@mui/material';
 
+
 const DriveEndCheck = (props) => {
     const {resInfo, setResInfo,
         resCarInfo, setResCarInfo,
         } = useContext(DriveContext)
+    const {token} = useContext(CarContext)
     const {payOpen, setPayOpen} = props
     // 결제 보내기  
     // const option = {
@@ -73,7 +75,7 @@ const DriveEndCheck = (props) => {
                     이용시간 :{resInfo.realtime}
                 </Typography>
                 <Typography>
-                    이용요금 :
+                    이용요금 : {resInfo.rate}
                 </Typography>
                     결제방법 :
                 </DialogContent>

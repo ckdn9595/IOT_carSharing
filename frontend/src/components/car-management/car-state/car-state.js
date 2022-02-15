@@ -10,6 +10,14 @@ import {
   Typography, 
   TextField, 
   Button,
+  Chip,
+  Card,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+
   Avatar,
   createMuiTheme,
   ThemeProvider,
@@ -21,6 +29,7 @@ import {
   Select,
   MenuItem,
   FormControl,
+  ListItemText,
 } from '@mui/material';
 import { CarContext } from '../carContext';
 import { Filter } from '@mui/icons-material';
@@ -46,15 +55,30 @@ const CarState = ({car}) =>{
         history, setHistory,
         insurance, setInsurance,
         register, setRegister,
+        alert, setAlert,
+        token
       } = useContext(CarContext)
   useEffect(()=>{
     setData(car)
+    console.log('차량상태',car)
+    getSegment()
+    getRentOn()
   },[])
-  const option = {
-    url:`http://localhost:8001/api/car/${car.carId}`,
-    method:'DELETE',
-    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-    }
+
+  // 하나식 가져와야할 데이터 api/car/info ${carId}
+  // const option = {
+  //   url:`http://localhost:8001/api/car/register`,
+  //   method:'GET',
+  //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+  //   }
+  // const getData = async() =>{
+  //   try{
+  //     const response = await axios(option)
+  //     setData(response.data)
+  //   }catch(err){
+  //     console.log(err)
+  //   }
+  // }
 
   // const delButton = async() =>{
   //   try{
@@ -64,57 +88,117 @@ const CarState = ({car}) =>{
   //     alert('error!')
   //   }
   // }
-  const delButton = ()=>{
-    setRegister(register.filter(car => car.carNum !== data.carNum))
-  }
+  const [segment, setSegment] = useState('')
+  const [rentOn, setRentOn] = useState('')
 
+  const getSegment = () =>{
+    switch(car.car_segment){
+      case 1: setSegment('경차')
+      break
+      case 2: setSegment('중형')
+      break
+      case 3: setSegment('SUV')
+    }
+  }
+  const getRentOn= ()=>{
+    // res_end_valid === 'Y'? setRentOn('대여 가능'):setRentOn('대여중')
+    1===1? setRentOn('대여 가능'):setRentOn('대여중')
+    
+  }
+  const [delOpen, setDelOpen] = useState(false)
+  const delButton = async() =>{
+    const option = {
+    url:`http://localhost:8001/api/car/register`,
+    method:'DELETE',
+    headers:{token},
+    }
+    try{
+      const response = await axios(option)
+      setData(response.data)
+      setDelOpen(false)
+    }catch(err){
+      console.log(err)
+      setDelOpen(false)
+
+    }
+  }
   
   return(
     <>
-    <Box container
-      sx={{display:'flex',
-          border:'1px solid',
-          flexDirection:'column',
-          alignItems:'center',
+    <Card container
+      sx={{
+        diplay:'flex',
+        width: '500px',
+        bgcolor: 'background.paper',
+        // border: '2px solid #000',
+        p: 1,
           }}
     >
-      <Box 
+      <Container
         sx={{ display:'flex',
-              m: 1,
               justifyContent:'space-between',
-              border: '1px solid'
+              border: '1px solid',
+              minWidth:'100%'
         }}
       >
+        <Grid item>
+
           <Typography
             variant='h6'
             lineHeight={5}
-          > 차량사진 </Typography>
-          <Box sx={{display:'flex',
+            > 차량사진 </Typography>
+        </Grid>
+          <Grid sx={{display:'flex',
                     flexDirection:'column',
-                    border:'1px solid',
-                    alignItems:'center'
+                    alignItems:'center',
+                    minwidth:'40%',
+                    p:1,
                     }}>
 
-          <Typography>
-            차종입니다  {car.carModel}
-          </Typography>
-          <Typography>
-            차량번호입니다 {car.carYear}
-          </Typography>
-          </Box>
-        <Box>
+          <Typography>{car.car_model} / {car.car_year}</Typography>
+          <Typography variant='h6'>{car.car_num}</Typography>
+          <Chip label={segment} variant="outlined" />
+          </Grid>
+        <Box
+          sx={{
+            display:'flex',
+            p:1,
+            gap:1,
+            alignItems:'center',
+            flexDirection:"column",
+          }}
+        
+        >
         <Button 
             variant="contained"
-            color="secondary"
-            onClick={delButton}
+            color="error"
+            onClick={()=>{setDelOpen(true)}}
             >
             차량삭제
         </Button>
-        <Typography>
-          임대상태
-        </Typography>
+        {/* 차량삭제 모달 */}
+        <Dialog
+        open={delOpen}
+        onClose={()=>{setDelOpen(false)}}
+      >
+        <DialogTitle>
+          {'등록된 차량을 지웁니다'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText >
+            등록된 차량을 정말로 삭제하시겠습니까? 
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={delButton} autoFocus>
+            확인
+          </Button>
+          <Button onClick={()=>{setDelOpen(false)}}>취소</Button>
+        </DialogActions>
+      </Dialog>
+        {rentOn ==='임대중'?<Chip label={rentOn} color='primary'/>:<Chip label={rentOn} variant="outlined"/> }
         </Box>
-      </Box>
+      </Container>
 
       <Box
         sx={{display:'flex',
@@ -124,13 +208,12 @@ const CarState = ({car}) =>{
       >
       <Grid
         sx={{display: 'flex',     
-            border:"1px solid",
             alignItems: 'flex-start',
             p: 1,
             justifyContent:'center',
             }}
       >
-        {car.rentInsurance === true? <Typography>보험가입완료</Typography>:     
+        {car.car_rent_insurance_yn === 'Y'? <Button variant='text'>보험가입완료</Button>:     
           <Button 
             variant="contained"
             color="primary"
@@ -141,7 +224,7 @@ const CarState = ({car}) =>{
         <Button 
             variant="contained"
             color="primary"
-            onClick={()=>{setTime(!time)}}
+            onClick={()=>{setTime(!time), setHistory(false)}}
           >
             임대기간 설정
         </Button>
@@ -149,26 +232,24 @@ const CarState = ({car}) =>{
         <Button 
             variant="contained"
             color="primary"
-            onClick={()=>{setHistory(!history)}}
+            onClick={()=>{setHistory(!history), setTime(false)}}
           >
             이용내역 보기
         </Button>
         </Grid>
-        <Grid item xs={12}>
-
-        {insurance? <Insurance carId={car.carId} />:''}
-        {time? <RentPeriod carId={car.carId} />:''}
-        {history? <RentHistoryList carId={car.carId} />:''}
-        </Grid>
+        {time? <RentPeriod carId={car.car_num} />:''}
+        {history? <RentHistoryList carId={car.car_num} />:''}
         {/* <Button 
             variant="contained"
             color="primary"
             onClick={()=>{setHistory(!리뷰)}}
-          >
-        </Button> */}
-        {history? <ReviewList carId={car.carId}/>:""}
+            >
+          </Button> */}
+        {/* {history? <ReviewList carId={car.car_num}/>:""} */}
     </Box>
-    </Box>
+    </Card>
+        {insurance? <Insurance carId={car.car_num} />:''}
+
     </>
 
   )

@@ -8,6 +8,8 @@ import {
   Typography, 
   TextField, 
   Button,
+  Card,
+  Chip,
   Avatar,
   createMuiTheme,
   ThemeProvider,
@@ -20,7 +22,18 @@ import {
   MenuItem,
   FormControl,
   Modal,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListItemIcon,
+
 } from '@mui/material';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import PersonIcon from '@mui/icons-material/Person';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 import DoorControl from '../driveCommon/DoorControl';
 import DriveCheckList from './DriveCheckList';
 import { Dialog } from '@material-ui/core';
@@ -78,83 +91,142 @@ const DriveStart = () => {
   //     }
   // }
 
+  //car_seq 통해서 차량정보가져오기
+
 const [checkPicOpen, setCheckPicOpen] = useState(false)
 const [checkOpen, setCheckOpen] = useState(false)
 
+//onstart 시작정보 post로 보내기
+  // const optionCar = {
+  //   url:`http://localhost:8001/api/car/아이디/예약정보`,
+  //   method:'GET',
+  //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+  //   }
+const onStart = () => {
+  
+}
+
   return (
-    <>
-    <Typography>
-      실시간 이용정보 페이지
-    </Typography>
-    <Button onClick={()=>{console.log(resInfo)}}>check</Button>
-    <Box
-      sx={{display:'flex',
-      border:'1px solid',
-      flexDirection:'column',
-      alignItems:'center',
+    <Container
+      sx={{
+        display:'flex',
+        alignItems:'center',
+        flexDirection:'column',
       }}
     >
-      <Grid
-            sx={{display:'flex',
-            border:'1px solid',
-            alignItems:'center',
+      <Card
+        sx={{
+          diplay:'flex',
+          width: '500px',
+          bgcolor: 'background.paper',
+          p: 1,
             }}
       >
-      <Grid>
-        사진차량사진입니다
-        <Typography>차량위치찾기</Typography>
-      </Grid>
-      <Grid>
-        <Typography>
-         예약번호 {resInfo.res_info_seq}
-        </Typography>
-        <Typography>
-          이용기간 {resInfo.car_res_date_start}
-        </Typography>
-        <Typography>
-          차량번호 :22가나000
-        </Typography>
-        <Typography>
-          차량종류 :쏘나다
-        </Typography>
-        <Typography>
-          차량주인 :김싸피
-        </Typography>
-        </ Grid>
-      </Grid>
-    <Grid>
-
-
-      <Dialog
-      open={checkPicOpen===true? checkPicOpen: checkOpen}
-      onClose={()=>{{setCheckPicOpen(false)}}}
-      >
-      <DriveCheckList 
-        setCheckPicOpen={setCheckPicOpen} checkPicOpen={checkPicOpen}
-        setCheckOpen={setCheckOpen} checkOpen={checkOpen}
-        />
-      </Dialog>
-      <Button onClick={()=>{setCheckPicOpen(true)}}>
-        내부 외부 사진 찍기 
-       <Typography>OK</Typography>
+        <Typography
+          textAlign='center'
+          variant='h5'
         
-      </Button>
-      <Button onClick={()=>{setCheckOpen(true)}}>
-        탑승전 점검하기
-      <Typography>OK</Typography>
-      </Button>
-    </Grid>
-    <Grid>
-            <DoorControl/>
-    </Grid>
-    <Grid>
-      <Button>
-        운행 하기
-      </Button>
-    </Grid>
-    </Box>
-    </>
-    
+        > 예약 정보 </Typography>
+        <Grid
+          sx={{display:'flex',
+          border:'1px solid',
+          alignItems:'center',
+          }}
+        >
+        <Grid 
+          sx={{
+            alignItem:"center",
+            display:'flex',
+            flexDirection:'column',
+          }}
+        >
+          <>사진차량사진</>
+          <Chip label='차량위치찾기'/>
+        </Grid>
+        <Grid>
+          <List>
+            <ListItemButton>
+              <ListItemIcon>
+                  <DirectionsCarIcon />
+                  <ListItemText primary={`예약번호 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                  <AccessTimeIcon/>
+                  <ListItemText primary={`이용기간 : ${resInfo.res_info_start}`}/>
+                  <ListItemText primary={`${resInfo.res_info_end}`}/>
+              </ListItemIcon>
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                  <ArrowForwardIcon />
+                  <ListItemText primary={`차량번호 : ${resInfo.car_seq}`}/>
+                  {/* 차량정보가저오기 */}
+              </ListItemIcon>
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                  <ArrowForwardIcon />
+                  <ListItemText primary={`차량종류 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                  <PersonIcon />
+                  <ListItemText primary={`차량주인 : ${resInfo.res_info_seq}`}/>
+              </ListItemIcon>
+            </ListItemButton>
+          </List>
+          </ Grid>
+        </Grid>
+      <Grid
+        sx={{
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'center',
+      }}
+      >
+        <Dialog
+        open={checkPicOpen===true? checkPicOpen: checkOpen}
+        onClose={()=>{{setCheckPicOpen(false)}}}
+        >
+        <DriveCheckList 
+          setCheckPicOpen={setCheckPicOpen} checkPicOpen={checkPicOpen}
+          setCheckOpen={setCheckOpen} checkOpen={checkOpen}
+          />
+        </Dialog>
+        <Button onClick={()=>{setCheckPicOpen(true)}}>
+          내부 외부 사진 찍기   
+        </Button>
+        <Chip label={'차량정보에서 사진정보가있으면'?"OK":"NEED"} color="primary" />
+        <Button onClick={()=>{setCheckOpen(true)}}>
+          탑승전 점검하기
+        </Button>
+        <Chip label={'차량정보에서 사진정보가있으면'?"OK":"NEED"} color="primary"/>
+      </Grid>
+      <Grid
+        sx={{
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'center',
+      }}
+      >
+        <DoorControl/>
+      </Grid>
+      <Grid
+        sx={{
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'center',
+      }}
+      >
+        <Button onClick={onStart}>
+          운행시작
+        </Button>
+      </Grid>
+      </Card>
+  </Container>
   )
 }
 
