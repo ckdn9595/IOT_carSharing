@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import axios from 'axios';
 import {
   Container,
@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import RentPeriodSet from './car-rent-period-set';
 import { getDate } from 'date-fns';
+import { CarContext } from '../carContext';
 
 const dump = [
     {
@@ -36,11 +37,12 @@ const dump = [
 const RentPeriod = ({carId}) =>{
   const [visible, setVisible] = useState(false)
   const [settingTime, setSettingTime] = useState(dump)
+  const {token} = useContext(CarContext)
 
   const option = {
-    url:`http://localhost:8001/api/car/${carId}/time`,
+    url:`http://localhost:8001/api/car/27/time`,
     method:'GET',
-    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+    headers:{token},
     }
 
   const onClickEvent= () =>{
@@ -64,12 +66,13 @@ const RentPeriod = ({carId}) =>{
   return(
     <>
     <Box
-       sx={{display: 'flex',
-       alignItems: 'center',
-       flexDirection: 'column',
-       p: 1,
-       m: 1,
-       border: '1px solid',}}
+        display='flex'
+
+        sx={{
+          p:1,
+          flexDirection:'column',
+          alignItems:'center',
+        }}
     >
       <Grid item
             sx={{
@@ -78,7 +81,7 @@ const RentPeriod = ({carId}) =>{
                   m:1
           }}           
       >
-          임대 기간 : {settingTime.map(date=>( <p>{date.year}년 {date.month}월 {date.day}일</p>))}
+          임대 기간 : {settingTime.map(date=>( <Typography>{date.year}년 {date.month}월 {date.day}일 {date.hours}시 {date.minutes}분</Typography>))}
       </Grid>
       <Grid>
     <Button

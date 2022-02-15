@@ -7,6 +7,7 @@ import {
   Typography, 
   TextField, 
   Button,
+  Chip,
   Avatar,
   createMuiTheme,
   ThemeProvider,
@@ -19,13 +20,16 @@ import {
   MenuItem,
   FormControl,
   SliderValueLabel,
+  Modal,
 } from '@mui/material';
 import { CarContext } from '../carContext';
 
 const RentHistory = ({list}) =>{
   const [clickOn, setClickOn] = useState(false)
   const [content, setConTent] = useState({})
-  const {SendConfirm, setSendConfirm} = useContext(CarContext)
+  const {SendConfirm, setSendConfirm,
+    open, setOpen
+  } = useContext(CarContext)
 
   useEffect(()=>{
     setConTent(list)
@@ -38,67 +42,84 @@ const RentHistory = ({list}) =>{
     data: {res_end_valid : true,}
     }
 
-  const sendConfirm = async () =>{
-    setConTent({...content, res_end_valid:true})
-    console.log(content)
-    setSendConfirm(!SendConfirm)
-  }
-  // const sendConfirm = async () =>{
-  //   try{
-  //     const response = await axios(option)
-  //     console.log(response.data)
-  //   }catch(err){
-  //     console.log(err)
-  //   }
-  // }
-
+    //이용승인 데이터 보내기
+    // const sendConfirm = async () =>{
+      //   try{
+        //     const response = await axios(option)
+        //     console.log(response.data)
+        //   }catch(err){
+          //     console.log(err)
+          //   }
+          // }
+          
+          // const sendConfirm = async () =>{
+          //   setConTent({...content, res_end_valid:true})
+          //   console.log(content)
+          //   setSendConfirm(!SendConfirm)
+          // }
   return(
     <>
-    <Box>
+    <Modal
+       open={open}
+       onClose={()=>{setOpen(false)}}   
+    >
       <Grid
         container
         direction='row'
         justify='center'
         alignItems='center'
-        spacing={3}    
+        spacing={3}
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+        }}    
       >
       <Grid item  key={content.res_info_seq}
         display='flex'
         justifyContent='center'
-        direction='column'
+        sx={{
+          flexDirection:'column',
+          alignItems:'center',
+
+        }}
       >
           <Typography
-            textAlign="center"
+            textAlign="justify"
             color="textPrimary"
             gutterBottom
             variant="h6"
+            
           >          
-            이용 번호 :{content.res_info_seq}
-          </Typography>
-         <Typography
-            color="textPrimary"
-            variant="body1"
-         >
-            차 번호 :{content.car_seq}
+            이용 번호 : {content.res_info_seq}
           </Typography>
           <Typography>
-            사용 시간 :{content.res_date}
+            사용기간
           </Typography>
           <Typography>
-            이동거리:{content.res_rate}
+            {content.res_date}
           </Typography>
-         <Typography>
-            이용요금 :{content.res_rate}
+          <Typography
+            textAlign="justify"
+          
+          >
+            이동거리 : {content.res_rate}Km
           </Typography>
-      </Grid>
-          <Typography>
-            {!content.res_end_valid? '이용중' : '이용완료'}
-          </Typography>
-        {!content.res_end_valid? <Button onClick={sendConfirm}>
-          이용완료 승인하기
-        </Button>:''}
+          <Typography
+            textAlign="justify"          
+          >
+              이용요금 : {content.res_rate}원
+            </Typography>
+        {!content.res_end_valid? <Chip label='이용중'/> : <Chip color='success' label='이용완료'/>}
+        {!content.res_end_valid?'':<Button onClick={sendConfirm}>승인하기</Button>}
         </Grid>
-    </Box>
+      </Grid>
+    </Modal>
     </>
   )
 }

@@ -4,6 +4,7 @@ import RentHistory from './car-rent-history';
 import { 
   Box, 
   Grid,
+  Chip,
   Container, 
   Typography, 
   TextField, 
@@ -21,7 +22,9 @@ import {
   FormControl,
   SliderValueLabel,
 } from '@mui/material';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { CarContext } from '../carContext';
+import { maxWidth } from '@mui/system';
 
 // 자동차의 렌트한 이력 조회
 // 자동차의 id값 prop
@@ -46,14 +49,33 @@ const dump = {
 
 const RentSummary = ({list})=>{
   const [items, setItems] = useState([])
-  const [open, setOpen] = useState(false)
+  const {open, setOpen} = useContext(CarContext)
+
+
   useEffect(()=>{
     setItems(list.res_info_seq)
   },[])
 
+  const getHistoy = async() =>{
+    // list.res_info_seq
+    const option = {
+      url:`http://localhost:8001/api/car/${carId}/history/{히스토리아이디}`,
+      method:'GET',
+      headers:{api},
+      }
+    try{
+      const response = await axios(option)
+      console.log(response.data)
+      await setList([response.data])
+    }catch(err){
+      console.log(err)
+    }
+  }
+
   const onClickBtn = () =>{
     setOpen(!open)
   }
+
 
   return(
     <>
@@ -63,6 +85,10 @@ const RentSummary = ({list})=>{
         display='flex'
         justifyContent='center'
         direction='column'
+        sx={{
+          p:1,
+        }}
+
       >
           <Typography
             textAlign="center"
@@ -72,25 +98,53 @@ const RentSummary = ({list})=>{
           >
             이용번호 : {list.res_info_seq}
           </Typography>
-          <Typography
-            textAlign="center"
-            color="textPrimary"
-            gutterBottom
-            variant="body1"  
-          >
-            사용시간:{list.res_realtime}분
-            이용요금:{list.res_rate}원
-          </Typography>
+          <Grid item
+            sx={{
+
+              display:'flex',  
+              justifyContent:'center',
+              gap:1,
+            }}>
+            <Grid item>
+              <Typography
+                textAlign="center"
+                >
+                사용시간 
+              </Typography>
+              <Typography
+                textAlign="center"
+              >
+                {list.res_realtime}분
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography
+                textAlign="center"
+                >
+                이용요금
+              </Typography>
+              <Typography
+                textAlign="center"
+              >
+              {list.res_rate}원
+              </Typography>
+            </Grid>
+          </Grid>
         </Grid>
 
         <Grid itme xs={6}
           display='flex'
           direction='column'
           justifyContent='center'
+          alignItems='center'
+          sx={{
+            p:1,
+            gap:1,
+          }}
           >
         <Typography>
-            이용상태 : {list.res_end_valid? '이용중': '이용완료'}
-          </Typography>
+          {list.res_end_valid? <Chip label="이용중" color="primary" />: <Chip label="이용완료" color="secondary" />}
+        </Typography>
           
         <Button
         justifyContent='center' 
@@ -105,26 +159,31 @@ const RentSummary = ({list})=>{
           {open?<RentHistory
           key={list.res_info_seq}
           list={list}
+
           />:''}
         </Box>
     </>
     )
   }
 const RentHistoryList = ({carId}) =>{
-  const {list, setList, rentSendConfirm} = useContext(CarContext)
+  const {list, setList, rentSendConfirm,
+    token,
+  
+  } = useContext(CarContext)
   // const {car_res_seq, res_rate} = props
   
 
   useEffect(()=>{
     setList([dump])
+    // getList()
   },[rentSendConfirm])
 
-  const option = {
-    url:`http://localhost:8001/api/car/${carId}/history`,
-    method:'GET',
-    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-    }
   const getList = async() =>{
+    const option = {
+      url:`http://localhost:8001/api/car/${carId}/history`,
+      method:'GET',
+      headers:{api},
+      }
     try{
       const response = await axios(option)
       console.log(response.data)
