@@ -15,7 +15,7 @@ const Customers = () => (
         차량정보 | 차키줘봐
       </title>
     </Head>
-    {/* <Box
+    <Box
       component="main"
       sx={{
         flexGrow: 1,
@@ -23,22 +23,11 @@ const Customers = () => (
       }}
     >
       <Container maxWidth={false}>
-        <CustomerListToolbar />
         <Box sx={{ mt: 3 }}>
-          <CustomerListResults customers={customers} />
+          <Car/>
         </Box>
       </Container>
-    </Box> */}
-    {/* <Insurance/>
-    <ReviewList/>
-  <Review/> */}
-    {/* <Car/> */}
-  {/* <Insurance/> */}
-  {/* <Car/> */}
-  {/* <DriveStart/> */}
-  {/* <CarMain/> */}
-  <Car/>
-  {/* <Car/> */}
+    </Box>
   </>
 );
 Customers.getLayout = (page) => (
