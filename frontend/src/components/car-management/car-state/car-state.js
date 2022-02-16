@@ -95,9 +95,9 @@ const CarState = ({car}) =>{
     switch(car.car_segment){
       case 1: setSegment('경차')
       break
-      case 2: setSegment('중형')
+      case 2: setSegment('SUV')
       break
-      case 3: setSegment('SUV')
+      case 3: setSegment('중형')
     }
   }
   const getRentOn= ()=>{
