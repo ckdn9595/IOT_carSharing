@@ -27,6 +27,7 @@ const Car = () => {
         previewURL: "",
       });
     const [imageUrl, setImageUrl] = useState(null)
+    const [registerSuccess, setRegisterSuccess] = useState(true)
     //car-state
     const [time, setTime] = useState(false)
     const [history, setHistory] = useState(false)
@@ -47,7 +48,7 @@ const Car = () => {
     const [sendConfirm, setSendConfirm] = useState(true)
     
     // api
-    const [token, setToken] = useState()
+    const [token, setToken] = useState('')
     
     // useEffect(()=>{
     //   // setRegister([])
@@ -58,9 +59,10 @@ const Car = () => {
     //
 
     useEffect(()=>{
-      setToken(`Authorization: Bearer ${sessionStorage.getItem("access_token")}`)
+      setToken(`Bearer ${sessionStorage.getItem("access_token")}`)
+      // getList()
+      console.log('load carpage')
     },[])
-
 
   return (
     <CarContext.Provider value={{
@@ -72,6 +74,7 @@ const Car = () => {
       inputs, setInputs,
       postfiles, setPostfiles,
       imageUrl, setImageUrl,
+      registerSuccess, setRegisterSuccess,
       //car-state
       time, setTime,
       history, setHistory,
