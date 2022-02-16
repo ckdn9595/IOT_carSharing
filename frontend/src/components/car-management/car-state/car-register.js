@@ -56,22 +56,22 @@ const CarRegister = () =>{
 
   // const uploadContent = new FormData()
 
+  const option = {
+    // url:`http://localhost:8001/api/car/register`,
+    url:`https://i6a104.p.ssafy.io/api/car/register`,
+    method:'POST',
+    // {Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
+    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`, 'Content-Type': 'multipart/form-data'},
+    data: formData
+    }
   useEffect(()=>{
-    const option = {
-      // url:`http://localhost:8001/api/car/register`,
-      url:`https://i6a104.p.ssafy.io/api/car/register`,
-      method:'POST',
-      // {Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-      headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`, 'Content-Type': 'multipart/form-data'},
-      data: formData
-      }
 
   },[])
   
   const uploading = () =>{
 
     for (let key in inputs){
-      String(key) !== 'carImg' ? formData.append(key,inputs[key]): console.log('업로드',key)
+      String(key) !== 'carImg' ? formData.append(key,inputs[key]): console.log('loading')
       
     }
     formData.append('carImg',upImg)
@@ -89,15 +89,16 @@ const CarRegister = () =>{
       uploading()
       // setRegister(register.concat(inputs))
       const response = await axios(option)
-      console.log(response.data)
       await setVisible(false)
+      // console.log(response.data)
+      console.log('차량등록이 성공하였습니다')
     }catch(err){
       // setVisible(false)
       // for (let key of formData.keys()) {
       //   console.log(key, formData.values(key));
       // }
       // // console.log('22',uploadContent.v)
-      // console.log(err)
+      console.log(err)
       }
     }else{
       setModal(true)
@@ -253,7 +254,7 @@ const CarRegister = () =>{
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-	          {carNum.length!==7?'차량번호가 잘못 되었습니다' :'입력하지 않은 정보가 있습니다!'}
+	          {carNum.length!==7 ?'차량번호가 잘못 되었습니다' :'입력하지 않은 정보가 있습니다!'}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
