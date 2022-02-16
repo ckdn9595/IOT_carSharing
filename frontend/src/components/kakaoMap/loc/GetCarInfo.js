@@ -44,7 +44,7 @@ const GetCarInfo = (map, option) => {
             positions.push({
                 content: `<div class="">
                             <div style="width:150px;" >
-                              <img src="../../../../${e.car_img}" width="120px" height="auto" />
+                              <img src="/static/images/${e.car_img}" width="120px" height="auto" />
                               <hr/>
                               <hr/>
                               모델 : ${e.car_model}
