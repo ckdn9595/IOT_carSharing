@@ -128,7 +128,6 @@ const CarState = ({car}) =>{
     <Card container
       sx={{
         diplay:'flex',
-        width: '500px',
         bgcolor: 'background.paper',
         // border: '2px solid #000',
         p: 1,

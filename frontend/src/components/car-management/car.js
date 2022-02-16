@@ -17,7 +17,7 @@ const Car = () => {
         carModel:'', //차량이름
         carYear:'', //차량연식
         carSegment:'', //차량크기
-        carFuel:'10',// 차량연료
+        carFuel:'',// 차량연료
         carRate:'', //차량 요금
         carImg:[], //차량 이미지
         rentInsurance:'N'//보험유무
