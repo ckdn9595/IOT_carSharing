@@ -17,34 +17,38 @@ const Insurance = ({carId}) =>{
   const {insurance, setInsurance,
     openIn, setOpenIn,
     alert, setAlert,
+    sendSuccess, setSendSuccess,
     token,
   
   } = useContext(CarContext)
+
   // const [rent, setRent]= useState(false)
   const {rent, setRent}= useContext(CarContext) //체크버튼 활성화,비활성화
+  const [send, setSend] = useState(false) // 정보갱신
 
   function agreeCheckHandle(){
     setRent(!rent)
   }
 
-
-  
   const agreeSend= async()=>{
-    try{
-      // const option = {
-      //   url:`http://localhost:8001/api/car/${carid}/info`,
-      //   method:'PATCH',
-      //   headers:token,
-      //   data: {rentInsurance:'Y'}
-      //   }
-      // const responsne = await axios(option)
-      // console.log(response.data)
-      setInsurance(false)
-      setAlert(false)
-    }catch(err){
-      console.log('failed')
-      setAlert(false)
+    const option = {
+      url:`https://i6a104.p.ssafy.io/api/car/${carId}/info`,
+      method:'PATCH',
+      headers:{ Authorization: token },
+      data: {car_rent_insurance_yn:'Y'}
       }
+    if (rent === true){
+      try{
+        const response = await axios(option)
+        console.log(response.status)
+        setInsurance(false)
+        setAlert(false)
+        setSendSuccess(!sendSuccess)
+      }catch(err){
+        console.log(err)
+        setAlert(false)
+        }
+    }
   }
 
   return(

@@ -27,7 +27,7 @@ const Car = () => {
         previewURL: "",
       });
     const [imageUrl, setImageUrl] = useState(null)
-    const [registerSuccess, setRegisterSuccess] = useState(true)
+    const [sendSuccess, setSendSuccess] = useState(true)
     //car-state
     const [time, setTime] = useState(false)
     const [history, setHistory] = useState(false)
@@ -63,7 +63,7 @@ const Car = () => {
       // getList()
       console.log(token)
       console.log('load carpage')
-    },[])
+    },[token])
 
   return (
     <CarContext.Provider value={{
@@ -75,7 +75,7 @@ const Car = () => {
       inputs, setInputs,
       postfiles, setPostfiles,
       imageUrl, setImageUrl,
-      registerSuccess, setRegisterSuccess,
+      sendSuccess, setSendSuccess,
       //car-state
       time, setTime,
       history, setHistory,
@@ -93,6 +93,7 @@ const Car = () => {
       //api
       token,
       }}>
+
     <CarMain/>
     </CarContext.Provider>
   )
