@@ -19,13 +19,13 @@ clientName = "TestCar001"
 # Mocking을 위해 필요한 임시 Data들
 curDrivenDistance = 0
 curDoorStatus = False
-locationPreset= {
+locationPreset= [
     "{\"latitude\":\"37.47\",\"longitude\":\"127.0\"}",
     "{\"latitude\":\"37.37\",\"longitude\":\"127.3\"}",
     "{\"latitude\":\"37.44\",\"longitude\":\"127.2\"}",
     "{\"latitude\":\"37.29\",\"longitude\":\"127.6\"}",
     "{\"latitude\":\"37.32\",\"longitude\":\"127.1\"}"
-}
+]
 isReported = False
 
 # ledBlink 함수
@@ -46,24 +46,25 @@ def onConnect(client, userdata, flags, rc):
 # message를 받으면 표시
 def onMessage(client, userdata, msg):
     print(msg.topic)
-    print(msg.payload)
+    tMessage = json.loads(msg.payload)
+    print(tMessage)
     if msg.topic.split("/")[2] == "control":
-        if msg.payload == "open":
+        if tMessage["door"] == "open":
             print("open door")
             ledBlink()
             ledBlink()
 
-        if msg.payload == "close":
+        if tMessage["door"] == "close":
             print("close door")
             ledBlink()
 
 # message를 publish할 때 실행
 def onPublish(client, userdata, mid):
-    print("Published to " + client)
+    print("Published to " + topicLoc)
 
 # client가 어떤 topic에 subscribe하면 실행
 def onSubscribe(client, userdata, mid, grated_qos):
-    print("Subscribed to " + client)
+    print("Subscribed to " + subTopic)
 
 # GPIO rising edge가 감지하면 실행
 def risingEdge(channel):
@@ -90,7 +91,7 @@ client.connect("i6a104.p.ssafy.io", 1883, 60)
 client.loop_start()
 
 # GPIO핀에 Rising Edge가 감지될 때 callback함수 실행
-GPIO.add_event_detect(23, GPIO.RISING, callback=risingEdge, bouncetime=100)
+# GPIO.add_event_detect(23, GPIO.RISING, callback=risingEdge, bouncetime=100)
 
 # 계속 sleep하다가 Ctrl+C로 종료시키면 GPIO.cleanup() 실행
 while True:
@@ -103,7 +104,7 @@ while True:
             client.publish(topicDrv, publishMessage, 0)
         elif (not isReported):
             isReported = True
-            publishMessage = locationPreset[random.randint(0,5)]
+            publishMessage = locationPreset[random.randint(0,4)]
             client.publish(topicLoc, publishMessage, 0)
     except KeyboardInterrupt:
         print("\nBye!")
