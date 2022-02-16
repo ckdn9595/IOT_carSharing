@@ -66,8 +66,8 @@ const CarMain = () => {
   
   const getList= async() =>{
     const option = {
-      url:`http://localhost:8001/api/car/mycar`,
-      // url:`https://i6a104.p.ssafy.io/api/car/mycar`,
+      // url:`http://localhost:8001/api/car/mycar`,
+      url:`https://i6a104.p.ssafy.io/api/car/mycar`,
       method:'GET',
       headers:{ Authorization: token },
       }
