@@ -15,40 +15,26 @@ import {
 import RentPeriodSet from './car-rent-period-set';
 import { getDate } from 'date-fns';
 import { CarContext } from '../carContext';
-
-const dump = [
-    {
-    year: 2022,
-    month: 1,
-    day: 30,
-    hours: 3,
-    minutes: 12
-    },
-    {
-    year: 2022,
-    month: 3,
-    day: 31,
-    hours: 15,
-    minutes: 22
-    }
-]
+import { API_BASE_URL } from 'src/config';
 
 // 차량 이용 기간 설정
 const RentPeriod = ({carId, car}) =>{
   const [visible, setVisible] = useState(false)
   const [settingTime, setSettingTime] = useState([])
-  const {token} = useContext(CarContext)
-
   const [date, setDate] = useState()
   const [visibleDate, setVisibleDate] = useState([])
   
+  const {
+    token,
+  } = useContext(CarContext)
+
     const onClickEvent= () =>{
       setVisible(!visible)
     }
 
   const option = {
     // url:`http://localhost:8001/api/car/${carId}/time`,
-    url:`https://i6a104.p.ssafy.io/api/car/${carId}/time`,
+    url:`${API_BASE_URL}/car/${carId}/time`,
     method:'GET',
     headers:{ Authorization: token },
     }
@@ -96,8 +82,6 @@ const RentPeriod = ({carId, car}) =>{
       const end = new Date()
       setSettingTime([start,end])
       setVisibleDate([dateChange(start),dateChange(end)])
-
-
     }else{
       const start = new Date(car.car_res_date_start)
       const end = new Date(car._car_res_date_end)

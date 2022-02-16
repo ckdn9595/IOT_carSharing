@@ -11,6 +11,7 @@ import { Container, Button, Checkbox, FormGroup, FormControlLabel, Box, Typograp
 } from '@mui/material';
 import { CarContext } from '../carContext';
 import { set } from 'nprogress';
+import { API_BASE_URL } from 'src/config';
 
 const Insurance = ({carId}) =>{
   // { carId } = props 차량 정보 받아오기
@@ -19,7 +20,6 @@ const Insurance = ({carId}) =>{
     alert, setAlert,
     sendSuccess, setSendSuccess,
     token,
-  
   } = useContext(CarContext)
 
   // const [rent, setRent]= useState(false)
@@ -29,10 +29,9 @@ const Insurance = ({carId}) =>{
   function agreeCheckHandle(){
     setRent(!rent)
   }
-
   const agreeSend= async()=>{
     const option = {
-      url:`https://i6a104.p.ssafy.io/api/car/${carId}/info`,
+      url:`${API_BASE_URL}/car/${carId}/info`,
       method:'PATCH',
       headers:{ Authorization: token },
       data: {car_rent_insurance_yn:'Y'}

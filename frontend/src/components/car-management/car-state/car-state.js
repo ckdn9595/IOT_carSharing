@@ -34,6 +34,7 @@ import {
 import { CarContext } from '../carContext';
 import { Filter } from '@mui/icons-material';
 import ReviewList from '../review/review-list';
+import { API_BASE_URL } from 'src/config';
 
 const dump = {
   carName:'good car',
@@ -42,22 +43,21 @@ const dump = {
   carPic: {
     pic_out:['img','img2'],
     pic_in:[''],
-    },
+  },
   carIntro:'',
 }
 const CarState = ({car}) =>{
-  const [data, setData]= useState({})
-  // const [time, setTime] = useState(false)
-  // const [history, setHistory] = useState(false)
-  // const [insurance, setInsurance] = useState(false)
-  // const [insuranceCheck, setInsuranceCheck] = useState(false)
- const {time, setTime,
-        history, setHistory,
-        insurance, setInsurance,
-        register, setRegister,
+  const [data, setData] = useState({})
+  const [segment, setSegment] = useState('')
+  const [rentOn, setRentOn] = useState('')
+
+  const {time, setTime,
+    history, setHistory,
+    insurance, setInsurance,
+    register, setRegister,
         alert, setAlert,
         sendConfirm, setSendConfirm,
-        token
+        token,
       } = useContext(CarContext)
   useEffect(()=>{
     setData(car)
@@ -70,7 +70,7 @@ const CarState = ({car}) =>{
 
   // 하나식 가져와야할 데이터 api/car/info ${carId}
   // const option = {
-  //   url:`http://localhost:8001/api/${car/register`,
+  //   url:`${API_BASE_URL}/car/info/${carId}`,
   //   method:'GET',
   //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
   //   }
@@ -83,16 +83,6 @@ const CarState = ({car}) =>{
   //   }
   // }
 
-  // const delButton = async() =>{
-  //   try{
-  //     // const response = await axios(option)
-  //     await setRegister(register.filter(car => car.carNum !== data.carNum))
-  //   } catch (error){
-  //     alert('error!')
-  //   }
-  // }
-  const [segment, setSegment] = useState('')
-  const [rentOn, setRentOn] = useState('')
 
   const getSegment = () =>{
     switch(car.car_segment){
@@ -113,7 +103,7 @@ const CarState = ({car}) =>{
   const [delOpen, setDelOpen] = useState(false)
   const delButton = async() =>{
     const option = {
-    url:`https://i6a104.p.ssafy.io/api//car/register`,
+    url:`${API_BASE_URL}/car/register`,
     method:'DELETE',
     headers:{ Authorization: token },
     }
@@ -148,10 +138,11 @@ const CarState = ({car}) =>{
       >
         <Grid item>
 
-          <Typography
-            variant='h6'
-            lineHeight={5}
-            > 차량사진 </Typography>
+        <Avatar
+          alt="carImage"
+          src={`/static/images/${car.car_img}`}
+          sx={{ width: "50%", height: "50%", }}
+/>
         </Grid>
           <Grid sx={{display:'flex',
                     flexDirection:'column',

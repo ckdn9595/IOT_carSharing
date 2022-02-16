@@ -14,11 +14,14 @@ import {
 import { LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { CarContext } from '../carContext';
+import { API_BASE_URL } from 'src/config';
 
 // 차량 이용 기간 설정
 const RentPeriodSet = (props) =>{
   const {settingTime, setSettingTime, setVisible, carId, car, visibleDate,} = props
-  const {token, sendSuccess, setSendSuccess
+  const {
+    token, 
+    sendSuccess, setSendSuccess,
   } = useContext(CarContext)
   
 
@@ -42,14 +45,10 @@ const RentPeriodSet = (props) =>{
   //   minutes: endDate.getMinutes(),
   // })
   
-  const submitDate = () =>{
-    
-  }
-  
+
   //carid 받아서 time으로 넘기면된다
   const option = {
-    // url:`http://localhost:8001/api/car/${carId}/time`,
-    url:`https://i6a104.p.ssafy.io/api/car/${carId}/time`,
+    url:`${API_BASE_URL}/car/${carId}/time`,
     method:'PATCH',
     headers:{ Authorization: token },
     data:{car_res_date_start: startDate, car_res_date_end: endDate}

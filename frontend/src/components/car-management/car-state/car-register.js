@@ -29,6 +29,7 @@ import { NavItem } from 'src/components/nav-item';
 import { CarContext } from '../carContext';
 import { border, width } from '@mui/system';
 import { set } from 'nprogress';
+import { API_BASE_URL } from 'src/config';
 // 차량등록
 // 사용자 prop
 const CarRegister = () =>{ 
@@ -55,11 +56,9 @@ const CarRegister = () =>{
   const formData = new FormData()
   const uploadContent = new FormData()
 
-  // const uploadContent = new FormData()
 
   const option = {
-    // url:`http://localhost:8001/api/car/register`,
-    url:`https://i6a104.p.ssafy.io/api/car/register`,
+    url:`${API_BASE_URL}/car/register`,
     method:'POST',
     // {Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
     headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`, 'Content-Type': 'multipart/form-data'},
@@ -73,9 +72,6 @@ const CarRegister = () =>{
       
     }
     formData.append('carImg',upImg)
-    // for (let value of formData.values()) {
-    //   console.log(value, '업로드컨텐츠사진확인');
-    // }
   
   }
   const onSubmit = async(event) =>{
@@ -90,9 +86,19 @@ const CarRegister = () =>{
       await setVisible(false)
       // console.log(response.data)
       console.log('차량등록이 성공하였습니다')
-      SetSendSuccess(!sendSuccess)
+      setSendSuccess(!sendSuccess)
+      setInputs({
+          carNum:'', //차량번호
+          carModel:'', //차량이름
+          carYear:'', //차량연식
+          carSegment:'', //차량크기
+          carFuel:'',// 차량연료
+          carRate:'', //차량 요금
+          carImg:[], //차량 이미지
+          rentInsurance:'N'//보험유무)
+      })
+      preview = null
     }catch(err){
-      // setVisible(false)
       // for (let key of formData.keys()) {
       //   console.log(key, formData.values(key));
       // }

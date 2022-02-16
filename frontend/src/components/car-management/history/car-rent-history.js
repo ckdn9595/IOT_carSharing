@@ -24,13 +24,15 @@ import {
 } from '@mui/material';
 import { CarContext } from '../carContext';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { API_BASE_URL } from 'src/config';
 
 
 const RentHistory = ({list}) =>{
   const [clickOn, setClickOn] = useState(false)
   const [content, setConTent] = useState({})
-  const {SendConfirm, setSendConfirm,
-    open, setOpen
+  const {
+    SendConfirm, setSendConfirm,
+    open, setOpen,
   } = useContext(CarContext)
 
   useEffect(()=>{
@@ -41,7 +43,7 @@ const RentHistory = ({list}) =>{
 
   //이용승인 데이터를 보냅니다
   const option = {
-    url:`https://i6a104.p.ssafy.io/api/car/${carId}/history/{예약아이디}`,
+    url:`${API_BASE_URL}/car/${carId}/history/{예약아이디}`,
     method:'PUT',
     headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
     data: {res_res_check:'Y'}
@@ -51,7 +53,7 @@ const RentHistory = ({list}) =>{
     const sendConfirm = async () => {
       try{
           const response = await axios(option)
-          console.log(response.data)
+          console.log('send confirm')
       }catch(err){
             console.log(err)
       }
