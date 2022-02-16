@@ -10,9 +10,9 @@ async function login(member, success, fail) {
     .catch(fail);
 }
 
-async function getUserInfo(success, fail) {
-  axios.defaults.headers["access_token"] =
-    sessionStorage.getItem("access_token");
+async function getUserInfo(data,success, fail) {
+  axios.defaults.headers["Authorization"] 
+    = `Bearer ${sessionStorage.getItem("access_token")}`
   await axios
     .get(`${API_BASE_URL}/user/info`)
     .then(success)
@@ -28,8 +28,8 @@ async function registerUser(data, success, fail) {
 }
 
 function modifyUser(data, success, fail) {
-  axios.defaults.headers["access_token"] =
-    sessionStorage.getItem("access_token");
+  axios.defaults.headers["Authorization"] 
+    = `Bearer ${sessionStorage.getItem("access_token")}`
   return axios
   .post(`${API_BASE_URL}/user/info`, JSON.stringify(data))
   .then(success)

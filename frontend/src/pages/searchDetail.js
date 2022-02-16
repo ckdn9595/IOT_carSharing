@@ -64,7 +64,7 @@ const SeachDetail = (props) => {
         startDate,
         endDate,
         carSeq,
-        resInfoSeq : searchData.car_res_info_seq
+        resInfoSeq : searchData.res_info_seq
       }
       let error = false;
       await goRegRes(
