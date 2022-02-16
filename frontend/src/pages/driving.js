@@ -13,21 +13,15 @@ const Driving = () => (
       차량이용정보 | 차키줘봐
       </title>
     </Head>
-    {/* <Box
+    <Box
       component="main"
       sx={{
-        flexGrow: 1,
+        flexGrow: 5,
         py: 8
       }}
     >
-      <Container maxWidth={false}>
-        <CustomerListToolbar />
-        <Box sx={{ mt: 3 }}>
-          <CustomerListResults customers={customers} />
-        </Box>
-      </Container>
-    </Box> */}
-  <Drive/>
+      <Drive/>
+    </Box>
   </>
 );
 Driving.getLayout = (page) => (
