@@ -16,7 +16,7 @@ router.post('/register', upload.single('carImg'), async(req, res) => {
     console.log(req.body);
     try {
         // JWT 유효성 검증
-        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
         const token = fullToken.replace(/^Bearer\s+/, "");
         const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
 
@@ -112,7 +112,7 @@ router.get('/:carID/time', async(req, res) => {
 router.patch('/:carID/time', async(req, res) => {
     console.log(req.body);
     try {
-        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
         const token = fullToken.replace(/^Bearer\s+/, "");
         const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
 
@@ -190,7 +190,7 @@ router.get('/:carID/info', async(req, res) => {
 router.patch('/:carID/info', upload.single('car_img'), async(req, res) => {
     console.log(req.body);
     try {
-        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
         const token = fullToken.replace(/^Bearer\s+/, "");
         const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
 
@@ -289,11 +289,11 @@ router.get('/:carID/review', async(req, res) => {
     }
 });
 
-// 아래로 작업중...
+// 아래 POST/PATCH review 작업중...
 router.post('/:carID/review', async(req, res) => {
     console.log(req.body);
     try {
-        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
         const token = fullToken.replace(/^Bearer\s+/, "");
         const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
 
@@ -317,7 +317,7 @@ router.post('/:carID/review', async(req, res) => {
 router.patch('/:carID/review', async(req, res) => {
     console.log(req.body);
     try {
-        const fullToken = req.headers['x-access-token'] || req.headers['authorization'];
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
         const token = fullToken.replace(/^Bearer\s+/, "");
         const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
 
@@ -349,6 +349,34 @@ router.get('/:carID/history', async(req, res) => {
     } catch (error) {
         console.log(error);
         return res.json({carHistory:'fail'});
+    }
+});
+
+// JWT 유저 소유의 차량 목록
+router.get('/mycar', async (req, res) => {
+    console.log(req.body);
+    try {
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
+        const token = fullToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+        const owner = await db['tb_user'].findOne({
+            where: {usr_id: decodedUserToken.userId}
+        });
+
+        const myCar = await db['tb_car'].findAll({
+            where: {usr_seq: owner.usr_seq}
+        });
+
+        if (myCar) {
+            return res.status(200).json(myCar);
+        }
+        else {
+            return res.status(404).json({statusCode: 2})
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({statusCode: 1});
     }
 });
 
