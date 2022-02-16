@@ -36,11 +36,6 @@ const items = [
     title: '참고용'
   },
   {
-    href: '/myPage',
-    icon: (<UserIcon fontSize="small" />),
-    title: '마이페이지'
-  },
-  {
     href: '/serviceCenter',
     icon: (<UserIcon fontSize="small" />),
     title: '고객센터'

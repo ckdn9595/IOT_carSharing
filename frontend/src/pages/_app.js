@@ -21,7 +21,7 @@ const App = (props) => {
       <UsersProvider>
         <Head>
           <title>
-            Material Kit Pro
+            차키줘바
           </title>
           <meta
             name="viewport"
