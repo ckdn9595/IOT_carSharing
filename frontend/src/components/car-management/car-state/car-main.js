@@ -54,27 +54,26 @@ return (
 const CarMain = () => {
   const {visible, setVisible,
      carList, setCarList, token,
-     registerSuccess, setRegisterSuccess,
+     sendSuccess, setSendSuccess,
   } = React.useContext(CarContext)
   const [registerVisible, setRegisterVisible] = useState(false)
   const [carListId, setCarLIstId] =useState([])
-  const [option, setOption] = useState({
-    // url:`http://localhost:8001/api/car/mycar`,
-    url:`https://i6a104.p.ssafy.io/api/car/mycar`,
-    method:'GET',
-    headers:{ Authorization: token },
-    })
-
+  
   const onClickHandle = () =>{
     setVisible(!visible)
   }
   
   // carlist로 차량목록의 아이디만 가져옴
-  
+  // 내가가진 모든 차량을 불러옵니다
+  // opencarstate로 출력하고
+  // openCarstate에서 carstate로 보낸 값을 통해서 각 차량의 예약정보를 불러옵니다
   const getList= async() =>{
-    setOption({...option,
+    const option = {
+      // url:`http://localhost:8001/api/car/mycar`,
+      url:`https://i6a104.p.ssafy.io/api/car/mycar`,
+      method:'GET',
       headers:{ Authorization: token },
-      })
+      }
     try{
       const response = await axios(option)
       console.log(response.data)
@@ -88,8 +87,8 @@ const CarMain = () => {
   
   useEffect(()=>{
     getList()
-    // console.log('초기화성공',carList)
-  },[registerSuccess])
+    console.log('초기화성공',carList)
+  },[sendSuccess])
   return(
     <Container
       sx={{
@@ -98,6 +97,7 @@ const CarMain = () => {
         flexDirection:'column',
       }}
     >
+
     <Card
       
       sx={{
@@ -117,6 +117,7 @@ const CarMain = () => {
       >
        차량 관리
       </Typography>
+      <Button onClick={()=>{setSendSuccess(!sendSuccess)}} label='button'>button</Button>
       <Button  
         sx={{minWidth:'50px'}}
         variant='contained'

@@ -37,7 +37,7 @@ const CarRegister = () =>{
     imageUrl, setImageUrl,
     register, setRegister,
     setVisible, visible,
-    registerSuccess, setRegisterSuccess,
+    sendSuccess, setSendSuccess,
   } = useContext(CarContext)
   const [upImg, setUpImg] = useState('')
   const [modal, setModal] = useState(false)
@@ -90,7 +90,7 @@ const CarRegister = () =>{
       await setVisible(false)
       // console.log(response.data)
       console.log('차량등록이 성공하였습니다')
-      SetRegisterSuccess(!RegisterSuccess)
+      SetSendSuccess(!sendSuccess)
     }catch(err){
       // setVisible(false)
       // for (let key of formData.keys()) {

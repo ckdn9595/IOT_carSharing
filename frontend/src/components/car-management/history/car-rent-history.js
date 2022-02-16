@@ -23,6 +23,8 @@ import {
   Modal,
 } from '@mui/material';
 import { CarContext } from '../carContext';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+
 
 const RentHistory = ({list}) =>{
   const [clickOn, setClickOn] = useState(false)
@@ -34,39 +36,38 @@ const RentHistory = ({list}) =>{
   useEffect(()=>{
     setConTent(list)
   },[])
-  const carId = content.car_res_seq
+
+  const carId = list.car_res_seq
+
+  //이용승인 데이터를 보냅니다
   const option = {
-    url:`http://localhost:8001/api/car/${carId}/history`,
+    url:`https://i6a104.p.ssafy.io/api/car/${carId}/history/{예약아이디}`,
     method:'PUT',
     headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-    data: {res_end_valid : true,}
+    data: {res_res_check:'Y'}
     }
 
     //이용승인 데이터 보내기
-    // const sendConfirm = async () =>{
-      //   try{
-        //     const response = await axios(option)
-        //     console.log(response.data)
-        //   }catch(err){
-          //     console.log(err)
-          //   }
-          // }
-          
-          // const sendConfirm = async () =>{
-          //   setConTent({...content, res_end_valid:true})
-          //   console.log(content)
-          //   setSendConfirm(!SendConfirm)
-          // }
+    const sendConfirm = async () => {
+      try{
+          const response = await axios(option)
+          console.log(response.data)
+      }catch(err){
+            console.log(err)
+      }
+    }
+
   return(
     <>
     <Modal
        open={open}
        onClose={()=>{setOpen(false)}}   
     >
+      
       <Grid
         container
         direction='row'
-        justify='center'
+        justifyContent='center'
         alignItems='center'
         spacing={3}
         sx={{
@@ -80,12 +81,13 @@ const RentHistory = ({list}) =>{
           p: 4,
         }}    
       >
+        
       <Grid item  key={content.res_info_seq}
         display='flex'
-        justifyContent='center'
         sx={{
           flexDirection:'column',
-          alignItems:'center',
+          p:3,
+          gap:1,
 
         }}
       >
@@ -113,11 +115,18 @@ const RentHistory = ({list}) =>{
           <Typography
             textAlign="justify"          
           >
-              이용요금 : {content.res_rate}원
+            이용요금 : {content.res_rate}원
             </Typography>
-        {!content.res_end_valid? <Chip label='이용중'/> : <Chip color='success' label='이용완료'/>}
-        {!content.res_end_valid?'':<Button onClick={sendConfirm}>승인하기</Button>}
+            {/* 보임상태바꾸기 */}
+          <Grid sx={{display:'flex', justifyContent:'center'}}>
+        {content.res_end_valid? <Chip label='이용중'/> : <Chip color='success' label='이용완료'/>}
+          </Grid>
+          <Grid>
+            {content.res_end_valid?'':<Button onClick={sendConfirm}>승인하기</Button>}
+            <Button onClick={()=>{setOpen(false)}}>취소</Button>
+          </Grid>
         </Grid>
+        
       </Grid>
     </Modal>
     </>
