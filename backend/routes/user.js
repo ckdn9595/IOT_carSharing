@@ -134,7 +134,10 @@ router.get('/info', async (req, res) => {
     console.log(req.body);
     try {
         // get token from header
-        const userToken = req.header('access_token');
+        const userToken = req.header('access_token') || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
+        if(userToken.indexOf(/^Bearer\s+/) !== -1){
+            userToken = userToken.replace(/^Bearer\s+/,'');
+        }
         
         // check if userId is registered
         const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
@@ -152,6 +155,7 @@ router.get('/info', async (req, res) => {
             const userInfo = await db.tb_user.findOne({where: {usr_id: decodedUserToken.userId}});
             return res.status(200).json({
                 message: 'user info',
+                userSeq: userInfo.usr_seq,
                 userId: userInfo.usr_id,
                 userName: userInfo.usr_name,
                 userGender: userInfo.usr_gender,
@@ -176,7 +180,10 @@ router.post('/info', async (req, res) => {
             userPassword,
             userPhone
         } = req.body;
-        const userToken = req.header('access_token');
+        const userToken = req.header('access_token') || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
+        if(userToken.indexOf(/^Bearer\s+/) !== -1){
+            userToken = userToken.replace(/^Bearer\s+/,'');
+        }
 
         // compare userToken
         const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
