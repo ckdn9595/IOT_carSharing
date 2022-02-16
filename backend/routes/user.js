@@ -134,14 +134,10 @@ router.get('/info', async (req, res) => {
     console.log(req.body);
     try {
         // get token from header
-        const userToken = req.header('access_token') || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
-        if(userToken.indexOf(/^Bearer\s+/) !== -1){
-            userToken = userToken.replace(/^Bearer\s+/,'');
-        }
+        const userToken = req.headers['access_token'] || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
+        const token = userToken.replace(/^Bearer\s+/,'');
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
         
-        // check if userId is registered
-        const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
-
         if(decodedUserToken == null){
             return res.status(400).json({
                 message: 'invailed token'
