@@ -134,8 +134,8 @@ router.get('/info', async (req, res) => {
     console.log(req.body);
     try {
         // get token from header
-        const userToken = req.header('access_token') || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
-        if(userToken.indexOf(/^Bearer\s+/) !== -1){
+        let userToken = req.header('access_token') || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
+        if(userToken.search(/^Bearer\s+/) !== -1){
             userToken = userToken.replace(/^Bearer\s+/,'');
         }
         
