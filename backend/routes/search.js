@@ -96,10 +96,16 @@ router.get('/detail/:carID', async (req, res) => {
             let carRes = await db['tb_car_res_info'].findOne({
                 where: {car_seq: req.params.carID}
             });
-            carRes.car_res_date_start.setHours(carRes.car_res_date_start.getHours() + 9);
-            carRes.car_res_date_end.setHours(carRes.car_res_date_end.getHours() + 9);
+            if (carRes.car_res_date_start && carRes.car_res_date_end) {
+                carRes.car_res_date_start.setHours(carRes.car_res_date_start.getHours() + 9);
+                carRes.car_res_date_end.setHours(carRes.car_res_date_end.getHours() + 9);
+            }
+            if (carRes.res_reg_dt) {
+                carRes.res_reg_dt.setHours(carRes.res_reg_dt.getHours() + 9);
+            }
 
             return res.status(200).json({
+                car_seq: carInfo.car_seq,
                 car_num: carInfo.car_num,
                 car_isValid: carInfo.car_isValid,
                 car_rent_insurance_yn: carInfo.car_rent_insurance_yn,
@@ -113,7 +119,10 @@ router.get('/detail/:carID', async (req, res) => {
                 car_dy: carInfo.car_dy,
                 car_dx: carInfo.car_dx,
                 car_res_date_start: carRes.car_res_date_start,
-                car_res_date_end: carRes.car_res_date_end
+                car_res_date_end: carRes.car_res_date_end,
+                res_info_seq: carRes.res_info_seq,
+                res_res_check: carRes.res_res_check,
+                res_reg_dt: carRes.res_reg_dt
             });
         }
         else {
