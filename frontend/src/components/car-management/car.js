@@ -61,6 +61,7 @@ const Car = () => {
     useEffect(()=>{
       setToken(`Bearer ${sessionStorage.getItem("access_token")}`)
       // getList()
+      console.log(token)
       console.log('load carpage')
     },[])
 

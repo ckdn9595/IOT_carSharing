@@ -58,6 +58,13 @@ const CarMain = () => {
   } = React.useContext(CarContext)
   const [registerVisible, setRegisterVisible] = useState(false)
   const [carListId, setCarLIstId] =useState([])
+  const [option, setOption] = useState({
+    // url:`http://localhost:8001/api/car/mycar`,
+    url:`https://i6a104.p.ssafy.io/api/car/mycar`,
+    method:'GET',
+    headers:{ Authorization: token },
+    })
+
   const onClickHandle = () =>{
     setVisible(!visible)
   }
@@ -65,12 +72,9 @@ const CarMain = () => {
   // carlist로 차량목록의 아이디만 가져옴
   
   const getList= async() =>{
-    const option = {
-      // url:`http://localhost:8001/api/car/mycar`,
-      url:`https://i6a104.p.ssafy.io/api/car/mycar`,
-      method:'GET',
+    setOption({...option,
       headers:{ Authorization: token },
-      }
+      })
     try{
       const response = await axios(option)
       console.log(response.data)
