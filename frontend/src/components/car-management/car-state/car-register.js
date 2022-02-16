@@ -42,7 +42,7 @@ const CarRegister = () =>{
   const [modal, setModal] = useState(false)
 
   const imgRef = useRef()
-  const { carNum, carYear, carImg, carModel, carSegment, carRate} = inputs
+  const { carNum, carYear, carImg, carModel, carSegment, carRate, carFuel} = inputs
 
   const onChange = event =>{
     const {name, value} = event.target
@@ -84,7 +84,7 @@ const CarRegister = () =>{
     event.preventDefault()
     // uploading()
 
-    if (carNum.length===7 && carImg && carModel && carYear){
+    if (carNum.length===7 && carImg && carModel && carYear && carFuel){
     try{
       uploading()
       // setRegister(register.concat(inputs))
@@ -188,12 +188,18 @@ const CarRegister = () =>{
             임대자동차 등록
           </Typography>
 
-      <Grid item>
+        <Grid item>
           <TextField
             error={carNum.length === 7 ? false: true} 
             variant="standard" name="carNum" label="차량번호" onChange={onChange} required 
             />
-      </Grid>
+        </Grid>
+        <Grid item>
+          <TextField
+              error={carYear.length === 4 ? false: true} 
+              variant="standard" name="carYear" label="연식입력" onChange={onChange} required
+              />
+        </Grid>
 
         <Grid item>
         <FormControl variant="standard" sx={{minWidth: 210}}>
@@ -213,11 +219,24 @@ const CarRegister = () =>{
           </Select>
         </FormControl>
         </Grid>
+
         <Grid item>
-        <TextField
-            error={carYear.length === 4 ? false: true} 
-            variant="standard" name="carYear" label="연식입력" onChange={onChange} required
-            />
+        <FormControl variant="standard" sx={{minWidth: 210}}>
+        <InputLabel id="carFuelSelect">연료타입</InputLabel>
+          <Select
+            labelId="carFuelSelect"
+            name="carFuel"
+            value={carFuel}
+            onChange={onChange}
+          >
+            <MenuItem value="">
+              <em> </em>
+            </MenuItem>
+            <MenuItem value={"휘발유"}>휘발유</MenuItem>
+            <MenuItem value={"경유"}>경유</MenuItem>
+            <MenuItem value={"LPG"}>LPG</MenuItem>
+          </Select>
+        </FormControl>
         </Grid>
         <Grid item>
           <label htmlFor="input-file">
