@@ -30,9 +30,12 @@ import {
 const DriveEndCheck = (props) => {
     const {resInfo, setResInfo,
         resCarInfo, setResCarInfo,
+        token,
+        setCheckEnd, setCheckStart,
         } = useContext(DriveContext)
-    const {token} = useContext(CarContext)
     const {payOpen, setPayOpen} = props
+    const [checkPicOpen, setCheckPicOpen] = useState(false)
+    const [checkOpen, setCheckOpen] = useState(false)
     // 결제 보내기  
     // const option = {
     //   url:`http://localhost:8001/api/car/아이디/예약정보`,
@@ -54,6 +57,9 @@ const DriveEndCheck = (props) => {
         try{
             // const response = await axios(option)
             setPayOpen(false)
+            setCheckStart(true)
+            setCheckEnd(true)
+
         }catch(err){
             console.log(err)
         }}

@@ -44,6 +44,7 @@ const DriveOn = () => {
         resCheckList, setResCheckList,
         resResPicture, setResPicture,
         resCarInfo, setResCarInfo,
+        doorOpen, setDoorOpen,
 
         resDump, resCarDump,
         } = useContext(DriveContext)
@@ -73,11 +74,14 @@ const DriveOn = () => {
   //   // getFare()
   // },[resCarInfo])
 
-  const getFare = ()=>{
-    const countFare = resCarInfo.res_realtime * 100
-    console.log(resCarInfo)
-    setFare(countFare)
+  const doorStatus = async()=>{
+    const response = await doorOpen
+    await setDoorOpen(response)
   }
+  useEffect(()=>{
+    doorStatus()
+    console.log('doorstatus')
+  },[])
 
   const getDriveNow = () =>{
     switch(resInfo.res_end ==='n'|| resInfo.res_drive_valid ==='n'){
@@ -85,7 +89,7 @@ const DriveOn = () => {
       setDriveNow('정지')
       break;
       case(true):
-      setDriveNow('운행중')
+      setDriveNow('주행중')
       break
       case(false):
       setDriveNow('운행종료')
@@ -183,21 +187,21 @@ const DriveOn = () => {
             <ListItemButton>
               <ListItemIcon>
                   <AccessTimeIcon/>
-                  <ListItemText primary={`이용시간 : ${resInfo.res_info_start}`}/>
-                  <ListItemText primary={`${resInfo.res_info_end}`}/>
+                  <ListItemText primary={`이용시간 : ${resInfo.res_date_start}`}/>
+                  <ListItemText primary={`${resInfo.res_date_end}`}/>
               </ListItemIcon>
             </ListItemButton>
             <ListItemButton>
               <ListItemIcon>
                   <ArrowForwardIcon />
-                  <ListItemText primary={`이동거리 : ${resInfo.car_seq}`}/>
+                  <ListItemText primary={`입력받을데이터 : ${resInfo.car_seq}`}/>
                   {/* 차량정보가저오기 */}
               </ListItemIcon>
             </ListItemButton>
             <ListItemButton>
               <ListItemIcon>
                   <ArrowForwardIcon />
-                  <ListItemText primary={`이용요금 : ${resInfo.res_info_seq}`}/>
+                  <ListItemText primary={`이용요금 : ${resInfo.res_rate}`}/>
               </ListItemIcon>
             </ListItemButton>
             <ListItemButton>
