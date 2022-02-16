@@ -20,7 +20,7 @@ const Dashboard = () => {
   <>
     <Head>
       <title>
-        Dashboard | Material Kit
+        예약관리 | 차키줘바
       </title>
     </Head>
     <Box

@@ -17,7 +17,7 @@ import {
   FormControlLabel,
   Typography,
   Radio,
-  FormControl
+  FormControl,Grid
 } from '@mui/material';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -166,36 +166,65 @@ const Register = () => {
                 회원가입!!
               </Typography>
             </Box>
-            <TextField
-              error={Boolean(formik.touched.userId && formik.errors.userId)}
-              fullWidth
-              helperText={formik.touched.userId && formik.errors.userId}
-              label="id"
-              margin="normal"
-              name="userId"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              type="email"
-              value={formik.values.userId}
-              variant="outlined"
-            />
+            <Grid 
+              container 
+              spacing={1}
+            >
+              <Grid 
+                item xs={12}
+                sx={{
+                  fontSize:15,
+                  lineHeight:"0px",
+                  marginBottom:"28px"
+                }}
+              >
+                아이디
+              <TextField
+                error={Boolean(formik.touched.userId && formik.errors.userId)}
+                fullWidth
+                helperText={formik.touched.userId && formik.errors.userId}
+                margin="normal"
+                name="userId"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="email"
+                value={formik.values.userId}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid 
+                item xs={12}
+                sx={{
+                  fontSize:15,
+                  lineHeight:"0px",
+                  marginBottom:"28px"
+                }}
+              >
+                이름
             <TextField
               error={Boolean(formik.touched.userName && formik.errors.userName)}
               fullWidth
               helperText={formik.touched.userName && formik.errors.userName}
-              label="name"
               margin="normal"
               name="userName"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.userName}
               variant="outlined"
-            />
+            /></Grid>
+            <Grid 
+                item xs={12}
+                sx={{
+                  fontSize:15,
+                  lineHeight:"0px",
+                  marginBottom:"28px"
+                }}
+              >
+                비밀번호
             <TextField
               error={Boolean(formik.touched.userPassword && formik.errors.userPassword)}
               fullWidth
               helperText={formik.touched.userPassword && formik.errors.userPassword}
-              label="password"
               margin="normal"
               name="userPassword"
               onBlur={formik.handleBlur}
@@ -203,12 +232,20 @@ const Register = () => {
               type="password"
               value={formik.values.userPassword}
               variant="outlined"
-            />
+            /></Grid>
+            <Grid 
+                item xs={12}
+                sx={{
+                  fontSize:15,
+                  lineHeight:"0px",
+                  marginBottom:"28px"
+                }}
+              >
+                비밀번호 확인
             <TextField
               error={Boolean(formik.touched.userPasswordCh && formik.errors.userPasswordCh)}
               fullWidth
               helperText={formik.touched.userPasswordCh && formik.errors.userPasswordCh}
-              label="password"
               margin="normal"
               name="userPasswordCh"
               onBlur={formik.handleBlur}
@@ -216,19 +253,28 @@ const Register = () => {
               type="password"
               value={formik.values.userPasswordCh}
               variant="outlined"
-            />
+            /></Grid>
+            <Grid 
+                item xs={12}
+                sx={{
+                  fontSize:15,
+                  lineHeight:"0px",
+                  marginBottom:"28px"
+                }}
+              >
+                전화번호 ex) 01012345678
             <TextField
               error={Boolean(formik.touched.userPhone && formik.errors.userPhone)}
               fullWidth
               helperText={formik.touched.userPhone && formik.errors.userPhone}
-              label="phone ex) 01012345678"
               margin="normal"
               name="userPhone"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.userPhone}
               variant="outlined"
-            />
+            /></Grid>
+            </Grid>
             <Box
               sx={{
                 alignItems: 'center',

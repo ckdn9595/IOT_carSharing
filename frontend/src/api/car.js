@@ -10,6 +10,22 @@ async function getCarInfo(param ,success, fail) {
     .catch(fail);
 }
 
+async function getCarDetail(carSeq ,success, fail) {
+  await axios
+    .get(`${API_BASE_URL}/search/detail/${carSeq}`)
+    .then(success)
+    .catch(fail);
+}
+
+async function goRegRes(param ,success, fail) {
+  axios.defaults.headers["Authorization"] 
+    = `Bearer ${sessionStorage.getItem("access_token")}`
+  await axios
+    .post(`${API_BASE_URL}/reservation`, JSON.stringify(param))
+    .then(success)
+    .catch(fail);
+}
+
 async function searchAddressByName(keyWord ,success, fail){
   axios.defaults.headers["Authorization"] 
     = `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_API_SEARCH}`;
@@ -18,4 +34,4 @@ async function searchAddressByName(keyWord ,success, fail){
     .then(success)
     .catch(fail);
 }
-export { getCarInfo, searchAddressByName};
+export { getCarInfo, searchAddressByName, getCarDetail, goRegRes};
