@@ -177,7 +177,7 @@ const SeachDetail = (props) => {
               flexDirection: 'column'
             }}
           >
-            <img src={`/app/${searchData.car_img}`} width="auto" height="200px" />
+            <img src={`/static/images/${searchData.car_img}`} width="auto" height="200px" />
           </Box>
         </Grid>
         <Grid item xs={6}>

@@ -56,6 +56,7 @@ const CarState = ({car}) =>{
         insurance, setInsurance,
         register, setRegister,
         alert, setAlert,
+        sendConfirm, setSendConfirm,
         token
       } = useContext(CarContext)
   useEffect(()=>{
@@ -64,10 +65,12 @@ const CarState = ({car}) =>{
     getSegment()
     getRentOn()
   },[])
+  // 보험등록기능
+
 
   // 하나식 가져와야할 데이터 api/car/info ${carId}
   // const option = {
-  //   url:`http://localhost:8001/api/car/register`,
+  //   url:`http://localhost:8001/api/${car/register`,
   //   method:'GET',
   //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
   //   }
@@ -95,9 +98,9 @@ const CarState = ({car}) =>{
     switch(car.car_segment){
       case 1: setSegment('경차')
       break
-      case 2: setSegment('중형')
+      case 2: setSegment('SUV')
       break
-      case 3: setSegment('SUV')
+      case 3: setSegment('중형')
     }
   }
   const getRentOn= ()=>{
@@ -105,17 +108,20 @@ const CarState = ({car}) =>{
     1===1? setRentOn('대여 가능'):setRentOn('대여중')
     
   }
+
+  // 차량삭제
   const [delOpen, setDelOpen] = useState(false)
   const delButton = async() =>{
     const option = {
-    url:`http://localhost:8001/api/car/register`,
+    url:`https://i6a104.p.ssafy.io/api//car/register`,
     method:'DELETE',
-    headers:{token},
+    headers:{ Authorization: token },
     }
     try{
       const response = await axios(option)
       setData(response.data)
       setDelOpen(false)
+      setSendConfirm(!sendConfirm)
     }catch(err){
       console.log(err)
       setDelOpen(false)
@@ -236,8 +242,8 @@ const CarState = ({car}) =>{
             이용내역 보기
         </Button>
         </Grid>
-        {time? <RentPeriod carId={car.car_num} />:''}
-        {history? <RentHistoryList carId={car.car_num} />:''}
+        {time? <RentPeriod carId={car.car_seq} car={car} />:''}
+        {history? <RentHistoryList carId={car.car_seq} />:''}
         {/* <Button 
             variant="contained"
             color="primary"
@@ -247,7 +253,7 @@ const CarState = ({car}) =>{
         {/* {history? <ReviewList carId={car.car_num}/>:""} */}
     </Box>
     </Card>
-        {insurance? <Insurance carId={car.car_num} />:''}
+        {insurance? <Insurance carId={car.car_seq} />:''}
 
     </>
 

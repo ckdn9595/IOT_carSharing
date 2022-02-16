@@ -17,12 +17,13 @@ import { CarContext } from '../carContext';
 
 // 차량 이용 기간 설정
 const RentPeriodSet = (props) =>{
-  const {setSettingTime, setVisible, carId} = props
-  const {token} = useContext(CarContext)
+  const {settingTime, setSettingTime, setVisible, carId, car, visibleDate,} = props
+  const {token, sendSuccess, setSendSuccess
+  } = useContext(CarContext)
   
 
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  const [startDate, setStartDate] = useState(settingTime[0])
+  const [endDate, setEndDate] = useState(settingTime[1])
   const [start, setStart] = useState({})
   const [end, setEnd] = useState({})
 
@@ -47,19 +48,22 @@ const RentPeriodSet = (props) =>{
   
   //carid 받아서 time으로 넘기면된다
   const option = {
-    url:`http://localhost:8001/api/car/27/time`,
+    // url:`http://localhost:8001/api/car/${carId}/time`,
+    url:`https://i6a104.p.ssafy.io/api/car/${carId}/time`,
     method:'PATCH',
-    headers:token,
+    headers:{ Authorization: token },
     data:{car_res_date_start: startDate, car_res_date_end: endDate}
     }
 
   const onClickEvent =  async () =>{
     try{
       const response = await axios(option)
-      setSettingTime([start, end])
+      // setSettingTime([start, end])
       setVisible(false)
+      setSendSuccess(!sendSuccess)
     }catch(err){
       console.log(err)
+      console.log('dateset',startDate,endDate)
       alert('전송실패')
       }
   }

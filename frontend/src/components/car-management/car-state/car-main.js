@@ -32,26 +32,8 @@ import Car from '../car'
 
 // 차량정보 불러와서 목록 조회하기
 const OpenCarState = () => {
-  const {register, carList, setCarList} = useContext(CarContext)
-
+  const {register, carList, setCarList, token } = useContext(CarContext)
   
-  // const option = {
-  //   url:`http://localhost:8001/api/car/5/info`,
-  //   // url:`https://i6a104.p.ssafy.io/api/car/35/info`,
-  //   method:'GET',
-  //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-  //   }
-
-  //   const getList= async() =>{
-  //     try{
-  //       const response = await axios(option)
-  //       setCarList([...carList, response.data])
-  //       console.log(carList)
-  //     }catch(err){
-  //       console.log('list get error')
-  //       }
-  //   }
-
   useEffect(()=>{
         // getList()
         console.log(carList)
@@ -63,41 +45,50 @@ return (
   <Card
   >
   {carList.map(car =>(
-  <CarState key={car.carNum} car={car}/>
+  <CarState key={car.car_seq} car={car}/>
   ))}
   </Card>
 )}
 
 // 차량관리 구조
 const CarMain = () => {
-  const {visible, setVisible, carList, setCarList, token} = React.useContext(CarContext)
+  const {visible, setVisible,
+     carList, setCarList, token,
+     sendSuccess, setSendSuccess,
+  } = React.useContext(CarContext)
   const [registerVisible, setRegisterVisible] = useState(false)
+  const [carListId, setCarLIstId] =useState([])
+  
   const onClickHandle = () =>{
     setVisible(!visible)
   }
   
   // carlist로 차량목록의 아이디만 가져옴
-  const option = {
-    url:`http://localhost:8001/api/car/27/info`,
-    // url:`https://i6a104.p.ssafy.io/api/car/35/info`,
-    method:'GET',
-    headers:{token},
-    }
-
+  // 내가가진 모든 차량을 불러옵니다
+  // opencarstate로 출력하고
+  // openCarstate에서 carstate로 보낸 값을 통해서 각 차량의 예약정보를 불러옵니다
   const getList= async() =>{
+    const option = {
+      // url:`http://localhost:8001/api/car/mycar`,
+      url:`https://i6a104.p.ssafy.io/api/car/mycar`,
+      method:'GET',
+      headers:{ Authorization: token },
+      }
     try{
       const response = await axios(option)
-      setCarList([...carList, response.data])
       console.log(response.data)
+      setCarList(response.data)
+      console.log('carlist',carList)
     }catch(err){
       console.log('list get error')
+      console.log('token:',token)
     }
   }
   
   useEffect(()=>{
     getList()
     console.log('초기화성공',carList)
-  },[])
+  },[sendSuccess])
   return(
     <Container
       sx={{
@@ -106,6 +97,7 @@ const CarMain = () => {
         flexDirection:'column',
       }}
     >
+
     <Card
       
       sx={{
@@ -125,6 +117,7 @@ const CarMain = () => {
       >
        차량 관리
       </Typography>
+      <Button onClick={()=>{setSendSuccess(!sendSuccess)}} label='button'>button</Button>
       <Button  
         sx={{minWidth:'50px'}}
         variant='contained'

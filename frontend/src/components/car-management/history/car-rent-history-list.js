@@ -56,21 +56,27 @@ const RentSummary = ({list})=>{
     setItems(list.res_info_seq)
   },[])
 
-  const getHistoy = async() =>{
-    // list.res_info_seq
-    const option = {
-      url:`http://localhost:8001/api/car/${carId}/history/{히스토리아이디}`,
-      method:'GET',
-      headers:{api},
-      }
-    try{
-      const response = await axios(option)
-      console.log(response.data)
-      await setList([response.data])
-    }catch(err){
-      console.log(err)
-    }
-  }
+  // 받은 예약의 id값으로 예약의 상세내용을 조회합니다
+  // renthistory로 예약정보를보내고
+  // rentHistory에서는 이용완료가 되면 
+  // 사용확인 값을 보낼 수있도록 합니다.
+
+  // car_res_info로 들어가서 
+  // const getHistoy = async() =>{
+  //   // list.res_info_seq
+  //   const option = {
+  //     url:`http://localhost:8001/api/car/${carId}/history/`,
+  //     method:'GET',
+  //     headers:{ Authorization: token },
+  //     }
+  //   try{
+  //     const response = await axios(option)
+  //     console.log('성공', response.data)
+  //     await setList([response.data])
+  //   }catch(err){
+  //     console.log(err)
+  //   }
+  // }
 
   const onClickBtn = () =>{
     setOpen(!open)
@@ -142,8 +148,9 @@ const RentSummary = ({list})=>{
             gap:1,
           }}
           >
+            {/* 보임 상태바꾸기 */}
         <Typography>
-          {list.res_end_valid? <Chip label="이용중" color="primary" />: <Chip label="이용완료" color="secondary" />}
+          {list && list.res_end_valid? <Chip label="이용중" color="primary" />: <Chip label="이용완료" color="secondary" />}
         </Typography>
           
         <Button
@@ -168,28 +175,33 @@ const RentSummary = ({list})=>{
 const RentHistoryList = ({carId}) =>{
   const {list, setList, rentSendConfirm,
     token,
-  
   } = useContext(CarContext)
   // const {car_res_seq, res_rate} = props
   
 
   useEffect(()=>{
-    setList([dump])
-    // getList()
+    getHistoy()
   },[rentSendConfirm])
 
-  const getList = async() =>{
+  //차량의 모든예약리스트를 불러옵니다
+  // rentsummary로 모든 예약리스트의 아이디를 보냅니다
+  const getHistoy = async() =>{
+    // list.res_info_seq
     const option = {
-      url:`http://localhost:8001/api/car/${carId}/history`,
+      url:`https://i6a104.p.ssafy.io/api/car/${carId}/history/`,
       method:'GET',
-      headers:{api},
+      headers:{ Authorization: token },
       }
     try{
       const response = await axios(option)
-      console.log(response.data)
+      console.log('성공', response.data)
       await setList([response.data])
+      console.log(list.length)
+      console.log(list)
     }catch(err){
       console.log(err)
+      console.log('히스토리리스트 실패')
+      console.log(list)
     }
   }
 
@@ -203,7 +215,8 @@ const RentHistoryList = ({carId}) =>{
       xs={{display:'flex',
     }}
     >
-      {list.map(data => (
+      {/* 보임상태 바꿔야함 */}
+      {list[0] && list[0].car_seq !== undefined ? <Typography align='center'>임대한기록이 없습니다</Typography> : list.map(data => (
         <RentSummary
           key={data.res_info_seq}
           list={data}

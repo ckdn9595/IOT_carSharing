@@ -36,7 +36,8 @@ const CarRegister = () =>{
     postfiles, setPostfiles,
     imageUrl, setImageUrl,
     register, setRegister,
-    setVisible, visible
+    setVisible, visible,
+    sendSuccess, setSendSuccess,
   } = useContext(CarContext)
   const [upImg, setUpImg] = useState('')
   const [modal, setModal] = useState(false)
@@ -64,9 +65,6 @@ const CarRegister = () =>{
     headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`, 'Content-Type': 'multipart/form-data'},
     data: formData
     }
-  useEffect(()=>{
-
-  },[])
   
   const uploading = () =>{
 
@@ -92,6 +90,7 @@ const CarRegister = () =>{
       await setVisible(false)
       // console.log(response.data)
       console.log('차량등록이 성공하였습니다')
+      SetSendSuccess(!sendSuccess)
     }catch(err){
       // setVisible(false)
       // for (let key of formData.keys()) {
