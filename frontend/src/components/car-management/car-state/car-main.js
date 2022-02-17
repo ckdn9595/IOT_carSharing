@@ -40,16 +40,9 @@ const OpenCarState = () => {
   useEffect(()=>{
     // getList()
     // console.log(carList)
-    console.log('carlist',carList)
-    onCarList()
+    console.log('carlist초기화성공',carList)
+    console.log('오픈카상태')
   },[])
-
-  let listOnPage = null
-  const onCarList = async()=>{
-    const listOn =  await carList
-    listOnPage = listOn.map(car =>(<CarState key={car.car_seq} car={car}/>))
-    console.log('listOn', listOn)
-  }
 
 // carlist 에서 car_seq를 맵으로 carstate에게 넘겨준다
 // carstate에서 하나씩 get으로 데이터 가져온다
@@ -59,7 +52,7 @@ return (
   {/* {carList ? carList.map(car =>(
   <CarState key={car.car_seq} car={car}/>
   )):''} */}
-  {listOnPage}
+  {carList && carList.map(car =>(<CarState key={car.car_seq} car={car}/>))}
   </Card>
 )}
 
@@ -95,11 +88,11 @@ const CarMain = () => {
     try{
       const response = await axios(option)
       setCarList([response.data[0]])
-      console.log(response)
-      console.log(carList[0],'car')
+      console.log(response.data,'responsedata')
+      await console.log(carList,'car')
     }catch(err){
       console.log('list get error')
-      console.log('token:',token)
+      console.log(err)
     }
   }
   
