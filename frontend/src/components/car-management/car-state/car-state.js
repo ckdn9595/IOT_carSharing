@@ -125,38 +125,42 @@ const CarState = ({car}) =>{
       sx={{
         diplay:'flex',
         bgcolor: 'background.paper',
-        // border: '2px solid #000',
+        // border: 'px solid #000',
         p: 1,
           }}
     >
       <Container
         sx={{ display:'flex',
-              justifyContent:'space-between',
-              border: '1px solid',
-              minWidth:'100%'
+              minWidth:'100%',
+              border: '3px solid #9BC3FF',
+              borderRadius:'7px'
         }}
       >
-        <Grid item>
+        <Grid item
+          xs={4}
+        >
 
         <Avatar
           alt="carImage"
           variant='square'
           src={`/static/images/${car.car_img}`}
-          sx={{ width: "30%", height: "50%", }}
+          sx={{ width: "100%", height: "100%", }}
 />
         </Grid>
           <Grid sx={{display:'flex',
                     flexDirection:'column',
                     alignItems:'center',
-                    minwidth:'40%',
-                    p:1,
-                    }}>
+                    justifyContent:'center'
+                    }}
+                xs={5}
+                    >
 
           <Typography>{car.car_model} / {car.car_year}</Typography>
           <Typography variant='h6'>{car.car_num}</Typography>
           <Chip label={segment} variant="outlined" />
           </Grid>
-        <Box
+        <Grid
+          xs={5}
           sx={{
             display:'flex',
             p:1,
@@ -194,7 +198,7 @@ const CarState = ({car}) =>{
         </DialogActions>
       </Dialog>
         {rentOn ==='임대중'?<Chip label={rentOn} color='primary'/>:<Chip label={rentOn} variant="outlined"/> }
-        </Box>
+        </Grid>
       </Container>
 
       <Box
