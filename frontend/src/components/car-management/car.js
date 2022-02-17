@@ -10,7 +10,7 @@ const Car = () => {
     // car-main
     const [register, setRegister] = useState([])
     const [visible, setVisible] = useState(false)
-    const [carList, setCarList] = useState([])
+    const [carList, setCarList] = useState([{}])
     // car-register
     const [inputs, setInputs] = useState({
         carNum:'', //차량번호
