@@ -44,8 +44,9 @@ const OpenCarState = () => {
   },[])
 
   const onCarList = async()=>{
-    const listOn =  await carList ? carList.map(car =>(<CarState key={car.car_seq} car={car}/>)):''
-  return (listOn)
+    const listOn =  await carList
+    const listOnPage = listOn.map(car =>(<CarState key={car.car_seq} car={car}/>))
+  return (listOnPage)
   }
 
 // carlist 에서 car_seq를 맵으로 carstate에게 넘겨준다
