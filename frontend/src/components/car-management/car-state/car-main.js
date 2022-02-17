@@ -38,15 +38,17 @@ const OpenCarState = () => {
   } = useContext(CarContext)
   
   useEffect(()=>{
-        // getList()
-        // console.log(carList)
-        console.log('carlist',carList)
+    // getList()
+    // console.log(carList)
+    console.log('carlist',carList)
+    onCarList()
   },[])
 
+  let listOnPage = null
   const onCarList = async()=>{
     const listOn =  await carList
-    const listOnPage = listOn.map(car =>(<CarState key={car.car_seq} car={car}/>))
-  return (listOnPage)
+    listOnPage = listOn.map(car =>(<CarState key={car.car_seq} car={car}/>))
+    console.log('listOn', listOn)
   }
 
 // carlist 에서 car_seq를 맵으로 carstate에게 넘겨준다
@@ -57,7 +59,7 @@ return (
   {/* {carList ? carList.map(car =>(
   <CarState key={car.car_seq} car={car}/>
   )):''} */}
-  {onCarList}
+  {listOnPage}
   </Card>
 )}
 
