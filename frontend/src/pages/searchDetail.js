@@ -87,6 +87,11 @@ const SeachDetail = (props) => {
       if(error){
         return;
       }
+    }else if(num == 2){
+      if((endDate - startDate) / (1000*60*60) < 3){
+        alert("최소 대여 기간은 세시간입니다.");
+        return;
+      }
     }
     setpageLV(num);
   }
@@ -110,11 +115,8 @@ const SeachDetail = (props) => {
       alert("대여 가능 시간 확인해주세요.");
       return;
     }
-    if((value - startDate) / (1000*60*60) < 3){
-      alert("최소 대여 기간은 세시간입니다.");
-      return;
-    }
-    setStartDate(value);
+    
+    setEndDate(value);
     const hour = Math.floor((value - startDate)/(1000*60*60));
     const min = Math.floor((value - startDate -(hour * (1000*60*60)))/(1000*60));
     setPeriod(hour+"시간 " + min+"분");
@@ -143,7 +145,7 @@ const SeachDetail = (props) => {
 
   useEffect( ()=>{
     if(searchData){
-      setSDate(new Date(searchData.car_res_date_start));
+      setSDate(s_Date);
       setEDate(new Date(searchData.car_res_date_end));
     }
   }, [searchData]);
@@ -165,8 +167,19 @@ const SeachDetail = (props) => {
       예약상세 | 차키줘바
     </title>
     </Head>
-    {(searchData && pageLV==0 ) && <>
-    <Card {...props} sx={{marginTop:3}}>
+    {(searchData && pageLV==0 ) && 
+    <Container
+      sx={{
+      display:'flex',
+      alignItems:'center',
+      flexDirection:'column',
+    }}
+    >
+    <Card {...props} sx={{
+      marginTop:3,
+      diplay:'flex',
+      minWidth: '600px',
+      }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Box
@@ -257,7 +270,9 @@ const SeachDetail = (props) => {
       <Card 
         {...props}
         sx={{
-          marginTop:3
+          marginTop:3,
+          diplay:'flex',
+          minWidth: '600px',
         }}
       >
         <Grid 
@@ -276,6 +291,8 @@ const SeachDetail = (props) => {
         {...props}
         sx={{
           marginTop:1,
+          diplay:'flex',
+          minWidth: '600px',
           height:400
         }}
       >
@@ -291,10 +308,20 @@ const SeachDetail = (props) => {
           리뷰 목록 구역
         </Grid>
       </Card>
-      </>}
+      </Container>}
       {(searchData && pageLV==1 ) && 
-      <>
-      <Card {...props} sx={{marginTop:3}}>
+      <Container
+      sx={{
+        display:'flex',
+        alignItems:'center',
+        flexDirection:'column',
+      }}
+    >
+      <Card {...props} sx={{
+        marginTop:3,
+        diplay:'flex',
+        minWidth: '600px',
+        }}>
       <Grid container spacing={2}>
             
         <Grid item xs={12}>
@@ -338,7 +365,9 @@ const SeachDetail = (props) => {
       <Card 
         {...props}
         sx={{
-          marginTop:1
+          marginTop:1,
+          diplay:'flex',
+          width: '600px',
         }}
       >
         <Grid 
@@ -362,33 +391,74 @@ const SeachDetail = (props) => {
           </Grid>
           <Grid item xs={12}
              sx={{
-              fontSize:20
+              fontSize:15
             }}
           >
             대여 가능 시각 : {sDate.toLocaleString()} ~ {eDate.toLocaleString()}
           </Grid>
-          <Grid item xs={12}
-             sx={{
-              fontSize:35
-            }}
+          <Container
+            sx={{
+            display:'flex',
+            flexDirection:'row',
+            marginTop:1
+          }}
           >
-              대여 시각&nbsp;&nbsp;&nbsp;
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                renderInput={(params) => <TextField {...params} />}
-                value={startDate}
-                onChange={(newValue) => {
-                  changeStartDate(newValue);
-                }}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={12}
-             sx={{
-              fontSize:35
-            }}
+            <Grid item 
+              lg={5}
+              md={5}
+              xs={5}
+              sx={{
+                fontSize:35,
+                marginLeft:5
+              }}
+            >
+                대여 시각&nbsp;&nbsp;&nbsp;
+            </Grid>
+            <Grid item 
+              lg={7}
+              md={7}
+              xs={7}
+              sx={{
+                fontSize:35
+              }}
+            >
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker
+                  renderInput={(params) => <TextField {...params} />}
+                  value={startDate}
+                  onChange={(newValue) => {
+                    changeStartDate(newValue);
+                  }}
+                />
+              </LocalizationProvider>
+            </Grid>
+          </Container>
+          <Container
+            sx={{
+            display:'flex',
+            flexDirection:'row',
+            marginTop:1
+          }}
           >
+            <Grid item 
+              lg={5}
+              md={5}
+              xs={5}
+              sx={{
+                fontSize:35,
+                marginLeft:5
+              }}
+            >
               반납 시각&nbsp;&nbsp;&nbsp;
+            </Grid>
+            <Grid item 
+              lg={7}
+              md={7}
+              xs={7}
+              sx={{
+                fontSize:35
+              }}
+            >
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateTimePicker
                 renderInput={(params) => <TextField {...params} />}
@@ -399,23 +469,46 @@ const SeachDetail = (props) => {
               />
             </LocalizationProvider>
           </Grid>
-          <Grid item xs={12}
-             sx={{
-              fontSize:35
-            }}
-          >
-              총 대여 기간&nbsp;&nbsp;&nbsp;
+          </Container>
+          <Container
+            sx={{
+            display:'flex',
+            flexDirection:'row',
+            marginTop:1
+          }}>
+          <Grid item 
+              lg={5}
+              md={5}
+              xs={5}
+              sx={{
+                fontSize:35,
+                marginLeft:5
+              }}
+            >
+              대여 기간&nbsp;&nbsp;&nbsp;
+            </Grid>
+            <Grid item 
+              lg={7}
+              md={7}
+              xs={7}
+              sx={{
+                fontSize:35
+              }}
+            >
             <TextField
                 value={rentPeriod}
                 variant="outlined"
               />
           </Grid>
+          </Container>
         </Grid>
       </Card>
       <Card 
         {...props}
         sx={{
-          marginTop:1
+          marginTop:1,
+          diplay:'flex',
+          minWidth: '600px',
         }}
       >
         <Grid 
@@ -450,13 +543,18 @@ const SeachDetail = (props) => {
               sx={{
                 fontSize:25,
                 fontStyle:'unset',
-                marginTop:"10px"
+                marginTop:"10px",
+                marginLeft:2
               }}
             >
             차량손해면책 상품
           </Grid>
           <Divider/>
-          <FormControl>
+          <FormControl
+            sx={{
+              marginLeft:2
+            }}
+          >
           <RadioGroup 
             sx={{
               fontSize:20,
@@ -499,11 +597,21 @@ const SeachDetail = (props) => {
           </Grid>
         </Grid>
       </Card>
-      </>
+      </Container>
       }
       {(searchData && pageLV==2 ) && 
-      <>
-      <Card {...props} sx={{marginTop:3}}>
+      <Container
+      sx={{
+        display:'flex',
+        alignItems:'center',
+        flexDirection:'column',
+      }}
+     >
+      <Card {...props} sx={{
+        marginTop:3,
+        diplay:'flex',
+        width: '600px',
+        }}>
       <Grid container spacing={2}>
             
         <Grid item xs={12}>
@@ -547,7 +655,9 @@ const SeachDetail = (props) => {
       <Card 
         {...props}
         sx={{
-          marginTop:1
+          marginTop:1,
+          diplay:'flex',
+          width: '600px',
         }}
       >
         <Grid 
@@ -571,7 +681,7 @@ const SeachDetail = (props) => {
           </Grid>
           <Grid item xs={12}
               sx={{
-                fontSize:20,
+                fontSize:13,
                 color:"blue",
                 margin:"10px"
               }}
@@ -592,71 +702,172 @@ const SeachDetail = (props) => {
             fontSize:25
           }}
         >
-          <Grid item xs={12}
-             sx={{
-              fontSize:25
-            }}
-          >
-              총 대여 기간&nbsp;&nbsp;&nbsp;
+        <Container
+            sx={{
+            display:'flex',
+            flexDirection:'row',
+            marginTop:1
+          }}>
+          <Grid item 
+              lg={5}
+              md={5}
+              xs={5}
+              sx={{
+                fontSize:25,
+                marginLeft:10
+              }}
+            >
+              대여 기간&nbsp;&nbsp;&nbsp;
+              </Grid>
+            <Grid item 
+              lg={7}
+              md={7}
+              xs={7}
+              sx={{
+                fontSize:35
+              }}
+            >
             <TextField
                 value={rentPeriod}
                 variant="standard"
               />
           </Grid>
-          <Grid item xs={12}
-             sx={{
-              fontSize:25
-            }}
-          >
+          </Container>
+          <Container
+            sx={{
+            display:'flex',
+            flexDirection:'row',
+            marginTop:1
+          }}>
+          <Grid item 
+              lg={5}
+              md={5}
+              xs={5}
+              sx={{
+                fontSize:25,
+                marginLeft:10
+              }}
+            >
               단위 요금&nbsp;&nbsp;&nbsp;
-              
+              </Grid>
+            <Grid item 
+              lg={7}
+              md={7}
+              xs={7}
+              sx={{
+                fontSize:35
+              }}
+            >
               <TextField
                 value={`${searchData.car_rate}원 /km`}
                 variant="standard"
               />
           </Grid>
-          <Grid item xs={12}
-             sx={{
-              fontSize:25
-            }}
-          >
+          </Container>
+          <Container
+            sx={{
+            display:'flex',
+            flexDirection:'row',
+            marginTop:1
+          }}>
+          <Grid item 
+              lg={5}
+              md={5}
+              xs={5}
+              sx={{
+                fontSize:25,
+                marginLeft:10
+              }}
+            >
               차량 대여가액&nbsp;&nbsp;&nbsp;
+              </Grid>
+            <Grid item 
+              lg={7}
+              md={7}
+              xs={7}
+              sx={{
+                fontSize:35
+              }}
+            >
               <TextField
                 value={`5000원 / 시간`}
                 variant="standard"
               />
           </Grid>
-          <Grid item xs={12}
-             sx={{
-              fontSize:25
-            }}
-          >
+          </Container>
+          <Container
+            sx={{
+            display:'flex',
+            flexDirection:'row',
+            marginTop:1
+          }}>
+          <Grid item 
+              lg={5}
+              md={5}
+              xs={5}
+              sx={{
+                fontSize:25,
+                marginLeft:10
+              }}
+            >
               보험금&nbsp;&nbsp;&nbsp;
+              </Grid>
+            <Grid item 
+              lg={7}
+              md={7}
+              xs={7}
+              sx={{
+                fontSize:35
+              }}
+            >
               <TextField
                 value={`${radioValue}원`}
                 variant="standard"
               />
           </Grid>
-          <Grid item xs={12}
-             sx={{
-              fontSize:25
-            }}
-          >
-              총 결제 예상금액&nbsp;&nbsp;&nbsp;
+          </Container>
+          <Container
+            sx={{
+            display:'flex',
+            flexDirection:'row',
+            marginTop:1
+          }}>
+          <Grid item 
+              lg={5}
+              md={5}
+              xs={5}
+              sx={{
+                fontSize:25,
+                marginLeft:10
+              }}
+            >
+              결제 예상금액&nbsp;&nbsp;&nbsp;
+              </Grid>
+            <Grid item 
+              lg={7}
+              md={7}
+              xs={7}
+              sx={{
+                fontSize:35
+              }}
+            >
               <TextField
-                value={`${(pHour * 5000) + Number(radioValue)}원 + (주행KM X ${searchData.car_rate}원)`}
+                value={`${(pHour * 5000) + Number(radioValue)}원 + 주행KM X ${searchData.car_rate}원`}
                 sx={{
-                  fontSize:10,
+                  fontSize:9,
                   borderColor:'white'
                 }}
               />
           </Grid>
+          </Container>
         </Grid>
       </Card>
       <Card 
         {...props}
         sx={{
-          marginTop:1
+          marginTop:1,
+          diplay:'flex',
+          width: '600px',
         }}
       >
         <Grid 
@@ -681,13 +892,18 @@ const SeachDetail = (props) => {
               sx={{
                 fontSize:25,
                 fontStyle:'unset',
-                marginTop:"10px"
+                marginTop:"10px",
+                marginLeft:2
               }}
             >
             결제 수단 목록 창
           </Grid>
           <Divider/>
-          <FormControl>
+          <FormControl
+            sx={{
+              marginLeft:2
+            }}
+          >
           <RadioGroup 
             sx={{
               fontSize:20,
@@ -730,11 +946,21 @@ const SeachDetail = (props) => {
           </Grid>
         </Grid>
       </Card>
-      </>
+      </Container>
       }
       {(searchData && pageLV==3 ) && 
-      <>
-      <Card {...props} sx={{marginTop:3}}>
+      <Container
+      sx={{
+        display:'flex',
+        alignItems:'center',
+        flexDirection:'column',
+      }}
+     >
+      <Card {...props} sx={{
+        marginTop:3,
+        diplay:'flex',
+        width: '600px',
+        }}>
       <Grid container spacing={2}>
             
         <Grid item xs={12}>
@@ -768,12 +994,11 @@ const SeachDetail = (props) => {
         </Grid>
       </Card>
       <Divider/>
-      <Card 
-        {...props}
-        sx={{
-          marginTop:1
-        }}
-      >
+      <Card {...props} sx={{
+        marginTop:3,
+        diplay:'flex',
+        width: '600px',
+      }}>
         <Grid 
           container 
           spacing={1}
@@ -802,12 +1027,11 @@ const SeachDetail = (props) => {
           </Grid>
         </Grid>
       </Card>
-      <Card 
-        {...props}
-        sx={{
-          marginTop:1
-        }}
-      >
+      <Card {...props} sx={{
+        marginTop:3,
+        diplay:'flex',
+        width: '600px',
+      }}>
         <Grid 
           container 
           spacing={1}
@@ -821,37 +1045,42 @@ const SeachDetail = (props) => {
           item xs={12}
           sx={{
             backgroundColor:'silver',
+            marginLeft:3
           }}
         >
           예약 내역
         </Grid>
           <Grid item xs={12}
              sx={{
-              fontSize:20
+              fontSize:20,
+              marginLeft:3
             }}
           >
             대여 일시 : {startDate.toLocaleString()}
           </Grid>
           <Grid item xs={12}
              sx={{
-              fontSize:20
+              fontSize:20,
+              marginLeft:3
             }}
           >
             반납 일시 : {endDate.toLocaleString()}
           </Grid>
           <Grid item xs={12}
              sx={{
-              fontSize:20
+              fontSize:20,
+              marginLeft:3
             }}
           >
-            차 량 명 : {searchData.car_year} {searchData.car_model}
+            차량 모델 : {searchData.car_year} {searchData.car_model}
           </Grid>
           <Grid item xs={12}
              sx={{
-              fontSize:20
+              fontSize:20,
+              marginLeft:3
             }}
           >
-            총 대여기간 : {rentPeriod}
+            대여 기간 : {rentPeriod}
           </Grid>
           
           
@@ -875,7 +1104,7 @@ const SeachDetail = (props) => {
           </Grid>
         </Grid>
       </Card>
-      </>
+      </Container>
       }
       </>
   );
