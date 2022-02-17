@@ -14,6 +14,8 @@ const Login = () => {
   const dispatch = useUsersDispatch();
   const getInfo = async() => {
     await getUserInfo(
+      "LGTM"
+      ,
       (response) => {
         console.log(response);
         if (response.status === 200 ) {
@@ -23,7 +25,7 @@ const Login = () => {
          console.log("유저 정보 가져오기 오류");
         }
       },
-      () => {}
+      (response) => {console.log(response);}
     );
   }
   const router = useRouter();

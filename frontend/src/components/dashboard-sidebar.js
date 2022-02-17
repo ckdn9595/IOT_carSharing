@@ -36,24 +36,9 @@ const items = [
     title: '실시간 이용정보'
   },
   {
-    href: '/chamgo',
-    icon: (<ShoppingBagIcon fontSize="small" />),
-    title: '참고용'
-  },
-  {
     href: '/serviceCenter',
     icon: (<UserIcon fontSize="small" />),
     title: '고객센터'
-  },
-  {
-    href: '/settings',
-    icon: (<CogIcon fontSize="small" />),
-    title: '옵션 선택 화면 참고용'
-  },
-  {
-    href: '/404',
-    icon: (<XCircleIcon fontSize="small" />),
-    title: 'Error - 남겨둠'
   }
 ];
 
@@ -106,7 +91,7 @@ export const DashboardSidebar = (props) => {
                 item
                 lg={3}
                 md={3}
-                xs={12}
+                xs={3}
               >
                 <NextLink
                   href="/"
@@ -129,7 +114,7 @@ export const DashboardSidebar = (props) => {
                 item
                 lg={6}
                 md={6}
-                xs={12}
+                xs={6}
                 >
                 <NavItem
                     // icon={<LockIcon fontSize="small" />}
@@ -144,13 +129,14 @@ export const DashboardSidebar = (props) => {
                 item
                 lg={3}
                 md={3}
-                xs={12}
+                xs={3}
                 >
                  <Button
+                 fullWidth
                     sx={{
                       height: 42,
                       width: 75,
-                      fontSize: 6
+                      fontSize: 10
                     }}
                     color="inherit"
                     onClick={logOutClick}
@@ -194,42 +180,7 @@ export const DashboardSidebar = (props) => {
 
           </Box>
           <Box sx={{ px: 2 }}>
-            <Box
-              sx={{
-                alignItems: 'center',
-                backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                cursor: 'pointer',
-                display: 'flex',
-                justifyContent: 'space-between',
-                px: 3,
-                py: '11px',
-                borderRadius: 1
-              }}
-            >
-              <div>
-                <Typography
-                  color="inherit"
-                  variant="subtitle1"
-                >
-                  Acme Inc
-                </Typography>
-                <Typography
-                  color="neutral.400"
-                  variant="body2"
-                >
-                  Your tier
-                  {' '}
-                  : Premium
-                </Typography>
-              </div>
-              <SelectorIcon
-                sx={{
-                  color: 'neutral.500',
-                  width: 14,
-                  height: 14
-                }}
-              />
-            </Box>
+            
           </Box>
         </div>
         <Divider
@@ -257,16 +208,6 @@ export const DashboardSidebar = (props) => {
         >
           
          
-            <Button
-              color="secondary"
-              component="a"
-              endIcon={(<OpenInNewIcon />)}
-              fullWidth
-              sx={{ mt: 2 }}
-              variant="contained"
-            >
-              버튼
-            </Button>
           
         </Box>
       </Box>
