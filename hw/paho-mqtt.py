@@ -11,9 +11,9 @@ GPIO.setup(24, GPIO.OUT)
 
 # 초기 설정 값
 tempCount = 0
-topicLoc = "test/5/location"
-topicDrv = "test/5/driven"
-subTopic = "test/5/control"
+topicLoc = "test/46/location"
+topicDrv = "test/46/driven"
+subTopic = "test/46/control"
 clientName = "TestCar001"
 
 # Mocking을 위해 필요한 임시 Data들
