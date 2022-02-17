@@ -136,7 +136,7 @@ router.patch('/:carID/time', async(req, res) => {
             return res.status(200).json({statusCode: 0});
         }
         else {
-            return res.status(403).json({message: 'invalid jwt'});
+            return res.status(403).json({message: 'require car_res_data_start, car_res_date_end'});
         }
 
     } catch (error) {
