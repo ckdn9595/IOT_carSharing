@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {DriveContext} from './DriveContext'
 import DriveStart from './driveReady/DriveStart'
 import DriveOn from './driveOn/DriveOn'
@@ -6,8 +6,12 @@ import DriveEnd from './driveEnd/DriveEnd'
 import DriveCheckList from './driveReady/DriveCheckList'
 
 const Drive =() => {
-  const [resInfo, setResInfo] = useState({}) // 예약정보
+  const [resInfo, setResInfo] = useState({res_res_check:'Y'}) // 예약정보
   const [resCarInfo, setResCarInfo] = useState({}) // 예약차량정보
+  // DriveStart
+  const [checkStart, setCheckStart] = useState(false)
+  const [checkEnd, setCheckEnd] = useState(false)
+  // DriveBefore
   // DriveCheckList
   const [resCheckList, setResCheckList] = useState({})
   const [resResPicture, setResPicture] = useState({})
@@ -15,7 +19,13 @@ const Drive =() => {
   const [customerHelp, setCustomerHelp] = useState(false)
   const [doorOpen, setDoorOpen] = useState(false)
   // DriveOn
-  // const []
+  // api
+  const [token, setToken] = useState('')
+
+  useEffect(()=>{
+    setToken(`Bearer ${sessionStorage.getItem("access_token")}`)
+    console.log(token)
+  },[token])
 
   const resDump = {
     res_info_seq: 123,
@@ -23,7 +33,7 @@ const Drive =() => {
     usr_seq: 10, 
     car_res_date_start: '1995-12-17T03:24:00',
     car_res_date_end: '1996-1-24T03:24:00',
-    res_res_check: false,
+    res_res_check: 'N',
     res_reg_dt: '',//DataTypes.DATE
   }
   const N= 'n'
@@ -51,6 +61,9 @@ const Drive =() => {
       //DriveStart
       resInfo, setResInfo,
       resCarInfo, setResCarInfo,
+      // status
+      checkStart, setCheckStart,
+      checkEnd, setCheckEnd,
       //DriveCheckList
       resCheckList, setResCheckList,
       resResPicture, setResPicture,
@@ -58,6 +71,10 @@ const Drive =() => {
 
       //Dump
       resCarDump, resDump,
+      //api
+      token, setToken,
+
+      doorOpen, setDoorOpen,
     }}>
       <DriveStart/>
 {/* 

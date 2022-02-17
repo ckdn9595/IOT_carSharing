@@ -25,6 +25,7 @@ import {
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { CarContext } from '../carContext';
 import { maxWidth } from '@mui/system';
+import { API_BASE_URL } from 'src/config';
 
 // 자동차의 렌트한 이력 조회
 // 자동차의 id값 prop
@@ -49,8 +50,10 @@ const dump = {
 
 const RentSummary = ({list})=>{
   const [items, setItems] = useState([])
-  const {open, setOpen} = useContext(CarContext)
-
+  const {
+    open, setOpen,
+  
+  } = useContext(CarContext)
 
   useEffect(()=>{
     setItems(list.res_info_seq)
@@ -65,7 +68,7 @@ const RentSummary = ({list})=>{
   // const getHistoy = async() =>{
   //   // list.res_info_seq
   //   const option = {
-  //     url:`http://localhost:8001/api/car/${carId}/history/`,
+  //     url:`${API_BASE_URL}/car/${carId}/history/`,
   //     method:'GET',
   //     headers:{ Authorization: token },
   //     }
@@ -173,7 +176,9 @@ const RentSummary = ({list})=>{
     )
   }
 const RentHistoryList = ({carId}) =>{
-  const {list, setList, rentSendConfirm,
+  const {
+    list, setList, 
+    rentSendConfirm,
     token,
   } = useContext(CarContext)
   // const {car_res_seq, res_rate} = props
@@ -188,7 +193,7 @@ const RentHistoryList = ({carId}) =>{
   const getHistoy = async() =>{
     // list.res_info_seq
     const option = {
-      url:`https://i6a104.p.ssafy.io/api/car/${carId}/history/`,
+      url:`${API_BASE_URL}/car/${carId}/history/`,
       method:'GET',
       headers:{ Authorization: token },
       }

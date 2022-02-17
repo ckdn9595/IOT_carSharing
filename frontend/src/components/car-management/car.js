@@ -48,13 +48,8 @@ const Car = () => {
     const [sendConfirm, setSendConfirm] = useState(true)
     
     // api
-    const [token, setToken] = useState('')
+    const [token, setToken] = useState(``)
     
-    // useEffect(()=>{
-    //   // setRegister([])
-    //   // setVisible(false)
-    // },[])
-
 
     //
 

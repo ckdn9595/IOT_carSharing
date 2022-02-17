@@ -34,7 +34,6 @@ import { CarContext } from 'src/components/car-management/carContext';
 
 const CheckOption = (props) =>{
     const {checkOpen, setCheckOpen} = props
-    const {token} = useContext(CarContext)
     const [checkMent, setCheckMent] = useState('')
 
     // 체크멘트 예약정보에 보내기
@@ -319,11 +318,6 @@ const CheckPicture = () =>{
 
 const DriveCheckList = (props) => {
     const {checkOpen, setCheckOpen, checkPicOpen, setCheckPicOpen}= props
-    
-    useEffect(()=>{
-        console.log(checkOpen)
-        console.log('체크픽오픈',checkPicOpen)
-    },[checkPicOpen])
     
     return(
         <>

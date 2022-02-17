@@ -55,12 +55,6 @@ const DriveEnd = () => {
   //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
   //   }
 
-  const getResData = async() =>{
-    const response = await resDump
-    await setResInfo(response)
-    // await setResCarInfo(resCarDump)
-  }
-
   // 차량 정보 가져오기
   // const getResData = async() =>{
   //   const response = await axios(option)
@@ -69,11 +63,6 @@ const DriveEnd = () => {
       //  const responseCar = await axios(optionCar)
       //  setResCarinfo(responseCar.data)
   // }
-
-  useEffect( ()=>{
-    getResData()
-  },[resInfo])
-
 
   //운행시작 버튼 운행시작알리기
   // const onSubmit = async() =>{
@@ -101,10 +90,9 @@ const [checkOpen, setCheckOpen] = useState(false)
       <Card
         sx={{
           diplay:'flex',
-          width: '500px',
+          width: '100%',
           bgcolor: 'background.paper',
           p: 1,
-          border:'solid 1px',
           flexDirection:'column',
             }}
       >
@@ -114,57 +102,41 @@ const [checkOpen, setCheckOpen] = useState(false)
         
         > 이용 정보 </Typography>
 
-        <Grid
-          sx={{
-          display:'flex',
-          border:'1px solid',
-          flexDirection:'column',
-          }}
-        >
-          <List>
-              <ListItemIcon>
+          <Grid>
                   <DirectionsCarIcon />
+
                   <ListItemText primary={`예약번호 : ${resInfo.res_info_seq}`}/>
-              </ListItemIcon>
-              <ListItemIcon>
+
                   <AccessTimeIcon/>
+
                   <ListItemText primary={`이용기간 : ${resInfo.res_info_start}`}/>
                   <ListItemText primary={`${resInfo.res_info_end}`}/>
-              </ListItemIcon>
-              <ListItemIcon>
+
                   <ArrowForwardIcon />
                   <ListItemText primary={`차량번호 : ${resInfo.car_seq}`}/>
-              </ListItemIcon>
-              <ListItemIcon>
+
                   <ArrowForwardIcon />
                   <ListItemText primary={`차량종류 : ${resInfo.res_info_seq}`}/>
-              </ListItemIcon>
-              <ListItemIcon>
+
                   <PersonIcon />
                   <ListItemText primary={`차량주인 : ${resInfo.res_info_seq}`}/>
-              </ListItemIcon>
-              <ListItemIcon>
+
                   <DirectionsCarIcon />
                   <ListItemText primary={`예약번호 : ${resInfo.res_info_seq}`}/>
-              </ListItemIcon>
-              <ListItemIcon>
+
                   <AccessTimeIcon/>
                   <ListItemText primary={`이용거리 : ${resInfo.res_info_start}`}/>
-              </ListItemIcon>
-              <ListItemIcon>
+
                   <ArrowForwardIcon />
                   <ListItemText primary={`이용요금 : ${resInfo.car_seq}`}/>
-              </ListItemIcon>
-              <ListItemIcon>
+
                   <ArrowForwardIcon />
                   <ListItemText primary={`결제상태 : ${resInfo.res_info_seq}`}/>
-              </ListItemIcon>
-              <ListItemIcon>
+
                   <PersonIcon />
                   <ListItemText primary={`차주승인 : ${resInfo.res_info_seq}`}/>
-              </ListItemIcon>
-          </List>
-        </Grid>
+          </Grid>
+
       </Card>
   </Container>
     

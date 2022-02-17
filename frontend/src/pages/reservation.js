@@ -4,8 +4,6 @@ import { CustomerListResults } from '../components/customer/customer-list-result
 import { CustomerListToolbar } from '../components/customer/customer-list-toolbar';
 import { DashboardLayout } from '../components/dashboard-layout';
 import { customers } from '../__mocks__/customers';
-import Insurance from 'src/components/car-management/insurance/insurance';
-import CarMain from 'src/components/car-management/car-state/car-main';
 import Car from 'src/components/car-management/car';
 
 const Customers = () => (
@@ -18,15 +16,11 @@ const Customers = () => (
     <Box
       component="main"
       sx={{
-        flexGrow: 1,
+        flexGrow: 5,
         py: 8
       }}
     >
-      <Container maxWidth={false}>
-        <Box sx={{ mt: 3 }}>
-          <Car/>
-        </Box>
-      </Container>
+      <Car/>
     </Box>
   </>
 );

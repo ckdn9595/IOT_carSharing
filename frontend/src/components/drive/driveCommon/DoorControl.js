@@ -18,21 +18,29 @@ import {
   Select,
   MenuItem,
   FormControl,
+  Chip,
 } from '@mui/material';
 import { DriveContext } from '../DriveContext';
+import { API_BASE_URL } from 'src/config';
 
 // 문 제어
 const DoorControl = () => {
   const {resInfo, setResInfo,
-   resCarInfo, setResCarInfo } = useContext(DriveContext)
+   resCarInfo, setResCarInfo,
+   doorOpen, setDoorOpen,
+  
+  } = useContext(DriveContext)
 
-  const [door, SetDoor]= useState(0)
+  const [door, SetDoor]= useState('')
 
-  // const option = {
-  //   url:`http://localhost:8001/api/car/아이디/예약정보`,
-  //   method:'',
-  //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-  //   }
+  const carId = resInfo.car_seq
+  const option = {
+    url:`https://i6a104.p.ssafy.io/api/mqtt/${carId}/control`,
+    // url:`${API_BASE_URL}/mqtt/${carId}/control`,
+    method:'GET',
+    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+    body:door
+    }
   
 // const getResInfo =()=>{
 //   setResInfo(resInfo)
@@ -48,31 +56,55 @@ const DoorControl = () => {
 //   getResCarInfo()
 // },[resCarInfo])
 
-const doorOpen = async ()=>{
-  SetDoor(1)
-  try{const response = await axios(option)
+const doorOpens = async ()=>{
+  SetDoor("open")
+  try{
+    const response = await axios(option)
+    console.log(response)
   }catch(err){
     console.log(err)
   }
 }
-const doorClose = async ()=>{
-  SetDoor(0)
-  try{const response = await axios(option)
+const doorCloses = async ()=>{
+  SetDoor("close")
+  
+  try{
+    const response = await axios(option)
+    console.log(response.data)
   }catch(err){
     console.log(err)
   }
+}
 
+const doorStatus = async()=>{
+  const response = await door
+  await setDoorOpen(response)
 }
+useEffect(()=>{
+  doorStatus()
+  console.log('door update')
+},[door])
 
   return(
-    <div>
-      <p>문 제어상태를 설정합니다.</p>
-      <Button onClick={doorOpen}>문 열기</Button>
-      <Button onClick={doorClose}>문 잠금</Button>
-      <Typography>
-        {door === 1? '문이 열렸습니다':'문이 잠겨있습니다.'}
-      </Typography>
-    </div>
+    <Grid
+      sx={{
+        display:'flex',
+        flexDirection:'column'
+    }}
+    >
+      <Typography>문 제어상태를 설정합니다</Typography>
+      <Grid
+        sx={{
+          display:'flex',
+          justifyContent:'center',
+        }}
+      
+      >
+        <Button onClick={doorOpens}>문 열기</Button>
+        <Button onClick={doorCloses}>문 잠금</Button>
+      </Grid>
+        {doorOpen === 'open'?  <Chip label="차문 열림" color="primary"/> : <Chip label="차문 닫힘" color="primary" variant="outlined"/>}
+    </Grid>
   )
 }
 
