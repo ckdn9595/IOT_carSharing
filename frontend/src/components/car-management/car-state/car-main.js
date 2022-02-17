@@ -87,7 +87,8 @@ const CarMain = () => {
       }
     try{
       const response = await axios(option)
-      setCarList([response.data[0]])
+      const gotData = await response.data[0]
+      setCarList([gotData])
       console.log(response.data,'responsedata')
       await console.log(carList,'car')
     }catch(err){
