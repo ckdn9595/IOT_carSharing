@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     card_cvc: DataTypes.STRING,
     card_aprv: {
       type: DataTypes.STRING,
-      primaryKey: Y
+      primaryKey: "Y"
     },
     card_comp: DataTypes.STRING,
   }, {
