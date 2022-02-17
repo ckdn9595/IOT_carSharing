@@ -28,23 +28,39 @@ router.post('/', async(req, res) => {
                 carSeq,
                 resInfoSeq
             } = req.body
-            await db.tb_car_info.create({
-                usr_seq: usrSeq,
-                res_info_seq: resInfoSeq,
-                car_seq: carSeq,
-                res_date_start: startDate,
-                res_date_end: endDate,
-            })
-            return res.status(200).json({
-                register:'success'
+
+            const carOwner = await db.tb_car_res_info.findOne({
+                where: {car_seq: carSeq}
             });
+
+            if (carOwner.usr_seq !== null) {
+                await db.tb_car_info.create({
+                    owner_usr_seq: carOwner.usr_seq,
+                    usr_seq: usrSeq,
+                    res_info_seq: resInfoSeq,
+                    car_seq: carSeq,
+                    res_date_start: startDate,
+                    res_date_end: endDate,
+                });
+                return res.status(200).json({
+                    reservation:'success'
+                });
+            }
+            else {
+                return res.status(404).json({
+                    reservation: 'No such car'
+                });
+            }
+
+            
         };
     } catch (error) {
         console.log(error);
         return res.status(400).json({
-            carRes:error
+            reservation: 'error'
         });
     }
 });
+
 
 module.exports = router;
