@@ -63,10 +63,11 @@ const CarMain = () => {
   const [registerVisible, setRegisterVisible] = useState(false)
   
   const onClickHandle = () =>{
-    if (carList && carList[0].hasOwnProperty('car_num') !== "undefined" ){
+    if (carList && carList[0].car_num !== undefined){
       alert('이미 차량이 등록되어있습니다.')
     }else{
     setVisible(!visible)}
+
   }
 
   // carlist로 차량목록의 아이디만 가져옴
@@ -180,7 +181,7 @@ const CarMain = () => {
 
       }}
     >
-      { carList && carList[0].hasOwnProperty('car_num') ? <OpenCarState /> : <Typography>등록된 차량이 없습니다</Typography> }
+      { carList && carList[0].car_num !== undefined ? <OpenCarState /> : <Typography>등록된 차량이 없습니다</Typography> }
     </Card>
     </Container>
   )
