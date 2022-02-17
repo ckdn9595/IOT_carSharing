@@ -140,8 +140,9 @@ const CarState = ({car}) =>{
 
         <Avatar
           alt="carImage"
-          src={`https://i6a104.p.ssafy.io/reservation/static/images/${car.car_img}`}
-          sx={{ width: "50%", height: "50%", }}
+          variant='square'
+          src={`/static/images/${car.car_img}`}
+          sx={{ width: "30%", height: "50%", }}
 />
         </Grid>
           <Grid sx={{display:'flex',
