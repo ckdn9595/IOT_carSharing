@@ -30,14 +30,14 @@ const Dashboard = () => {
         py: 1
       }}
     >
-      <Container maxWidth={false}>
+      {/* <Container maxWidth={true}> */}
         <Map/>
       {/* <div
         className="map"
         style={{ width: "500px", height: "500px" }}
         ref={container}
       ></div> */}
-      </Container>
+      {/* </Container> */}
     </Box>
   </>
   )
