@@ -20,11 +20,11 @@ clientName = "TestCar001"
 curDrivenDistance = 0
 curDoorStatus = False
 locationPreset= [
-    "{\"latitude\":\"37.47\",\"longitude\":\"127.0\"}",
-    "{\"latitude\":\"37.37\",\"longitude\":\"127.3\"}",
-    "{\"latitude\":\"37.44\",\"longitude\":\"127.2\"}",
-    "{\"latitude\":\"37.29\",\"longitude\":\"127.6\"}",
-    "{\"latitude\":\"37.32\",\"longitude\":\"127.1\"}"
+    "{\"latitude\":\"37.50284862927078\",\"longitude\":\"127.0412337333346\"}",
+    "{\"latitude\":\"37.5012667347432\",\"longitude\":\"127.03961358933134\"}",
+    "{\"latitude\":\"37.50284862927078\",\"longitude\":\"127.0412337333346\"}",
+    "{\"latitude\":\"37.5012667347432\",\"longitude\":\"127.03961358933134\"}",
+    "{\"latitude\":\"37.50284862927078\",\"longitude\":\"127.0412337333346\"}",
 ]
 isReported = False
 
@@ -53,10 +53,12 @@ def onMessage(client, userdata, msg):
             print("open door")
             ledBlink()
             ledBlink()
+            curDoorStatus = True
 
         if tMessage["door"] == "close":
             print("close door")
             ledBlink()
+            curDoorStatus = False
 
 # message를 publish할 때 실행
 def onPublish(client, userdata, mid):
@@ -97,12 +99,12 @@ client.loop_start()
 while True:
     try:
         sleep(5)
-        if(curDoorStatus):
+        if(curDoorStatus == True):
             isReported = False
             curDrivenDistance += random.random()
             publishMessage = json.dumps({"drivenDistance":curDrivenDistance})
             client.publish(topicDrv, publishMessage, 0)
-        elif (not isReported):
+        elif (curDoorStatus == False and not isReported):
             isReported = True
             publishMessage = locationPreset[random.randint(0,4)]
             client.publish(topicLoc, publishMessage, 0)
