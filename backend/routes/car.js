@@ -272,76 +272,6 @@ router.patch('/:carID/info', upload.single('car_img'), async(req, res) => {
     }
 });
 
-
-// 차량 리뷰 API
-router.get('/:carID/review', async(req, res) => {
-    console.log(req.body);
-    try {
-        const carReview = await db['tb_car_review'].findAll({
-            where: {car_seq: req.params.carID}
-        });
-        if (carReview) {
-            return res.status(200).json(carReview);
-        }
-        else {
-            return res.status(404).json({statusCode: 2});
-        }
-    } catch (error) {
-        console.log(error);
-        return res.status(400).json({statusCode: 1});
-    }
-});
-
-// 아래 POST/PATCH review 작업중...
-router.post('/:carID/review', async(req, res) => {
-    console.log(req.body);
-    try {
-        const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
-        const token = fullToken.replace(/^Bearer\s+/, "");
-        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
-
-        if (decodedUserToken) {
-            const reviewCheck = await db['tb_car_review'].findOne({
-                where: {
-                    car_res_seq: req.body['car_res_seq']
-                }
-            });
-
-            if (req.body['rev_content']) {
-                // const review = await db['tb_car_review'].create({
-                //     car_res_seq: 
-                // });
-
-                return res.status(200).json({statusCode: 0});
-            }
-            else {
-                return res.status(400).json({message: 'No review content found'});
-            }
-        }
-        else {
-            return res.status(400).json({message: 'Invalid jwt'});
-        }
-    } catch (error) {
-        console.log(error);
-        return res.status(400).json({statusCode: 1});
-    }
-});
-
-router.patch('/:carID/review', async(req, res) => {
-    console.log(req.body);
-    try {
-        const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
-        const token = fullToken.replace(/^Bearer\s+/, "");
-        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
-
-        return res.json({patchCarReview:'success'});
-    } catch (error) {
-        console.log(error);
-        return res.json({patchCarReview:'fail'});
-    }
-});
-
-
 // 차량 임대 내역 API
 router.get('/:carID/history', async(req, res) => {
     console.log(req.body);
@@ -362,6 +292,38 @@ router.get('/:carID/history', async(req, res) => {
     } catch (error) {
         console.log(error);
         return res.json({carHistory:'fail'});
+    }
+});
+
+// JWT 유저가 임대한 내역 목록
+router.get('/:carID/myhistory', async (req, res) => {
+    console.log(req.body);
+    try {
+        const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
+        const token = fullToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+        const owner = await db['tb_user'].findOne({
+            where: {usr_id: decodedUserToken.userId}
+        });
+
+        let myHistory = await db['tb_car_info'].findAll({
+            where: {
+                usr_seq: owner.usr_seq,
+                car_seq: req.params.carID,
+                res_end_valid: 'Y'
+            }
+        });
+        for (let i = 0; i < myHistory.length; i++) {
+            myHistory[i].res_date_start.setHours(myHistory[i].res_date_start.getHours() + 9);
+            myHistory[i].res_date_end.setHours(myHistory[i].res_date_end.getHours() + 9);
+            myHistory[i].res_realtime_start.setHours(myHistory[i].res_realtime_start.getHours() + 9);
+            myHistory[i].res_realtime_end.setHours(myHistory[i].res_realtime_end.getHours() + 9);
+        }
+        return res.status(200).json(myHistory);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({statusCode: 1});
     }
 });
 
