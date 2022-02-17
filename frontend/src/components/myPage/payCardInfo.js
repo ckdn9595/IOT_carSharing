@@ -146,14 +146,16 @@ const PayCardInfo = () => {
                   md={12}
                   xs={12}
                 >
-                 
+                  {cardInfo&& 
                     <TextField
-                      fullWidth
-                      name="carInfo"
-                      value={cardInfo.card_num.substr(0,4)+ "-" + cardInfo.card_num.substr(4,4)+ "-****-**** / 개인"}
-                      variant="standard"
-                      aria-readonly
-                    /> 
+                    fullWidth
+                    name="carInfo"
+                    value={cardInfo.card_num.substr(0,4)+ "-" + cardInfo.card_num.substr(4,4)+ "-****-**** / 개인"}
+                    variant="standard"
+                    aria-readonly
+                  /> 
+                  }
+                    
                 </Grid>
               </Grid>
             </CardContent>
