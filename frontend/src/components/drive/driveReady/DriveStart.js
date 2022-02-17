@@ -88,6 +88,8 @@ const [checkOpen, setCheckOpen] = useState(false)
 // 운행시작을 하면 체크스타트와 체크엔드가 모두 true가되어서 
 // 운행시작전창은 안보인다
 // 운행종료가 완료되면 체크스타트가 false가 된다
+const isClickedPicture = false;
+const isClickedChecklist = false;
 
 const onStart = () => {
   setCheckEnd(true)
@@ -197,14 +199,20 @@ return (
         setCheckOpen={setCheckOpen} checkOpen={checkOpen}
         />
       </Dialog>
-      <Button onClick={()=>{setCheckPicOpen(true)}}>
+      <Button onClick={()=>{
+        setCheckPicOpen(true)
+        isClickedPicture = true
+        }}>
         내부 외부 사진 찍기   
       </Button>
-      <Chip label={'차량정보에서 사진정보가있으면'?"OK":"NEED"} color="primary" />
-      <Button onClick={()=>{setCheckOpen(true)}}>
+      <Chip label={isClickedPicture?"OK":"NEED"} color="primary" />
+      <Button onClick={()=>{
+        setCheckOpen(true)
+        isClickedChecklist = true
+        }}>
         탑승전 점검하기
       </Button>
-      <Chip label={'차량정보에서 사진정보가있으면'?"OK":"NEED"} color="primary"/>
+      <Chip label={isClickedChecklist?"OK":"NEED"} color="primary"/>
     </Grid>
     <Grid
       sx={{
@@ -213,7 +221,7 @@ return (
         justifyContent:'center',
     }}
     >
-      <DoorControl/>
+
     </Grid>
     <Grid
       sx={{
