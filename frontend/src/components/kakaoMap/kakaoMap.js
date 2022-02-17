@@ -41,7 +41,8 @@ const Map = () => {
 }
 
 const MapContainer = styled.div`
-  aspect-ratio: 320 / 220;
+  width:100%;
+  height:100%;
 `;
 
 export default Map;

@@ -98,12 +98,13 @@ export const DashboardSidebar = (props) => {
                   passHref
                 >
                   <a>
-                    <Logo
+                    <img src="/static/images/logo_getCarKey.png" width="60px" height="60px" />
+                    {/* <Logo
                       sx={{
                         height: 42,
                         width: 42
                       }}
-                    />
+                    /> */}
                   </a>
                 </NextLink>
               </Grid>
