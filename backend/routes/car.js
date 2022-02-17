@@ -92,7 +92,7 @@ router.get('/:carID/time', async(req, res) => {
         let carTime = await db['tb_car_res_info'].findOne({
             where: {car_seq: req.params.carID}
         });
-        if (carTime) {
+        if (carTime.car_res_date_start !== null && carTime.car_res_date_end !== null) {
             carTime.car_res_date_start.setHours(carTime.car_res_date_start.getHours() + 9);
             carTime.car_res_date_end.setHours(carTime.car_res_date_end.getHours() + 9);
             return res.status(200).json({
@@ -118,7 +118,8 @@ router.patch('/:carID/time', async(req, res) => {
 
         if (decodedUserToken && req.body['car_res_date_start', 'car_res_date_end']) {
             const ownerRequest = decodedUserToken.userId;
-            const owner = await db['tb_car'].findOne({
+
+            const owner = await db['tb_user'].findOne({
                 where: {usr_id: ownerRequest}
             });
 
@@ -158,8 +159,10 @@ router.get('/:carID/info', async(req, res) => {
             let carRes = await db['tb_car_res_info'].findOne({
                 where: {car_seq: req.params.carID}
             });
-            carRes.car_res_date_start.setHours(carRes.car_res_date_start.getHours() + 9);
-            carRes.car_res_date_end.setHours(carRes.car_res_date_end.getHours() + 9);
+            if (carRes.car_res_date_start !== null && carRes.car_res_date_end !== null) {
+                carRes.car_res_date_start.setHours(carRes.car_res_date_start.getHours() + 9);
+                carRes.car_res_date_end.setHours(carRes.car_res_date_end.getHours() + 9);
+            }
 
             return res.status(200).json({
                 car_num: carInfo.car_num,
@@ -298,12 +301,22 @@ router.post('/:carID/review', async(req, res) => {
         const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
 
         if (decodedUserToken) {
-            const userRequest = await db['tb_car_info'].findAll({
-                where: {car_seq: req.params.carID, usr_seq: decodedUserToken.userId, res_end_valid: 'Y'}
+            const reviewCheck = await db['tb_car_review'].findOne({
+                where: {
+                    car_res_seq: req.body['car_res_seq']
+                }
             });
-            
 
-            return res.status(200).json({statusCode: 0});
+            if (req.body['rev_content']) {
+                // const review = await db['tb_car_review'].create({
+                //     car_res_seq: 
+                // });
+
+                return res.status(200).json({statusCode: 0});
+            }
+            else {
+                return res.status(400).json({message: 'No review content found'});
+            }
         }
         else {
             return res.status(400).json({message: 'Invalid jwt'});
