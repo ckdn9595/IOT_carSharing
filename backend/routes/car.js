@@ -296,7 +296,7 @@ router.get('/:carID/history', async(req, res) => {
 });
 
 // JWT 유저가 임대한 내역 목록
-router.get('/:carID/myhistory', async (req, res) => {
+router.get('/myhistory', async (req, res) => {
     console.log(req.body);
     try {
         const fullToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
@@ -310,15 +310,14 @@ router.get('/:carID/myhistory', async (req, res) => {
         let myHistory = await db['tb_car_info'].findAll({
             where: {
                 usr_seq: owner.usr_seq,
-                car_seq: req.params.carID,
-                res_end_valid: 'Y'
+                // res_end_valid: 'Y'
             }
         });
         for (let i = 0; i < myHistory.length; i++) {
             myHistory[i].res_date_start.setHours(myHistory[i].res_date_start.getHours() + 9);
             myHistory[i].res_date_end.setHours(myHistory[i].res_date_end.getHours() + 9);
-            myHistory[i].res_realtime_start.setHours(myHistory[i].res_realtime_start.getHours() + 9);
-            myHistory[i].res_realtime_end.setHours(myHistory[i].res_realtime_end.getHours() + 9);
+            // myHistory[i].res_realtime_start.setHours(myHistory[i].res_realtime_start.getHours() + 9);
+            // myHistory[i].res_realtime_end.setHours(myHistory[i].res_realtime_end.getHours() + 9);
         }
         return res.status(200).json(myHistory);
     } catch (error) {
