@@ -88,33 +88,27 @@ const SeachDetail = (props) => {
         return;
       }
     }else if(num == 2){
+      if(sDate > startDate || startDate > eDate || endDate > eDate){
+        alert("대여 가능 시간 확인해주세요.");
+        return;
+      }
       if((endDate - startDate) / (1000*60*60) < 3){
         alert("최소 대여 기간은 세시간입니다.");
         return;
       }
+     
+      
     }
     setpageLV(num);
   }
   const changeStartDate = (value) => {
-    if(sDate > value || value > eDate){
-      alert("대여 가능 시간 확인해주세요.");
-      return;
-    }
-    const diff = (eDate - value) / (1000*60*60);
-    if(diff < 3){
-      alert("최소 대여 기간은 세시간입니다.");
-      return;
-    }
+    
     setStartDate(value);
     const hour = Math.floor((endDate - value)/(1000*60*60));
     const min = Math.floor((endDate - value -(hour * (1000*60*60)))/(1000*60));
     setPeriod(hour+"시간 " + min+"분");
   }
   const changeEndDate = (value) => {
-    if(value > eDate){
-      alert("대여 가능 시간 확인해주세요.");
-      return;
-    }
     
     setEndDate(value);
     const hour = Math.floor((value - startDate)/(1000*60*60));
@@ -160,6 +154,14 @@ const SeachDetail = (props) => {
       setHour(hour+ min / 60);
     }
   }, [sDate]);
+  useEffect( ()=>{
+    if(searchData){
+      const hour = Math.floor((endDate - startDate)/(1000*60*60));
+      const min = Math.floor((endDate - startDate -(hour * (1000*60*60)))/(1000*60));
+      setPeriod(hour+"시간 " + min+"분");
+      setHour(hour+ min / 60);
+    }
+  }, [startDate,endDate]);
   return(
     <>
     <Head>
@@ -173,27 +175,36 @@ const SeachDetail = (props) => {
       display:'flex',
       alignItems:'center',
       flexDirection:'column',
+      width:"100%"
     }}
     >
     <Card {...props} sx={{
       marginTop:3,
       diplay:'flex',
-      minWidth: '600px',
+      width:"80%"
       }}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item 
+          lg={6}
+          md={6}
+          xs={6}
+        >
           <Box
             sx={{
               alignItems: 'center',
-              heigth: '200px',
+              width: '100%',
               display: 'flex',
               flexDirection: 'column'
             }}
           >
-            <img src={`/static/images/${searchData.car_img}`} width="auto" height="200px" />
+            <img src={`/static/images/${searchData.car_img}`} width="100%" height="auto" />
           </Box>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item 
+          lg={6}
+          md={6}
+          xs={6}
+        >
           <Box
               sx={{
                 alignItems: 'center',
@@ -272,7 +283,7 @@ const SeachDetail = (props) => {
         sx={{
           marginTop:3,
           diplay:'flex',
-          minWidth: '600px',
+          width:"80%"
         }}
       >
         <Grid 
@@ -292,7 +303,7 @@ const SeachDetail = (props) => {
         sx={{
           marginTop:1,
           diplay:'flex',
-          minWidth: '600px',
+          width:"80%",
           height:400
         }}
       >
@@ -305,22 +316,22 @@ const SeachDetail = (props) => {
             fontSize:30
           }}
         >
-          리뷰 목록 구역
+          리뷰 목록
         </Grid>
       </Card>
       </Container>}
       {(searchData && pageLV==1 ) && 
       <Container
-      sx={{
-        display:'flex',
-        alignItems:'center',
-        flexDirection:'column',
-      }}
-    >
+        sx={{
+          display:'flex',
+          alignItems:'center',
+          flexDirection:'column',
+        }}
+      >
       <Card {...props} sx={{
         marginTop:3,
         diplay:'flex',
-        minWidth: '600px',
+        width:"80%",
         }}>
       <Grid container spacing={2}>
             
@@ -367,7 +378,7 @@ const SeachDetail = (props) => {
         sx={{
           marginTop:1,
           diplay:'flex',
-          width: '600px',
+          width:"80%"
         }}
       >
         <Grid 
@@ -508,7 +519,7 @@ const SeachDetail = (props) => {
         sx={{
           marginTop:1,
           diplay:'flex',
-          minWidth: '600px',
+          width:"80%",
         }}
       >
         <Grid 
@@ -610,7 +621,7 @@ const SeachDetail = (props) => {
       <Card {...props} sx={{
         marginTop:3,
         diplay:'flex',
-        width: '600px',
+        width:"80%",
         }}>
       <Grid container spacing={2}>
             
@@ -657,7 +668,7 @@ const SeachDetail = (props) => {
         sx={{
           marginTop:1,
           diplay:'flex',
-          width: '600px',
+          width:"80%",
         }}
       >
         <Grid 
@@ -852,7 +863,7 @@ const SeachDetail = (props) => {
               }}
             >
               <TextField
-                value={`${(pHour * 5000) + Number(radioValue)}원 + 주행KM X ${searchData.car_rate}원`}
+                value={`${(Math.round(pHour * 50) * 100) + Number(radioValue)}원 + 주행KM X ${searchData.car_rate}원`}
                 sx={{
                   fontSize:9,
                   borderColor:'white'
@@ -867,7 +878,7 @@ const SeachDetail = (props) => {
         sx={{
           marginTop:1,
           diplay:'flex',
-          width: '600px',
+          width:"80%",
         }}
       >
         <Grid 
@@ -959,7 +970,7 @@ const SeachDetail = (props) => {
       <Card {...props} sx={{
         marginTop:3,
         diplay:'flex',
-        width: '600px',
+        width:"80%",
         }}>
       <Grid container spacing={2}>
             
@@ -997,7 +1008,7 @@ const SeachDetail = (props) => {
       <Card {...props} sx={{
         marginTop:3,
         diplay:'flex',
-        width: '600px',
+        width:"80%",
       }}>
         <Grid 
           container 
@@ -1030,7 +1041,7 @@ const SeachDetail = (props) => {
       <Card {...props} sx={{
         marginTop:3,
         diplay:'flex',
-        width: '600px',
+        width:"80%",
       }}>
         <Grid 
           container 
