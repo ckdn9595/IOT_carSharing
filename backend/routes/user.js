@@ -312,15 +312,67 @@ router.post('/:userID/question/:questionID', async (req, res) => {
     }
 })
 
-// payment manage function
+// post payment function
 router.post('/payment', async (req, res) => {
     console.log(req.body);
     try {
-        return res.json({payment:'success'});
+        const {
+            cardNum,
+            cardDate,
+            cardCvc,
+        } = req.body;
+        const userToken = req.header('access_token') || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
+        if(userToken.indexOf(/^Bearer\s+/) !== -1){
+            userToken = userToken.replace(/^Bearer\s+/,'');
+        }
+        // compare userToken
+        const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
+        if(decodedUserToken){
+            const tempUser = await db.tb_user.findOne({where: {usr_id: decodedUserToken.userId}});
+            await db.tb_payment.create({
+                usr_seq: tempUser.usr_seq,
+                card_num: cardNum,
+                card_date: cardDate,
+                card_cvc: cardCvc,
+                card_aprv: 'Y',
+                card_comp: "samsung"
+            });
+            return res.status(200).json({payment:'success'});
+        } else {
+            return res.status(400).json({
+                message: 'userToken is incorrect or expired'
+            })
+        }
+        
     } catch (error) {
         console.log(error);
-        return res.json({payment:'fail'});
+        return res.status(400).json({"error":error});
     }
-}) // end of payment manage function
+}) // end of post payment function
+
+// get payment function
+router.get('/payment', async (req, res) => {
+    console.log(req.body);
+    try {
+        const userToken = req.header('access_token') || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
+        if(userToken.indexOf(/^Bearer\s+/) !== -1){
+            userToken = userToken.replace(/^Bearer\s+/,'');
+        }
+        // compare userToken
+        const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
+        if(decodedUserToken){
+            const tempUser = await db.tb_user.findOne({where: {usr_id: decodedUserToken.userId}});
+            const tempPayment = await db.tb_payment.findOne({where: {usr_seq: tempUser.usr_seq}});
+            return res.status(200).json({tempPayment});
+        } else {
+            return res.status(400).json({
+                message: 'userToken is incorrect or expired'
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({"error":error});
+    }
+}) // end of get payment function
 
 module.exports = router;
