@@ -16,7 +16,7 @@ const MyPage = () => (
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8
+        py: 4
       }}
     >
       <MemberInfo/>
@@ -25,7 +25,7 @@ const MyPage = () => (
       component="main"
       sx={{
         flexGrow: 5,
-        py: 8
+        py: 4
       }}
     >
       <LicenseResi/>
@@ -34,7 +34,7 @@ const MyPage = () => (
       component="main"
       sx={{
         flexGrow: 5,
-        py: 8
+        py: 4
       }}
     >
       <PayCardInfo/>

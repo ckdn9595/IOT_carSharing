@@ -25,6 +25,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { useUsersState } from '../context/UserContext';
+import { getPayment } from 'src/api/payment'
 
 const SeachDetail = (props) => {
   const curr = new Date();
@@ -34,10 +35,11 @@ const SeachDetail = (props) => {
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   const s_Date =  new Date(utc + (KR_TIME_DIFF));
   let e_Date =  new Date(utc + (KR_TIME_DIFF));
-  e_Date.setDate(e_Date.getDate()+1);
+      e_Date.setDate(e_Date.getDate()+1);
   const router = useRouter();
   const query = router.query;
   const carSeq = query.no;
+  const [cardInfo, setCardInfo] = useState("");
   const userState = useUsersState().user;
   const [searchData, setData] = useState();
   const [pageLV, setpageLV] = useState(0);
@@ -118,6 +120,22 @@ const SeachDetail = (props) => {
   const radioHandleChange = (e) =>{
     setRadioValue(e.target.value);
   }
+  useEffect( async () => {
+    await getPayment(
+      "",
+      (response) => {
+        if (response.status === 200 ) {
+          setCardInfo(response.data.tempPayment);
+        }else {
+          console.log(response);
+        }
+      },
+      (response) => {
+        console.log(response);
+      })
+
+    console.log(cardInfo);
+  }, []);
   useEffect(  async ()=>{
     if(carSeq){
       await getCarDetail(
@@ -907,7 +925,7 @@ const SeachDetail = (props) => {
                 marginLeft:2
               }}
             >
-            결제 수단 목록 창
+            결제 수단 목록
           </Grid>
           <Divider/>
           <FormControl
@@ -924,17 +942,10 @@ const SeachDetail = (props) => {
             onChange={radioHandleChange}
           >
             <FormControlLabel
-              value="20000" 
+              value="01" 
               control={<Radio />}
-              label=" " />
-            <FormControlLabel 
-              value="15000" 
-              control={<Radio />} 
-              label=" " />
-            <FormControlLabel 
-              value="10000" 
-              control={<Radio />} 
-              label=" " />
+              label={cardInfo.card_num.substr(0,4)+ "-" + cardInfo.card_num.substr(4,4)+ "-****-**** / 개인"} />
+            
           </RadioGroup>
           </FormControl>
           <Grid item xs={12}
