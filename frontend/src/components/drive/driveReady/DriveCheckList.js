@@ -33,7 +33,7 @@ import DoorControl from '../driveCommon/DoorControl';
 import { CarContext } from 'src/components/car-management/carContext';
 
 const CheckOption = (props) =>{
-    const {checkOpen, setCheckOpen} = props
+    const {checkOpen, setCheckOpen, setCheckCheck} = props
     const [checkMent, setCheckMent] = useState('')
 
     // 체크멘트 예약정보에 보내기
@@ -43,7 +43,10 @@ const CheckOption = (props) =>{
       //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
       //   body: checkment
       //   }
-
+    const click= () =>{
+        setCheckOpen(false)
+        setCheckCheck(true)
+    }
     return(
         <div>
           <DialogTitle>운행전 체크하기</DialogTitle>
@@ -53,7 +56,7 @@ const CheckOption = (props) =>{
             </DialogContentText>
             <TextField
               id="check"
-              label="checkContent"
+              label="ex) 왼쪽 범퍼가 약간 긁힘"
               type="text"
               fullWidth
               variant="standard"
@@ -61,7 +64,7 @@ const CheckOption = (props) =>{
           </DialogContent>
           <DialogActions>
             <Button onClick={()=>{setCheckOpen(false)}}>취소</Button>
-            <Button onClick={()=>{setCheckOpen(false)}}>제출하기</Button>
+            <Button onClick={click}>제출하기</Button>
           </DialogActions>
       </div>
     )
@@ -75,7 +78,7 @@ const CheckPicture = () =>{
     const [leftSideImage, setLeftSideImage] = useState('')
     const [rightSideImage, setRightSideImage] = useState('')
     const [innerImage, setInnerImage] = useState('')
-    const [previewImg, setPreviewImg] = useState({})
+    const [previewImg, setPreviewImg] = useState([])
     
       // const option = {
       //   url:`http://localhost:8001/api/car/아이디/예약정보`,
@@ -84,23 +87,24 @@ const CheckPicture = () =>{
       //   body:formData
       //   }
     
-    const formData = new FormData()
+    // useEffect(()=>{
+    //     console.log(previewImg)
+    // },[previewImg])
+    // const formData = new FormData()
     
-    const uploadImage = event =>{
-        event.stopPropagation();
-        let reader = new FileReader();
-        let file = event.target.files
-        // formData.append(name, file)
-        `set${event.target.id}Image(${event.target.files[0]})`
+    // const uploadImage = event =>{
+    //     event.stopPropagation();
+    //     const reader = new FileReader();
+    //     const file = event.target.files[0];
+    //     const filesInArr = Array.from(event.target.files);
+    //     reader.onloadend = () => {
+    //     reader.onloadend = () => {
+    //         console.log('fuck')
+    //     // setPreviewImg([...previewImg, {file: filesInArr, previewURL: reader.result}]);
+    //     }
 
-        console.log(frontImage)
-        const filesInArr = Array.from(event.target.files);
-        reader.onloadend = async() => {
-            await setPreviewImg({
-              ...preview,
-              name: filesInArr,
-              previewURL: reader.result,
-            });
+    // }
+
         // let preview = null
         // if ([name].file !== null) {
         //  preview = postfiles.file[0]?.type.includes("image/") ? (
@@ -112,26 +116,55 @@ const CheckPicture = () =>{
         //     height: '100%'
         //     }}
         // />) : '' 
-    }
+    
+    // const uploadImage = event =>{
+    //     event.stopPropagation();
+    //     let reader = new FileReader();
+    //     let file = event.target.files
+    //     formData.append(event.target.name, file)
+    //     // `set${event.target.id}Image(${event.target.files[0]})`
+
+    //     // console.log(frontImage)
+
+    //     const filesInArr = Array.from(event.target.files);
+    //     reader.onloadend = async() => {
+    //         await setPreviewImg({
+    //           ...preview,
+    //           name: filesInArr,
+    //           previewURL: reader.result,
+    //         });
+    //     console.log(preview)
+        // let preview = null
+        // if ([name].file !== null) {
+        //  preview = postfiles.file[0]?.type.includes("image/") ? (
+        // <Avatar
+        //     variant="square"
+        //     src={previewImg.[name].previewURL}
+        //     sx={{
+        //     width: '100%',
+        //     height: '100%'
+        //     }}
+        // />) : '' 
+    // }
 
 
-    }
+    // }
     
     const sendImage = async (event)=>{
-        event.preventDefault()
-        try{
-            for (let image of images){
-            await formData.append(image.name,image.file)
-            console.log(image)
-            }
-        // console.log(formData)
-        console.log(formData.has('front'))
-        console.log(images)
-        const response = await axios(option)
-        console.log(response.data)
-        }catch(err){
-            console.log(err)
-        }
+        // event.preventDefault()
+        // try{
+        //     for (let image of images){
+        //     await formData.append(image.name,image.file)
+        //     console.log(image)
+        //     }
+        // // console.log(formData)
+        // console.log(formData.has('front'))
+        // console.log(images)
+        // const response = await axios(option)
+        // console.log(response.data)
+        // }catch(err){
+        //     console.log(err)
+        // }
     }
     
     //   let profile_preview = null;
@@ -185,7 +218,7 @@ const CheckPicture = () =>{
                   container
                   component='img'
                   height="140"
-                  image={  previewImg.frontImage && previewImg.frontImage.previewURL ? previewImg.frontImage.previewURL :''}
+                  image={ previewImg && previewImg[0]? previewImg[0].previewURL : ''}
                   />
             </Card>
     
@@ -213,7 +246,8 @@ const CheckPicture = () =>{
               <CardMedia
                   component='img'
                   height="140"
-                  image={  previewImg.rearImage &&previewImg.rearImage.previewURL ? previewImg.rearImage.previewURL :''}
+                  image={ previewImg && previewImg[1]? previewImg[1].previewURL : ''}
+
                 />
           
             </Card>
@@ -241,7 +275,8 @@ const CheckPicture = () =>{
               <CardMedia
                   component='img'
                   height="140"
-                  image={  previewImg.leftSideImage && previewImg.leftSideImage.previewURL ? previewImg.leftSideImage.previewURL :''}
+                  image={  previewImg && previewImg[2]? previewImg[2].previewURL : ''}
+
 
                 />      
             </Card>
@@ -269,7 +304,8 @@ const CheckPicture = () =>{
               <CardMedia
                   component='img'
                   height="140"
-                  image={  previewImg.rightSideImage && previewImg.rightSideImage.previewURL ? previewImg.rightSideImage.previewURL :''}
+                  image={  previewImg && previewImg[3]? previewImg[3].previewURL : ''}
+
 
                   />     
           
@@ -298,7 +334,8 @@ const CheckPicture = () =>{
               <CardMedia
                   component='img'
                   height="140"
-                  image={  previewImg.innerImage && previewImg.innerImage.previewURL ? previewImg.innerImage.previewURL :''}
+                  image={  previewImg && previewImg[4]? previewImg[4].previewURL : ''}
+
 
                   />     
               </Card>
@@ -317,19 +354,17 @@ const CheckPicture = () =>{
 
 
 const DriveCheckList = (props) => {
-    const {checkOpen, setCheckOpen, checkPicOpen, setCheckPicOpen}= props
+    const {checkOpen, setCheckOpen, checkPicOpen, setCheckPicOpen, setCheckCheck}= props
     
     return(
         <>
-        {/* <CheckPicture/> */}
-        {/* {checkOpen === true? <checkOption checkOpen={checkOpen} setCheckOpen={setCheckOpen} />:<checkPicture/>} */}
-        {checkPicOpen === true? <CheckPicture/>: <CheckOption checkOpen={checkOpen} setCheckOpen={setCheckOpen} />}
-        {/* <CheckOption checkOpen={checkOpen} setCheckOpen={setCheckOpen}/>
-        <CheckPicture/> */}
-        </>
+         {/* <CheckPicture/> */}
+         {checkOpen === true? <CheckOption checkOpen={checkOpen} setCheckOpen={setCheckOpen} setCheckCheck={setCheckCheck} />:''}
+        {/* {checkPicOpen === true? <CheckPicture/>: <CheckOption checkOpen={checkOpen} setCheckOpen={setCheckOpen} />} */}
+         </>
 
-    )
-    }
+     )
+     }
   
 
-export default DriveCheckList
+ export default DriveCheckList

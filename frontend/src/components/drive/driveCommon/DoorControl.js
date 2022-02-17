@@ -60,7 +60,7 @@ const doorOpens = async ()=>{
   SetDoor("open")
   try{
     const response = await axios(option)
-    console.log(response)
+    // console.log(response)
   }catch(err){
     console.log(err)
   }
@@ -70,7 +70,7 @@ const doorCloses = async ()=>{
   
   try{
     const response = await axios(option)
-    console.log(response.data)
+    // console.log(response.data)
   }catch(err){
     console.log(err)
   }
@@ -92,13 +92,20 @@ useEffect(()=>{
         flexDirection:'column'
     }}
     >
-      <Typography>문 제어상태를 설정합니다</Typography>
+      <Grid
+        sx={{
+          display:'flex',
+          justifyContent:'center',
+
+        }}
+      >
+      <Typography sx={{fontWeight:'bold'}}>자동차 문 제어</Typography>
+      </Grid>
       <Grid
         sx={{
           display:'flex',
           justifyContent:'center',
         }}
-      
       >
         <Button onClick={doorOpens}>문 열기</Button>
         <Button onClick={doorCloses}>문 잠금</Button>

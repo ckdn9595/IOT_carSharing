@@ -25,6 +25,7 @@ import {
   MenuItem,
   FormControl,
 } from '@mui/material';
+import { API_BASE_URL } from 'src/config';
 
 
 const DriveEndCheck = (props) => {
@@ -32,30 +33,65 @@ const DriveEndCheck = (props) => {
         resCarInfo, setResCarInfo,
         token,
         setCheckEnd, setCheckStart,
+        cardInfo, setCardInfo,
+        endData, setEndData,
         } = useContext(DriveContext)
-    const {payOpen, setPayOpen} = props
+    const {payOpen, setPayOpen, rate, time} = props
     const [checkPicOpen, setCheckPicOpen] = useState(false)
     const [checkOpen, setCheckOpen] = useState(false)
     // 결제 보내기  
-    // const option = {
-    //   url:`http://localhost:8001/api/car/아이디/예약정보`,
-    //   method:'POST',
-    //   headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-    //   }
-
-    // const getResData = async()=>{
-    //     try{
-    //         const response = awiat axios(option)
-    //     }catch{
-    //         console.log(err)
-    //     }}
+    const option = {
+      url:`${API_BASE_URL}/user/payment`,
+      method:'POST',
+      headers:{Authorization: token},
+      }
+    const getResData = async()=>{
+        try{
+            const response = await axios(option)
+            const data = await response.data.tempPayment
+            // console.log(response)
+            setCardInfo(data)
+        }catch(err){
+            console.log(err)
+        }}
+    // 날짜 문자로바꾸기
+    const dateChange = (d) =>{
+    let date = new Date(d)
+    let year = date.getFullYear()
+    let month = date.getMonth()+1 //1월 === 0
+    let day = date.getDate()
+    let hour = date.getHours()
+    let minutes = date.getMinutes()
+    if (minutes<10){minutes='0'+minutes} if (hour<10){hour='0'+hour} 
+    year = year.toString()
+    month = month.toString()
+    day = day.toString()
+    hour = hour.toString()
+    minutes = minutes.toString()
+    const result = {year,month,day,hour,minutes}
+    return result 
+    }
+    
+    const getEndData = async() =>{
+        let day = new Date()
+        await setEndData({
+            time:setTime(),
+            rate:rate,
+            card: cardInfo !==''? `${cardInfo.slice(0,4)}-****-****-****`: '1234-5678-9012-****',
+            endDay:dateChange(day)
+        })
+   
+    }
 
     useEffect(()=>{
-        // setResData()   
-    },[])
+        // setResData()  
+        getResData()
+        getEndData()
+        console.log('엔드')
+    },[payOpen])
+
     const sendConfirm =  async()=>{
         try{
-            // const response = await axios(option)
             setPayOpen(false)
             setCheckStart(true)
             setCheckEnd(true)
@@ -63,8 +99,12 @@ const DriveEndCheck = (props) => {
         }catch(err){
             console.log(err)
         }}
-
-
+    
+    const setTime = () =>{
+        let hour = parseInt(time / 60)
+        let minute = time % 5
+        return `${hour}시간 ${minute}분`
+    }
 
     return(
         <>
@@ -73,17 +113,25 @@ const DriveEndCheck = (props) => {
             onClose={()=>{setPayOpen(false)}}
         >
             <DialogContent>
-                <DialogContentText>
+                <DialogTitle>
                     이용을 종료하시겠습니까?
-                    다음과 같은 요금이 결제 됩니다.
+                </DialogTitle>
+                <Typography align='center'>
+                    다음과 같은 요금이 결제 됩니다
+                </Typography>
+
+                <DialogContent>
+
+                <DialogContentText>
+                    이용시간 : {setTime()}
                 </DialogContentText>
-                <Typography>
-                    이용시간 :{resInfo.realtime}
-                </Typography>
-                <Typography>
-                    이용요금 : {resInfo.rate}
-                </Typography>
-                    결제방법 :
+                <DialogContentText>
+                    이용요금 : {rate} 원
+                </DialogContentText>
+                <DialogContentText>
+                    결제방법 : {cardInfo !==''? `${cardInfo.slice(0,4)}-****-****-****`: '1234-5678-9012-****'}
+                </DialogContentText>
+                </DialogContent>
                 </DialogContent>
             <DialogActions>
                 <Button onClick={sendConfirm}>

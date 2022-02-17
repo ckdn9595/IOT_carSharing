@@ -39,9 +39,9 @@ const OpenCarState = () => {
   
   useEffect(()=>{
     // getList()
-    // console.log(carList)
-    console.log('carlist초기화성공',carList)
-    console.log('오픈카상태')
+    console.log(carList)
+    // console.log('carlist초기화성공',carList)
+    // console.log('오픈카상태')
   },[])
 
 // carlist 에서 car_seq를 맵으로 carstate에게 넘겨준다
@@ -66,10 +66,13 @@ const CarMain = () => {
   const [registerVisible, setRegisterVisible] = useState(false)
   
   const onClickHandle = () =>{
-    if (carList[0] !== undefined ){
+    if (token === 'Bearer null'){
+      alert('로그인이 필요합니다.')
+    }
+    else if (carList[0] !== undefined ){
       alert('이미 차량이 등록되어있습니다.')
     }else{
-    console.log(carList)
+    // console.log(carList)
     setVisible(!visible)}
 
   }
@@ -89,7 +92,7 @@ const CarMain = () => {
       const response = await axios(option)
       const gotData = await response.data[0]
       setCarList([gotData])
-      console.log(response.data,'responsedata')
+      // console.log(response.data,'responsedata')
       await console.log(carList,'car')
     }catch(err){
       console.log('list get error')

@@ -47,8 +47,8 @@ const RentPeriod = ({carId, car}) =>{
     try{
       const response = await axios(option)
       setDate(response.data)
-      console.log('date', date)
-      console.log('respose',response.data)
+      // console.log('date', date)
+      // console.log('respose',response.data)
 
     }catch(err){
       console.log(err)

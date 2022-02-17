@@ -39,7 +39,7 @@ const Insurance = ({carId}) =>{
     if (rent === true){
       try{
         const response = await axios(option)
-        console.log(response.status)
+        // console.log(response.status)
         setInsurance(false)
         setAlert(false)
         setSendSuccess(!sendSuccess)

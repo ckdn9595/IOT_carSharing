@@ -11,6 +11,18 @@ const Drive =() => {
   // DriveStart
   const [checkStart, setCheckStart] = useState(false)
   const [checkEnd, setCheckEnd] = useState(false)
+  const [startDay, setStartDay] = useState({year:'',
+                                          month:'',
+                                          day:'',
+                                          hour:'',
+                                          minutes:""
+                                          })
+  const [endDay, setEndDay] = useState({year:'',
+                                          month:'',
+                                          day:'',
+                                          hour:'',
+                                          minutes:""
+                                          })
   // DriveBefore
   // DriveCheckList
   const [resCheckList, setResCheckList] = useState({})
@@ -19,6 +31,16 @@ const Drive =() => {
   const [customerHelp, setCustomerHelp] = useState(false)
   const [doorOpen, setDoorOpen] = useState(false)
   // DriveOn
+  // DriveEndCheck
+  const [cardInfo, setCardInfo] = useState('')
+  // DriveEnd
+  const [endData, setEndData] = useState({
+                                        time:'',
+                                        rate:'',
+                                        card:'',
+                                        endDay:''
+                                      })
+                                        
   // api
   const [token, setToken] = useState('')
 
@@ -61,6 +83,8 @@ const Drive =() => {
       //DriveStart
       resInfo, setResInfo,
       resCarInfo, setResCarInfo,
+      startDay, setStartDay,
+      endDay, setEndDay,
       // status
       checkStart, setCheckStart,
       checkEnd, setCheckEnd,
@@ -68,13 +92,16 @@ const Drive =() => {
       resCheckList, setResCheckList,
       resResPicture, setResPicture,
       //DriveOn
-
+      //DriveEndCheck
+      cardInfo, setCardInfo,
       //Dump
       resCarDump, resDump,
       //api
       token, setToken,
 
       doorOpen, setDoorOpen,
+      //DriveEnd
+      endData, setEndData,
     }}>
       <DriveStart/>
 {/* 
