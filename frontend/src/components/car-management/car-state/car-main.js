@@ -63,7 +63,7 @@ const CarMain = () => {
   const [registerVisible, setRegisterVisible] = useState(false)
   
   const onClickHandle = () =>{
-    if (carList[0].carNum !== ''){
+    if (carList && carList[0].hasOwnProperty('car_num') !== "undefined" ){
       alert('이미 차량이 등록되어있습니다.')
     }else{
     setVisible(!visible)}
@@ -180,7 +180,7 @@ const CarMain = () => {
 
       }}
     >
-      { carList && carList.length !== 0 ? <OpenCarState /> : <Typography>등록된 차량이 없습니다</Typography> }
+      { carList && carList[0].hasOwnProperty('car_num') ? <OpenCarState /> : <Typography>등록된 차량이 없습니다</Typography> }
     </Card>
     </Container>
   )
