@@ -321,12 +321,11 @@ router.post('/payment', async (req, res) => {
             cardDate,
             cardCvc,
         } = req.body;
-        const userToken = req.header('access_token') || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
-        if(userToken.indexOf(/^Bearer\s+/) !== -1){
-            userToken = userToken.replace(/^Bearer\s+/,'');
-        }
-        // compare userToken
-        const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
+
+        const userToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
+        const token = userToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
+
         if(decodedUserToken){
             const tempUser = await db.tb_user.findOne({where: {usr_id: decodedUserToken.userId}});
             await db.tb_payment.create({
@@ -354,12 +353,9 @@ router.post('/payment', async (req, res) => {
 router.get('/payment', async (req, res) => {
     console.log(req.body);
     try {
-        const userToken = req.header('access_token') || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
-        if(userToken.indexOf(/^Bearer\s+/) !== -1){
-            userToken = userToken.replace(/^Bearer\s+/,'');
-        }
-        // compare userToken
-        const decodedUserToken = await jwt.verify(userToken, process.env.JWT_SECRET);
+        const userToken = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['access_token'];
+        const token = userToken.replace(/^Bearer\s+/, "");
+        const decodedUserToken = await jwt.verify(token, process.env.JWT_SECRET);
         if(decodedUserToken){
             const tempUser = await db.tb_user.findOne({where: {usr_id: decodedUserToken.userId}});
             const tempPayment = await db.tb_payment.findOne({where: {usr_seq: tempUser.usr_seq}});
