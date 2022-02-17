@@ -40,16 +40,23 @@ const OpenCarState = () => {
   useEffect(()=>{
         // getList()
         // console.log(carList)
+        console.log('carlist',carList)
   },[])
+
+  const onCarList = async()=>{
+    const listOn =  await carList ? carList.map(car =>(<CarState key={car.car_seq} car={car}/>)):''
+  return (listOn)
+  }
 
 // carlist 에서 car_seq를 맵으로 carstate에게 넘겨준다
 // carstate에서 하나씩 get으로 데이터 가져온다
 return (
   <Card
   >
-  {carList.map(car =>(
+  {/* {carList ? carList.map(car =>(
   <CarState key={car.car_seq} car={car}/>
-  ))}
+  )):''} */}
+  {onCarList}
   </Card>
 )}
 
@@ -63,9 +70,10 @@ const CarMain = () => {
   const [registerVisible, setRegisterVisible] = useState(false)
   
   const onClickHandle = () =>{
-    if (carList && carList[0].car_num !== undefined){
+    if (carList[0] !== undefined ){
       alert('이미 차량이 등록되어있습니다.')
     }else{
+    console.log(carList)
     setVisible(!visible)}
 
   }
@@ -83,8 +91,9 @@ const CarMain = () => {
       }
     try{
       const response = await axios(option)
-      setCarList(response.data)
-      console.log('carlist on')
+      setCarList([response.data.[0]])
+      console.log(response)
+      console.log(carList[0],'car')
     }catch(err){
       console.log('list get error')
       console.log('token:',token)
@@ -181,7 +190,7 @@ const CarMain = () => {
 
       }}
     >
-      { carList && carList[0].car_num !== undefined ? <OpenCarState /> : <Typography>등록된 차량이 없습니다</Typography> }
+      { carList && carList[0] !== undefined ? <OpenCarState /> : <Typography>등록된 차량이 없습니다</Typography> }
     </Card>
     </Container>
   )
