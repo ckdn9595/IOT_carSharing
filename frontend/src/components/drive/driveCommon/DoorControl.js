@@ -54,7 +54,7 @@ const DoorControl = () => {
             const option = {
               url:`https://i6a104.p.ssafy.io/api/mqtt/${carId}/control`,
               // url:`${API_BASE_URL}/mqtt/${carId}/control`,
-              method:'POST',
+              method:'GET',
               headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
               body:{"door":"open"}
               }
@@ -70,9 +70,9 @@ const DoorControl = () => {
               const option = {
                 url:`https://i6a104.p.ssafy.io/api/mqtt/${carId}/control`,
                 // url:`${API_BASE_URL}/mqtt/${carId}/control`,
-                method:'POST',
+                method:'GET',
                 headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-                body:{door:"close"}
+                body:{"door":"close"}
                 }
               
               try{
