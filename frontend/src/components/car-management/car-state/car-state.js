@@ -61,7 +61,7 @@ const CarState = ({car}) =>{
       } = useContext(CarContext)
   useEffect(()=>{
     setData(car)
-    console.log('차량상태',car)
+    console.log('차량상태')
     getSegment()
     getRentOn()
   },[])
