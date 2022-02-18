@@ -31,7 +31,7 @@ const DoorControl = () => {
   
   } = useContext(DriveContext)
 
-  const [door, SetDoor]= useState('')
+  const [door, SetDoor]= useState({door:''})
 
   const carId = resInfo.car_seq
   const option = {
@@ -57,7 +57,7 @@ const DoorControl = () => {
 // },[resCarInfo])
 
 const doorOpens = async ()=>{
-  SetDoor("open")
+  SetDoor({door:"open"})
   try{
     const response = await axios(option)
     // console.log(response)
@@ -66,7 +66,7 @@ const doorOpens = async ()=>{
   }
 }
 const doorCloses = async ()=>{
-  SetDoor("close")
+  SetDoor({door:"close"})
   
   try{
     const response = await axios(option)
