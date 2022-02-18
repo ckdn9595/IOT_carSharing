@@ -50,13 +50,13 @@ const DoorControl = () => {
           // },[resCarInfo])
           
           const doorOpens = async ()=>{
-            SetDoor({door:"open"})
+            SetDoor({"door":"open"})
             const option = {
               url:`https://i6a104.p.ssafy.io/api/mqtt/${carId}/control`,
               // url:`${API_BASE_URL}/mqtt/${carId}/control`,
               method:'GET',
               headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-              body:{door:"open"}
+              body:{"door":"open"}
               }
               try{
                 const response = await axios(option)
