@@ -69,7 +69,7 @@ const PayCardInfo = () => {
           /^\d{2}$/,
           "숫자 2자리"
         )
-        .required(' s'
+        .required(' '
           ),
         validYear: Yup
           .string()
