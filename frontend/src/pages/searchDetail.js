@@ -941,11 +941,12 @@ const SeachDetail = (props) => {
             value={radioValue}
             onChange={radioHandleChange}
           >
+          {(cardInfo) &&
             <FormControlLabel
               value="01" 
               control={<Radio />}
               label={cardInfo.card_num.substr(0,4)+ "-" + cardInfo.card_num.substr(4,4)+ "-****-**** / 개인"} />
-            
+          }
           </RadioGroup>
           </FormControl>
           <Grid item xs={12}
