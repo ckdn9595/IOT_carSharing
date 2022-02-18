@@ -34,49 +34,56 @@ const DoorControl = () => {
   const [door, SetDoor]= useState({door:''})
 
   const carId = resInfo.car_seq
-  const option = {
-    url:`https://i6a104.p.ssafy.io/api/mqtt/${carId}/control`,
-    // url:`${API_BASE_URL}/mqtt/${carId}/control`,
-    method:'GET',
-    headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
-    body:door
-    }
   
-// const getResInfo =()=>{
-//   setResInfo(resInfo)
-// }
-// const getResCarInfo =()=>{
-//   setResInfo(resCarInfo)
-// }
-// useEffect(()=>{
-//   getResInfo()
-// },[resInfo])
-
-// useEffect( ()=> {
-//   getResCarInfo()
-// },[resCarInfo])
-
-const doorOpens = async ()=>{
-  SetDoor({door:"open"})
-  try{
-    const response = await axios(option)
-    // console.log(response)
-  }catch(err){
-    console.log(err)
-  }
-}
-const doorCloses = async ()=>{
-  SetDoor({door:"close"})
-  
-  try{
-    const response = await axios(option)
-    // console.log(response.data)
-  }catch(err){
-    console.log(err)
-  }
-}
-
-const doorStatus = async()=>{
+  // const getResInfo =()=>{
+    //   setResInfo(resInfo)
+    // }
+    // const getResCarInfo =()=>{
+      //   setResInfo(resCarInfo)
+      // }
+      // useEffect(()=>{
+        //   getResInfo()
+        // },[resInfo])
+        
+        // useEffect( ()=> {
+          //   getResCarInfo()
+          // },[resCarInfo])
+          
+          const doorOpens = async ()=>{
+            SetDoor({door:"open"})
+            const option = {
+              url:`https://i6a104.p.ssafy.io/api/mqtt/${carId}/control`,
+              // url:`${API_BASE_URL}/mqtt/${carId}/control`,
+              method:'GET',
+              headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+              body:{door:"open"}
+              }
+              try{
+                const response = await axios(option)
+                console.log(response)
+              }catch(err){
+                console.log(err)
+              }
+            }
+            const doorCloses = async ()=>{
+              SetDoor({door:"close"})
+              const option = {
+                url:`https://i6a104.p.ssafy.io/api/mqtt/${carId}/control`,
+                // url:`${API_BASE_URL}/mqtt/${carId}/control`,
+                method:'GET',
+                headers:{Authorization: `Bearer ${sessionStorage.getItem("access_token")}`},
+                body:{door:"close"}
+                }
+              
+              try{
+                const response = await axios(option)
+                console.log(response.data)
+              }catch(err){
+                console.log(err)
+              }
+            }
+            
+            const doorStatus = async()=>{
   const response = await door
   await setDoorOpen(response)
 }
