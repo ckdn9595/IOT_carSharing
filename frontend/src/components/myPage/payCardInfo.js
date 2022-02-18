@@ -58,8 +58,8 @@ const PayCardInfo = () => {
         cardNo: Yup
         .string()
         .matches(
-          /^\d{12}$/,
-          "숫자 12자리"
+          /^\d{16}$/,
+          "숫자 16자리"
         )
         .required(' '
           ),
