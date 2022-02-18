@@ -265,7 +265,7 @@ export const DashboardNavbar = (props) => {
                     차종 
                   </Typography>
                   <Divider/>
-                  체크된 옵션은 검색결과에서 제외됩니다.
+                  
                   <FormControlLabel
                     control={(
                       <Checkbox
