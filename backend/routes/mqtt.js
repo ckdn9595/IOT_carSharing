@@ -11,7 +11,7 @@ const options = {
     port: 1883,
     protocol: "mqtt",
     username: 'server',
-    paaaword: 'a104server',
+    password: 'a104server',
     reconnectPeriod: 1000,
 };
 
