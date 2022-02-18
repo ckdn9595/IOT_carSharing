@@ -46,8 +46,9 @@ const RentPeriod = ({carId, car}) =>{
   const getDate = async() => {
     try{
       const response = await axios(option)
-      setDate(response.data)
-      // console.log('date', date)
+      const data = await response.data
+      setDate(data)
+      console.log('date', data)
       // console.log('respose',response.data)
 
     }catch(err){
@@ -77,14 +78,14 @@ const RentPeriod = ({carId, car}) =>{
   // settingtime은 불러온값, visibledate는 표시할 값
   useEffect(() => {
     getDate()
-    if(car.car_res_date_start === undefined){
+    if(date.car_res_date_start === undefined){
       const start = new Date()
       const end = new Date()
       setSettingTime([start,end])
       setVisibleDate([dateChange(start),dateChange(end)])
     }else{
-      const start = new Date(car.car_res_date_start)
-      const end = new Date(car._car_res_date_end)
+      const start = new Date(date.car_res_date_start)
+      const end = new Date(date.car_res_date_end)
       setSettingTime([start,end])
       setVisibleDate([dateChange(start),dateChange(end)])
     }
