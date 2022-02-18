@@ -67,6 +67,7 @@ mqttServer.on("message", async (topic, message) => {
 });
 
 router.get('/:carSeq/control', async (req, res) => {
+    console.log(req.body);
     try {
         const topic = `test/${req.params.carSeq}/control`;
         console.log(topic);
