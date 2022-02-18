@@ -18,6 +18,7 @@ const options = {
 const mqttServer = mqttListener.connect(options);
 const topic = 'test/#';
 const carId = 46;
+let doorStatus = "open";
 
 mqttServer.on("connect", () => {
     console.log("mqtt connected");
@@ -75,8 +76,9 @@ router.get('/:carSeq/control', async (req, res) => {
             door,
             alram,
         } = req.body;
-        const data = {"door":door,"alram":alram };
-        if(data.door == "open") {
+        const data = {"door":doorStatus,"alram":alram };
+
+        if(doorStatus === "open") {
             db.tb_car_info.update({
                 res_door_on: "Y"
             }, {
@@ -84,7 +86,7 @@ router.get('/:carSeq/control', async (req, res) => {
                     car_seq: req.params.carSeq
                 }
             });
-        } else if(data.door == "close") {
+        } else if(doorStatus === "close") {
             db.tb_car_info.update({
                 res_door_on: "N"
             }, {
@@ -93,6 +95,13 @@ router.get('/:carSeq/control', async (req, res) => {
                 }
             });
         }
+
+        if(doorStatus === "open"){
+            doorStatus = "close";
+        } else if (doorStatus === "close"){
+            doorStatus = "open";
+        }
+        // publish data to mqtt broker
         mqttServer.publish(topic, JSON.stringify(data));
         return res.status(200).json({
             success: true
